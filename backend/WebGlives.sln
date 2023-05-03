@@ -1,8 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.API", "src\WebGLives.API\WebGLives.API.csproj", "{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
