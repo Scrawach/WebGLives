@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebGLives.API.Controllers;
 
 [ApiController]
-[Route("api/games")]
+[Route("api/[controller]")]
 public class GamesController : Controller
 {
     private readonly ILogger<GamesController> _logger;

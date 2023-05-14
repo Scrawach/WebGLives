@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebGLives.API.Controllers;
 
 [ApiController]
-[Route("api/upload")]
+[Route("api/[controller]")]
 public class FilesController : ControllerBase
 {
     private readonly ILogger<FilesController> _logger;
