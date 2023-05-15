@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
 
@@ -28,9 +29,21 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+var contentTypeProvider = new FileExtensionContentTypeProvider();
+contentTypeProvider.Mappings[".unityweb"] = "application/octet-stream";
+
+var fileProvider = new PhysicalFileProvider(Path.Combine(Path.GetTempPath(), "games"));
+
 app.UseStaticFiles(new StaticFileOptions()
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(Path.GetTempPath(), "games"))
+    FileProvider = fileProvider,
+    ContentTypeProvider = contentTypeProvider
+});
+
+app.UseDirectoryBrowser(new DirectoryBrowserOptions
+{
+    FileProvider = fileProvider,
 });
 
 app.UseAuthorization();
