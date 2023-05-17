@@ -13,8 +13,7 @@ public class GamesController : Controller
     public GamesController(ILogger<GamesController> logger) => 
         _logger = logger;
 
-    [HttpGet]
-    [Route("{gameName}")]
+    [HttpGet("{gameName}")]
     public IActionResult Index(string gameName)
     {
         if (DirectoryNotExist())
@@ -31,8 +30,13 @@ public class GamesController : Controller
     private IActionResult GamePage(string pathToGame)
     {
         var filePath = Path.Combine(pathToGame, "index.html");
-        var fileBytes = System.IO.File.ReadAllBytes(filePath);
-        return File(fileBytes, "application/octet-stream");
+        var page = System.IO.File.ReadAllText(filePath);
+        return new ContentResult()
+        {
+            ContentType = "unityweb",
+            StatusCode = (int)HttpStatusCode.OK,
+            Content = page
+        };
     }
 
     private static ContentResult HelloWorldPage() =>
