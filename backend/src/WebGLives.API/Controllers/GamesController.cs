@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebGLives.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class GamesController : Controller
 {
     private readonly ILogger<GamesController> _logger;
@@ -20,7 +20,6 @@ public class GamesController : Controller
             CreateDirectory();
         
         var pathToGame = Path.Combine(BaseDirectory, gameName);
-
         if (Directory.Exists(pathToGame))
             return GamePage(pathToGame);
         
@@ -29,14 +28,7 @@ public class GamesController : Controller
 
     private IActionResult GamePage(string pathToGame)
     {
-        var filePath = Path.Combine(pathToGame, "index.html");
-        var page = System.IO.File.ReadAllText(filePath);
-        return new ContentResult()
-        {
-            ContentType = "unityweb",
-            StatusCode = (int)HttpStatusCode.OK,
-            Content = page
-        };
+        return Redirect(Path.Combine("../ufo", "index.html"));
     }
 
     private static ContentResult HelloWorldPage() =>

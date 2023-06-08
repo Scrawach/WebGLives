@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
+using WebGLives.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<IZipService>(new ZipService());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,8 +35,8 @@ app.UseHttpsRedirection();
 
 var contentTypeProvider = new FileExtensionContentTypeProvider();
 contentTypeProvider.Mappings[".unityweb"] = "application/octet-stream";
-
-var fileProvider = new PhysicalFileProvider(Path.Combine(Path.GetTempPath(), "games"));
+var staticFilesPath = Path.Combine(Path.GetTempPath(), "WebGLives");
+var fileProvider = new PhysicalFileProvider(staticFilesPath);
 
 app.UseStaticFiles(new StaticFileOptions()
 {

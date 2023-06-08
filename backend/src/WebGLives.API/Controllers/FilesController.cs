@@ -1,5 +1,6 @@
 ﻿using System.IO.Compression;
 using Microsoft.AspNetCore.Mvc;
+using WebGLives.API.Services;
 
 namespace WebGLives.API.Controllers;
 
@@ -8,10 +9,14 @@ namespace WebGLives.API.Controllers;
 public class FilesController : ControllerBase
 {
     private readonly ILogger<FilesController> _logger;
+    private readonly IZipService _zipService;
     private static readonly string BaseDirectory = Path.Combine(Path.GetTempPath(), "games");
 
-    public FilesController(ILogger<FilesController> logger) => 
+    public FilesController(ILogger<FilesController> logger, IZipService zipService)
+    {
         _logger = logger;
+        _zipService = zipService;
+    }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
@@ -25,12 +30,11 @@ public class FilesController : ControllerBase
         await using (var stream = new FileStream(filePath, FileMode.Create))
             await file.CopyToAsync(stream);
 
-        ExtractFilesFrom(filePath);
+        if (_zipService.IsValid(filePath))
+            _zipService.Extract(filePath, Path.Combine(BaseDirectory, "unzip"));
+        
         return Ok();
     }
-
-    private static void ExtractFilesFrom(string filePath) => 
-        ZipFile.ExtractToDirectory(filePath, Path.Combine(BaseDirectory, "unzip"));
 
     private static bool DirectoryNotExist() => 
         !Directory.Exists(BaseDirectory);
