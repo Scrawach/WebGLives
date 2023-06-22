@@ -25,8 +25,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<IRandomService, RandomService>();
 builder.Services.AddSingleton<IZipService, ZipService>();
-builder.Services.AddSingleton<IGamePagesRepository, GamePagesRepository>();
+builder.Services.AddSingleton<IGamePagesRepository, RandomGamePagesRepository>();
 
 var app = builder.Build();
 app.UseCors("MyAllowSpecificOrigins");
