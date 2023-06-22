@@ -20,7 +20,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IZipService>(new ZipService());
+builder.Services.AddSingleton<IZipService, ZipService>();
+builder.Services.AddSingleton<IGamePagesRepository, GamePagesRepository>();
 
 var app = builder.Build();
 
