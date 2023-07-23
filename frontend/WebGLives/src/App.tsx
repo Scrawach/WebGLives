@@ -2,6 +2,7 @@ import { ChakraProvider, Box, Grid, theme } from "@chakra-ui/react"
 import { ColorModeSwitcher } from "./ColorModeSwitcher"
 import { Dashboard } from "./pages/Dashboard"
 import { FileUploadPage } from "./pages/FileUploadPage";
+import { Player } from "./pages/Player";
 import {
   RouterProvider,
   createBrowserRouter,
@@ -21,6 +22,14 @@ const router = createBrowserRouter([
     element: (
       <div className="App">
         <FileUploadPage />
+      </div>
+    ),
+  },
+  {
+    path: "/player",
+    element: (
+      <div className="App">
+        <Player />
       </div>
     ),
   },
