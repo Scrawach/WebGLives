@@ -17,4 +17,13 @@ export class Api {
         const json = await response.json();
         return json;
     }
+
+    public static async upload(file: File): Promise<void> {
+        const formData = new FormData();
+        formData.append('file', file);
+        await fetch(`${Api.url}/files`, {
+            method: 'POST',
+            body: formData
+        });
+    }
 }
