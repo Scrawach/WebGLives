@@ -21,7 +21,7 @@ export class Api {
     public static async upload(file: File): Promise<void> {
         const formData = new FormData();
         formData.append('file', file);
-        await fetch(`${Api.url}/files`, {
+        await fetch(`${Api.url}/api/files`, {
             method: 'POST',
             body: formData
         });

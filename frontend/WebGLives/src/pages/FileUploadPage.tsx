@@ -5,7 +5,7 @@ interface ComponentProps {
     name?: string
 }
 
-const FileUploadPage: React.FC<ComponentProps> = (props) => {
+export const FileUploadPage: React.FC<ComponentProps> = (props) => {
     const uploadFile = async () => {
       if (!file) {
         return;
@@ -24,7 +24,7 @@ const FileUploadPage: React.FC<ComponentProps> = (props) => {
   
     return (
       <>
-        <div>FileUploadPage</div>;
+        <div>Upload page</div>
         <div>
           <input type="file" name="file" onChange={handleFileChange} />
           <input type="button" value="Upload" onClick={uploadFile} />
@@ -32,5 +32,3 @@ const FileUploadPage: React.FC<ComponentProps> = (props) => {
       </>
     );
   };
-  
-  export default FileUploadPage;
