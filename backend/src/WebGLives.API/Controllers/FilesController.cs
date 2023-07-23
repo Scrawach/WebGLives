@@ -10,7 +10,7 @@ public class FilesController : ControllerBase
 {
     private readonly ILogger<FilesController> _logger;
     private readonly IZipService _zipService;
-    private static readonly string BaseDirectory = Path.Combine(Path.GetTempPath(), "games");
+    private static readonly string BaseDirectory = Path.Combine(Path.GetTempPath(), "WebGLives", "games");
 
     public FilesController(ILogger<FilesController> logger, IZipService zipService)
     {
