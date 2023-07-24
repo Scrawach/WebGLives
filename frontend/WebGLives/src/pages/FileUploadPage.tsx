@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
+import { Input } from "@chakra-ui/react";
 import { Api } from "../services/Api";
 
 interface ComponentProps {
@@ -26,8 +27,8 @@ export const FileUploadPage: React.FC<ComponentProps> = (props) => {
       <>
         <div>Upload page</div>
         <div>
-          <input type="file" name="file" onChange={handleFileChange} />
-          <input type="button" value="Upload" onClick={uploadFile} />
+          <Input type="file" name="file" onChange={handleFileChange} />
+          <Input type="button" value="Upload" onClick={uploadFile} />
         </div>
       </>
     );
