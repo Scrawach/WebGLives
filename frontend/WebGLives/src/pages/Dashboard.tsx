@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Button, Grid } from "@chakra-ui/react";
-import { GamePage } from "../types/GamePage";
+import { GameCardData } from "../types/GameCardData";
 import { GameCard } from "../components/GameCard"
 import { Api } from "../services/Api"
 
 export const Dashboard: React.FC = () => {
-    const [gamePages, setGamePages] = useState<GamePage[]>([]);
+    const [gamePages, setGamePages] = useState<GameCardData[]>([]);
     const getGamePages = async () => {
-        var pages = await Api.getInstance().getGamePages();
+        var pages = await Api.gamePages();
         setGamePages(pages);
     }
 
@@ -21,6 +21,7 @@ export const Dashboard: React.FC = () => {
                         title = {game.title}
                         description = {game.description}
                         icon = {game.icon}
+                        url = {game.url}
                     />
                 ))}
             </Grid>

@@ -10,15 +10,23 @@ import {
     Divider,
     Button 
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router";
 
 export interface GameCardProps {
     id: string;
     title: string;
     description?: string;
     icon?: string;
+    url: string;
 }
 
-export const GameCard: React.FC<GameCardProps> = ({id, title, description, icon}) => {
+export const GameCard: React.FC<GameCardProps> = ({id, title, description, icon, url}) => {
+    let navigate = useNavigate();
+    const toGamePage = () => {
+        let path = 'play';
+        navigate(path, {state: {title: title, url: url}});
+    }
+
     return (
         <GridItem>
             <Card maxW='sm'>
@@ -31,7 +39,7 @@ export const GameCard: React.FC<GameCardProps> = ({id, title, description, icon}
                 </CardBody>
                 <Divider />
                 <CardFooter>
-                    <Button colorScheme='blue'>
+                    <Button colorScheme='blue' onClick={toGamePage}>
                         Play
                     </Button>
                 </CardFooter>
