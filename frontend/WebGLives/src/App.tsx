@@ -26,13 +26,13 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/play",
+    path: "/games/:id",
     element: (
       <div className="App">
         <GamePage />
       </div>
     ),
-  },
+  }
 ]);
 
 export const App = () => (
