@@ -1,47 +1,25 @@
 import { ChakraProvider, Box, Grid, theme } from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
 import { Dashboard } from "./pages/Dashboard"
 import { FileUploadPage } from "./pages/FileUploadPage";
 import {
-  RouterProvider,
-  createBrowserRouter,
+  Routes,
+  Route,
 } from "react-router-dom";
 import { GamePage } from "./pages/GamePage";
+import { NavigationBar } from "./components/NavigationBar";
+import UploadPage from "./pages/UploadPage";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <div className="App">
-        <Dashboard />
-      </div>
-    ),
-  },
-  {
-    path: "/upload",
-    element: (
-      <div className="App">
-        <FileUploadPage />
-      </div>
-    ),
-  },
-  {
-    path: "/games/:id",
-    element: (
-      <div className="App">
-        <GamePage />
-      </div>
-    ),
-  }
-]);
 
 export const App = () => (
   <ChakraProvider theme={theme}>
     <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <RouterProvider router={router} />
-      </Grid>
+      <NavigationBar />
+      <Routes>
+        <Route path="/" element={<Dashboard />}></Route>
+        <Route path="dashboard" element={<Dashboard />}></Route>
+        <Route path="upload" element={<UploadPage />}></Route>
+        <Route path="games/:id" element={<GamePage />}></Route>
+      </Routes>
     </Box>
   </ChakraProvider>
 )
