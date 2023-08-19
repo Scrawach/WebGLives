@@ -13,6 +13,16 @@ public class RandomGamePagesRepository : IGamePagesRepository
             yield return RandomGamePage(i);
     }
 
+    public void Create(GameCard card)
+    {
+        
+    }
+
+    public GameCard GetById(string id)
+    {
+        return null;
+    }
+
     private GameCard RandomGamePage(int id) =>
         new(
             id.ToString(),

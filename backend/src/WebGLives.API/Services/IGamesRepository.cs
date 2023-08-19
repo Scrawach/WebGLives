@@ -2,5 +2,7 @@ namespace WebGLives.API.Services;
 
 public interface IGamePagesRepository
 {
-    public IEnumerable<GameCard> All();
+    IEnumerable<GameCard> All();
+    void Create(GameCard card);
+    GameCard GetById(string id);
 }

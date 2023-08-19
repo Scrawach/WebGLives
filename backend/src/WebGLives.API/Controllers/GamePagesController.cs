@@ -15,4 +15,8 @@ public class GamePagesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> All() =>
         Ok(_gamePagesRepository.All());
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(string id) => 
+        Ok(_gamePagesRepository.GetById(id));
 }

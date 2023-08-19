@@ -10,12 +10,14 @@ public class FilesController : ControllerBase
 {
     private readonly ILogger<FilesController> _logger;
     private readonly IZipService _zipService;
+    private readonly IGamePagesRepository _repository;
     private static readonly string BaseDirectory = Path.Combine(Path.GetTempPath(), "WebGLives", "games");
 
-    public FilesController(ILogger<FilesController> logger, IZipService zipService)
+    public FilesController(ILogger<FilesController> logger, IZipService zipService, IGamePagesRepository repository)
     {
         _logger = logger;
         _zipService = zipService;
+        _repository = repository;
     }
 
     [HttpPost]
@@ -34,7 +36,17 @@ public class FilesController : ControllerBase
         if (_zipService.IsValid(filePath))
             _zipService.Extract(filePath, root);
         
+        AddGameCard(request);
+
         return Ok();
+    }
+
+    private void AddGameCard(UploadGameRequest request)
+    {
+        var path = Path.Combine("http://localhost:5072/games", request.Title, Path.GetFileNameWithoutExtension(request.Game.FileName), "index.html");
+        var icon = Path.Combine("http://localhost:5072/games", request.Title, $"{request.Title}.png");
+        var card = new GameCard(Guid.NewGuid().ToString(), request.Title, icon, request.Description, path);
+        _repository.Create(card);
     }
 
     private static string RootDirectory(string directoryName)
