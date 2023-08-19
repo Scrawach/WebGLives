@@ -23,7 +23,7 @@ export interface GameCardProps {
 export const GameCard: React.FC<GameCardProps> = ({id, title, description, icon, url}) => {
     let navigate = useNavigate();
     const toGamePage = (game_id: string) => {
-        navigate("games/" + game_id);
+        navigate("/games/" + game_id);
     }
 
     return (
@@ -38,7 +38,7 @@ export const GameCard: React.FC<GameCardProps> = ({id, title, description, icon,
                 </CardBody>
                 <Divider />
                 <CardFooter>
-                    <Button colorScheme='blue' onClick={() => toGamePage("cows")}>
+                    <Button colorScheme='blue' onClick={() => toGamePage(id)}>
                         Play
                     </Button>
                 </CardFooter>

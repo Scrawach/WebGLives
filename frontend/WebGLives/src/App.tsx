@@ -16,9 +16,9 @@ export const App = () => (
       <NavigationBar />
       <Routes>
         <Route path="/" element={<Dashboard />}></Route>
-        <Route path="dashboard" element={<Dashboard />}></Route>
-        <Route path="upload" element={<UploadPage />}></Route>
-        <Route path="games/:id" element={<GamePage />}></Route>
+        <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route path="/upload" element={<UploadPage />}></Route>
+        <Route path="/games/:id" element={<GamePage />}></Route>
       </Routes>
     </Box>
   </ChakraProvider>
