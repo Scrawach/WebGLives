@@ -1,4 +1,6 @@
-﻿using System.IO.Compression;
+﻿using System.Diagnostics;
+using System.IO.Compression;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Services;
 
@@ -21,14 +23,15 @@ public class FilesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<ActionResult> Post(IFormFile file)
+    public async Task<ActionResult> Post([FromForm] UploadGameRequest request)
     {
         if (DirectoryNotExist())
             CreateDirectory();
 
-        var filePath = Path.Combine(BaseDirectory, file.FileName);
-        await using (var stream = new FileStream(filePath, FileMode.Create))
-            await file.CopyToAsync(stream);
+        var filePath = Path.Combine(BaseDirectory, request.Title);
+        
+        await using (var stream = new FileStream(filePath, FileMode.Create)) 
+            await request.Game.CopyToAsync(stream);
 
         if (_zipService.IsValid(filePath))
             _zipService.Extract(filePath, Path.Combine(BaseDirectory, "unzip"));
