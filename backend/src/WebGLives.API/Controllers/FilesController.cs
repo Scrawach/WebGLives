@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using System.IO.Compression;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebGLives.API.Extensions;
 using WebGLives.API.Services;
 
 namespace WebGLives.API.Controllers;
@@ -25,23 +23,31 @@ public class FilesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
     public async Task<ActionResult> Post([FromForm] UploadGameRequest request)
     {
-        if (DirectoryNotExist())
-            CreateDirectory();
+        var root = RootDirectory(request.Title);
 
-        var filePath = Path.Combine(BaseDirectory, request.Title);
+        var filePath = Path.Combine(root, $"{request.Title}.zip");
+        var iconPath = Path.Combine(root, $"{request.Title}.png");
         
-        await using (var stream = new FileStream(filePath, FileMode.Create)) 
-            await request.Game.CopyToAsync(stream);
+        await request.Game.CopyToAsync(filePath);
+        await request.Icon.CopyToAsync(iconPath);
 
         if (_zipService.IsValid(filePath))
-            _zipService.Extract(filePath, Path.Combine(BaseDirectory, "unzip"));
+            _zipService.Extract(filePath, root);
         
         return Ok();
     }
 
-    private static bool DirectoryNotExist() => 
-        !Directory.Exists(BaseDirectory);
+    private static string RootDirectory(string directoryName)
+    {
+        var root = Path.Combine(BaseDirectory, directoryName);
+        if (DirectoryNotExist(root))
+            CreateDirectory(root);
+        return root;
+    }
+    
+    private static bool DirectoryNotExist(string path) => 
+        !Directory.Exists(path);
 
-    private static DirectoryInfo CreateDirectory() => 
-        Directory.CreateDirectory(BaseDirectory);
+    private static DirectoryInfo CreateDirectory(string path) => 
+        Directory.CreateDirectory(path);
 }
