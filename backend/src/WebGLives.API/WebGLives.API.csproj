@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\WebGLives.DataAccess\WebGLives.DataAccess.csproj" />
+      <ProjectReference Include="..\WebGLives.DataAccess\WebGLives.DataAccess.csproj" />
     </ItemGroup>
 
 </Project>
