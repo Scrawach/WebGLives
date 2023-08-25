@@ -3,6 +3,7 @@ using Serilog;
 using WebGLives.API.Extensions;
 using WebGLives.API.Services;
 using WebGLives.DataAccess;
+using WebGLives.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,10 +27,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IRandomService, RandomService>();
-builder.Services.AddSingleton<IZipService, ZipService>();
-builder.Services.AddSingleton<IGamePagesRepository, TempGamePageRepository>();
-
 builder.Services.AddDbContext<GamePageDbContext>(options =>
 {
     options.UseNpgsql
@@ -37,6 +34,15 @@ builder.Services.AddDbContext<GamePageDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")
     );
 });
+
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile<DataAccessMappingProfile>();
+});
+
+builder.Services.AddSingleton<IRandomService, RandomService>();
+builder.Services.AddSingleton<IZipService, ZipService>();
+builder.Services.AddScoped<IGamePageRepository, GamePageRepository>();
 
 var app = builder.Build();
 app.UseCors("MyAllowSpecificOrigins");

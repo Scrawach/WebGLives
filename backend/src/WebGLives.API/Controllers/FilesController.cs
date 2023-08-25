@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Extensions;
 using WebGLives.API.Services;
+using WebGLives.Core;
+using WebGLives.DataAccess.Repositories;
 
 namespace WebGLives.API.Controllers;
 
@@ -10,10 +12,10 @@ public class FilesController : ControllerBase
 {
     private readonly ILogger<FilesController> _logger;
     private readonly IZipService _zipService;
-    private readonly IGamePagesRepository _repository;
+    private readonly IGamePageRepository _repository;
     private static readonly string BaseDirectory = Path.Combine(Path.GetTempPath(), "WebGLives", "games");
 
-    public FilesController(ILogger<FilesController> logger, IZipService zipService, IGamePagesRepository repository)
+    public FilesController(ILogger<FilesController> logger, IZipService zipService, IGamePageRepository repository)
     {
         _logger = logger;
         _zipService = zipService;
@@ -45,8 +47,8 @@ public class FilesController : ControllerBase
     {
         var path = Path.Combine("http://localhost:5072/games", request.Title, Path.GetFileNameWithoutExtension(request.Game.FileName), "index.html");
         var icon = Path.Combine("http://localhost:5072/games", request.Title, $"{request.Title}.png");
-        var card = new GameCard(Guid.NewGuid().ToString(), request.Title, icon, request.Description, path);
-        _repository.Create(card);
+        var card = new GamePage(Guid.NewGuid().ToString(), request.Title, icon, request.Description, path);
+        _repository.Add(card);
     }
 
     private static string RootDirectory(string directoryName)

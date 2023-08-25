@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Services;
+using WebGLives.DataAccess.Repositories;
 
 namespace WebGLives.API.Controllers;
 
@@ -7,9 +8,9 @@ namespace WebGLives.API.Controllers;
 [Route("[controller]")]
 public class GamePagesController : ControllerBase
 {
-    private readonly IGamePagesRepository _gamePagesRepository;
+    private readonly IGamePageRepository _gamePagesRepository;
 
-    public GamePagesController(IGamePagesRepository gamePagesRepository) =>
+    public GamePagesController(IGamePageRepository gamePagesRepository) =>
         _gamePagesRepository = gamePagesRepository;
 
     [HttpGet]
@@ -17,6 +18,6 @@ public class GamePagesController : ControllerBase
         Ok(_gamePagesRepository.All());
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(string id) => 
+    public async Task<IActionResult> GetById(int id) => 
         Ok(_gamePagesRepository.GetById(id));
 }
