@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebGLives.API.Extensions;
 using WebGLives.API.Services;
+using WebGLives.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +29,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IRandomService, RandomService>();
 builder.Services.AddSingleton<IZipService, ZipService>();
 builder.Services.AddSingleton<IGamePagesRepository, TempGamePageRepository>();
+
+builder.Services.AddDbContext<GamePageDbContext>(options =>
+{
+    options.UseNpgsql
+    (
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    );
+});
 
 var app = builder.Build();
 app.UseCors("MyAllowSpecificOrigins");
