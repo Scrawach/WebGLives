@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\WebGLives.Core\WebGLives.Core.csproj" />
+      <ProjectReference Include="..\WebGLives.Core\WebGLives.Core.csproj" />
     </ItemGroup>
 
 </Project>
