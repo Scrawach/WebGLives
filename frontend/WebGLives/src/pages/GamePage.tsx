@@ -31,7 +31,7 @@ export const GamePage: React.FC = () => {
                 {gameCard?.description}
             </div>
             <div>
-                <iframe src={gameCard?.url} width="1080" height="800"/>
+                <iframe src={gameCard?.gameUrl} width="1080" height="800"/>
             </div>
         </>
     );

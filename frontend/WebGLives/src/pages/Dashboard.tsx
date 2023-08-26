@@ -23,8 +23,8 @@ export const Dashboard: React.FC = () => {
                         id = {game.id}
                         title = {game.title}
                         description = {game.description}
-                        icon = {game.icon}
-                        url = {game.url}
+                        icon = {game.posterUrl}
+                        url = {game.gameUrl}
                     />
                 ))}
             </Grid>
