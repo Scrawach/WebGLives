@@ -30,7 +30,7 @@ public class FilesController : ControllerBase
         var root = RootDirectory(request.Title);
 
         var filePath = Path.Combine(root, $"{request.Title}.zip");
-        var iconPath = Path.Combine(root, $"{request.Title}.png");
+        var iconPath = Path.Combine(root, $"{request.Title}.{FileExtensionFrom(request.Icon.FileName)}");
         
         await request.Game.CopyToAsync(filePath);
         await request.Icon.CopyToAsync(iconPath);
@@ -45,8 +45,8 @@ public class FilesController : ControllerBase
 
     private void AddGameCard(UploadGameRequest request)
     {
-        var path = $"http://localhost:5072/games/{request.Title}/{request.Game.FileName}/index.html";
-        var icon = $"http://localhost:5072/games/{request.Title}/{request.Title}.png";
+        var path = $"http://localhost:5072/games/{request.Title}/{request.Game.FileName.Split('.').First()}/index.html";
+        var icon = $"http://localhost:5072/games/{request.Title}/{request.Title}.{FileExtensionFrom(request.Icon.FileName)}";
         var card = new GamePage
         {
             Title = request.Title,
@@ -56,6 +56,9 @@ public class FilesController : ControllerBase
         };
         _repository.Add(card);
     }
+
+    private static string FileExtensionFrom(string fullName) => 
+        fullName.Split('.').Last();
 
     private static string RootDirectory(string directoryName)
     {
