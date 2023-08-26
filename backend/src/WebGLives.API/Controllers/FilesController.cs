@@ -45,9 +45,15 @@ public class FilesController : ControllerBase
 
     private void AddGameCard(UploadGameRequest request)
     {
-        var path = Path.Combine("http://localhost:5072/games", request.Title, Path.GetFileNameWithoutExtension(request.Game.FileName), "index.html");
-        var icon = Path.Combine("http://localhost:5072/games", request.Title, $"{request.Title}.png");
-        var card = new GamePage(Guid.NewGuid().ToString(), request.Title, icon, request.Description, path);
+        var path = $"http://localhost:5072/games/{request.Title}/{request.Game.FileName}/index.html";
+        var icon = $"http://localhost:5072/games/{request.Title}/{request.Title}.png";
+        var card = new GamePage
+        {
+            Title = request.Title,
+            Description = request.Description,
+            PosterUrl = icon,
+            GameUrl = path
+        };
         _repository.Add(card);
     }
 
