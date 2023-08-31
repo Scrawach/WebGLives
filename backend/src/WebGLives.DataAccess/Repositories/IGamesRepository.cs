@@ -2,7 +2,7 @@
 
 namespace WebGLives.DataAccess.Repositories;
 
-public interface IGamePageRepository
+public interface IGamesRepository
 {
     int Add(Game page);
     IEnumerable<Game> All();

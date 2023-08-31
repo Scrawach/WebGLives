@@ -5,12 +5,12 @@ using WebGLives.DataAccess.Entities;
 
 namespace WebGLives.DataAccess.Repositories;
 
-public class GamePageRepository : IGamePageRepository
+public class GamesRepository : IGamesRepository
 {
-    private readonly GamePageDbContext _context;
+    private readonly GamesDbContext _context;
     private readonly IMapper _mapper;
 
-    public GamePageRepository(GamePageDbContext context, IMapper mapper)
+    public GamesRepository(GamesDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
@@ -19,14 +19,14 @@ public class GamePageRepository : IGamePageRepository
     public int Add(Game page)
     {
         var cardEntity = _mapper.Map<Game, GameEntity>(page);
-        _context.GamePages.Add(cardEntity);
+        _context.Games.Add(cardEntity);
         _context.SaveChanges();
         return cardEntity.Id;
     }
 
     public IEnumerable<Game> All()
     {
-        var pages = _context.GamePages
+        var pages = _context.Games
             .AsNoTracking()
             .ToArray();
         return _mapper.Map<GameEntity[], Game[]>(pages);
@@ -34,7 +34,7 @@ public class GamePageRepository : IGamePageRepository
 
     public Game GetById(int pageId)
     {
-        var page = _context.GamePages
+        var page = _context.Games
             .AsNoTracking()
             .FirstOrDefault(x => x.Id == pageId);
         return _mapper.Map<GameEntity, Game>(page);

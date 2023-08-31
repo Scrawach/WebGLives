@@ -27,7 +27,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<GamePageDbContext>(options =>
+builder.Services.AddDbContext<GamesDbContext>(options =>
 {
     options.UseNpgsql
     (
@@ -42,7 +42,7 @@ builder.Services.AddAutoMapper(cfg =>
 
 builder.Services.AddSingleton<IRandomService, RandomService>();
 builder.Services.AddSingleton<IZipService, ZipService>();
-builder.Services.AddScoped<IGamePageRepository, GamePageRepository>();
+builder.Services.AddScoped<IGamesRepository, GamesRepository>();
 
 var app = builder.Build();
 app.UseCors("MyAllowSpecificOrigins");

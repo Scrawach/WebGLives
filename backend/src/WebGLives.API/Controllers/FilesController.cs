@@ -12,10 +12,10 @@ public class FilesController : ControllerBase
 {
     private readonly ILogger<FilesController> _logger;
     private readonly IZipService _zipService;
-    private readonly IGamePageRepository _repository;
+    private readonly IGamesRepository _repository;
     private static readonly string BaseDirectory = Path.Combine(Path.GetTempPath(), "WebGLives", "games");
 
-    public FilesController(ILogger<FilesController> logger, IZipService zipService, IGamePageRepository repository)
+    public FilesController(ILogger<FilesController> logger, IZipService zipService, IGamesRepository repository)
     {
         _logger = logger;
         _zipService = zipService;

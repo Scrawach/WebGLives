@@ -1,47 +1,22 @@
-﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using WebGLives.DataAccess.Repositories;
 
 namespace WebGLives.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class GamesController : Controller
+[Route("[controller]")]
+public class GamesController : ControllerBase
 {
-    private readonly ILogger<GamesController> _logger;
-    private static readonly string BaseDirectory = Path.Combine(Path.GetTempPath(), "games");
+    private readonly IGamesRepository _gamesRepository;
 
-    public GamesController(ILogger<GamesController> logger) => 
-        _logger = logger;
+    public GamesController(IGamesRepository gamesRepository) =>
+        _gamesRepository = gamesRepository;
 
-    [HttpGet("{gameName}")]
-    public IActionResult Index(string gameName)
-    {
-        if (DirectoryNotExist())
-            CreateDirectory();
-        
-        var pathToGame = Path.Combine(BaseDirectory, gameName);
-        if (Directory.Exists(pathToGame))
-            return GamePage(pathToGame);
-        
-        return HelloWorldPage();
-    }
+    [HttpGet]
+    public async Task<IActionResult> All() =>
+        Ok(_gamesRepository.All());
 
-    private IActionResult GamePage(string pathToGame)
-    {
-        return Redirect(Path.Combine("../ufo", "index.html"));
-    }
-
-    private static ContentResult HelloWorldPage() =>
-        new ContentResult()
-        {
-            ContentType = "text/html",
-            StatusCode = (int)HttpStatusCode.OK,
-            Content = "<html><body>Hello World</body></html>"
-        };
-
-    private static bool DirectoryNotExist() => 
-        !Directory.Exists(BaseDirectory);
-
-    private static DirectoryInfo CreateDirectory() => 
-        Directory.CreateDirectory(BaseDirectory);
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id) => 
+        Ok(_gamesRepository.GetById(id));
 }
