@@ -25,15 +25,18 @@ public class GamesRepository : IGamesRepository
         return _mapper.Map<GameEntity[], Game[]>(games);
     }
     
-    public async Task<Game> Get(int id, CancellationToken token = default)
+    public async Task<Game?> GetOrDefault(int id, CancellationToken token = default)
     {
         var game = await _context.Games
             .AsNoTracking()
-            .FirstAsync(x => x.Id == id, cancellationToken: token);
-        return _mapper.Map<GameEntity, Game>(game);
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken: token);
+
+        return game is null 
+            ? null 
+            : _mapper.Map<GameEntity, Game>(game);
     }
     
-    public async Task Add(Game game, CancellationToken token = default)
+    public async Task Create(Game game, CancellationToken token = default)
     {
         var entity = _mapper.Map<Game, GameEntity>(game);
         await _context.Games.AddAsync(entity, token);

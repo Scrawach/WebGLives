@@ -54,7 +54,7 @@ public class FilesController : ControllerBase
             PosterUrl = icon,
             GameUrl = path
         };
-        _repository.Add(card);
+        _repository.Create(card);
     }
 
     private static string FileExtensionFrom(string fullName) => 

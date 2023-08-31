@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WebGLives.Core;
 using WebGLives.DataAccess.Repositories;
 
 namespace WebGLives.API.Controllers;
@@ -13,16 +14,30 @@ public class GamesController : ControllerBase
         _gamesRepository = gamesRepository;
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Game>))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> All()
     {
         var games = await _gamesRepository.All();
         return Ok(games);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Game))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Get(int id)
     {
-        var game = await _gamesRepository.Get(id);
-        return Ok(game);
+        var game = await _gamesRepository.GetOrDefault(id);
+        
+        return game is null 
+            ? NotFound() 
+            : Ok(game);
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _gamesRepository.Delete(id);
+        return Ok();
     }
 }
