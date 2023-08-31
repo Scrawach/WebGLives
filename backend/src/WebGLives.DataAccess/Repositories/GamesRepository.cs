@@ -15,28 +15,44 @@ public class GamesRepository : IGamesRepository
         _context = context;
         _mapper = mapper;
     }
-
-    public int Add(Game page)
+    
+    public async Task<IEnumerable<Game>> All(CancellationToken token = default)
     {
-        var cardEntity = _mapper.Map<Game, GameEntity>(page);
-        _context.Games.Add(cardEntity);
-        _context.SaveChanges();
-        return cardEntity.Id;
+        var games = await _context.Games
+            .AsNoTracking()
+            .ToArrayAsync(cancellationToken: token);
+
+        return _mapper.Map<GameEntity[], Game[]>(games);
+    }
+    
+    public async Task<Game> Get(int id, CancellationToken token = default)
+    {
+        var game = await _context.Games
+            .AsNoTracking()
+            .FirstAsync(x => x.Id == id, cancellationToken: token);
+        return _mapper.Map<GameEntity, Game>(game);
+    }
+    
+    public async Task Add(Game game, CancellationToken token = default)
+    {
+        var entity = _mapper.Map<Game, GameEntity>(game);
+        await _context.Games.AddAsync(entity, token);
+        await _context.SaveChangesAsync(token);
     }
 
-    public IEnumerable<Game> All()
+    public async Task Update(Game game, CancellationToken token = default)
     {
-        var pages = _context.Games
-            .AsNoTracking()
-            .ToArray();
-        return _mapper.Map<GameEntity[], Game[]>(pages);
+        var entity = _mapper.Map<Game, GameEntity>(game);
+        _context.Games.Update(entity);
+        await _context.SaveChangesAsync(token);
     }
 
-    public Game GetById(int pageId)
+    public async Task Delete(int id, CancellationToken token = default)
     {
-        var page = _context.Games
-            .AsNoTracking()
-            .FirstOrDefault(x => x.Id == pageId);
-        return _mapper.Map<GameEntity, Game>(page);
+        if (_context.Games.Any(game => game.Id == id))
+        {
+            _context.Remove(id);
+            await _context.SaveChangesAsync(token);
+        }
     }
 }

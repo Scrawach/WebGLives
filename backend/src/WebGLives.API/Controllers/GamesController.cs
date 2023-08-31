@@ -13,10 +13,16 @@ public class GamesController : ControllerBase
         _gamesRepository = gamesRepository;
 
     [HttpGet]
-    public async Task<IActionResult> All() =>
-        Ok(_gamesRepository.All());
+    public async Task<IActionResult> All()
+    {
+        var games = await _gamesRepository.All();
+        return Ok(games);
+    }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id) => 
-        Ok(_gamesRepository.GetById(id));
+    public async Task<IActionResult> GetById(int id)
+    {
+        var game = await _gamesRepository.Get(id);
+        return Ok(game);
+    }
 }
