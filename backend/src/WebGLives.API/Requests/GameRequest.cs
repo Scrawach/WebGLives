@@ -1,6 +1,6 @@
 ﻿namespace WebGLives.API.Requests;
 
-public class UploadGameRequest
+public class GameRequest
 {
     public string Title { get; set; }
     

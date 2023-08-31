@@ -26,7 +26,7 @@ public class FilesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<ActionResult> Post([FromForm] UploadGameRequest request)
+    public async Task<ActionResult> Post([FromForm] GameRequest request)
     {
         var root = RootDirectory(request.Title);
 
@@ -44,7 +44,7 @@ public class FilesController : ControllerBase
         return Ok();
     }
 
-    private void AddGameCard(UploadGameRequest request)
+    private void AddGameCard(GameRequest request)
     {
         var path = $"http://localhost:5072/games/{request.Title}/{request.Game.FileName.Split('.').First()}/index.html";
         var icon = $"http://localhost:5072/games/{request.Title}/{request.Title}.{FileExtensionFrom(request.Icon.FileName)}";
