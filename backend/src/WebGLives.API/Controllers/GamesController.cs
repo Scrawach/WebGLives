@@ -35,6 +35,7 @@ public class GamesController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Delete(int id)
     {
         await _gamesRepository.Delete(id);
