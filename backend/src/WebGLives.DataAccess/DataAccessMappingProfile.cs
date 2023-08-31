@@ -8,6 +8,6 @@ public class DataAccessMappingProfile : Profile
 {
     public DataAccessMappingProfile()
     {
-        CreateMap<GamePageEntity, GamePage>().ReverseMap();
+        CreateMap<GameEntity, Game>().ReverseMap();
     }
 }

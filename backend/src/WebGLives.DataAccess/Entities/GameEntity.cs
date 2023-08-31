@@ -1,6 +1,6 @@
 namespace WebGLives.DataAccess.Entities;
 
-public class GamePageEntity
+public class GameEntity
 {
     public int Id { get; set; }
     

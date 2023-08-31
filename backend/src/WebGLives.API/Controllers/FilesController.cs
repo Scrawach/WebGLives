@@ -47,7 +47,7 @@ public class FilesController : ControllerBase
     {
         var path = $"http://localhost:5072/games/{request.Title}/{request.Game.FileName.Split('.').First()}/index.html";
         var icon = $"http://localhost:5072/games/{request.Title}/{request.Title}.{FileExtensionFrom(request.Icon.FileName)}";
-        var card = new GamePage
+        var card = new Game
         {
             Title = request.Title,
             Description = request.Description,

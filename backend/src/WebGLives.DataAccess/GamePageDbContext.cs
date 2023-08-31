@@ -7,5 +7,5 @@ public class GamePageDbContext : DbContext
 {
     public GamePageDbContext(DbContextOptions<GamePageDbContext> options) : base(options) { }
     
-    public DbSet<GamePageEntity> GamePages { get; set; }
+    public DbSet<GameEntity> GamePages { get; set; }
 }

@@ -16,27 +16,27 @@ public class GamePageRepository : IGamePageRepository
         _mapper = mapper;
     }
 
-    public int Add(GamePage page)
+    public int Add(Game page)
     {
-        var cardEntity = _mapper.Map<GamePage, GamePageEntity>(page);
+        var cardEntity = _mapper.Map<Game, GameEntity>(page);
         _context.GamePages.Add(cardEntity);
         _context.SaveChanges();
         return cardEntity.Id;
     }
 
-    public IEnumerable<GamePage> All()
+    public IEnumerable<Game> All()
     {
         var pages = _context.GamePages
             .AsNoTracking()
             .ToArray();
-        return _mapper.Map<GamePageEntity[], GamePage[]>(pages);
+        return _mapper.Map<GameEntity[], Game[]>(pages);
     }
 
-    public GamePage GetById(int pageId)
+    public Game GetById(int pageId)
     {
         var page = _context.GamePages
             .AsNoTracking()
             .FirstOrDefault(x => x.Id == pageId);
-        return _mapper.Map<GamePageEntity, GamePage>(page);
+        return _mapper.Map<GameEntity, Game>(page);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace WebGLives.Core;
 
-public class GamePage
+public class Game
 {
     public string Id { get; set; }
     public string Title { get; set; }

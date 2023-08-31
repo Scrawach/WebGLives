@@ -4,7 +4,7 @@ namespace WebGLives.DataAccess.Repositories;
 
 public interface IGamePageRepository
 {
-    int Add(GamePage page);
-    IEnumerable<GamePage> All();
-    GamePage GetById(int pageId);
+    int Add(Game page);
+    IEnumerable<Game> All();
+    Game GetById(int pageId);
 }
