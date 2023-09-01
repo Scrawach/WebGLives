@@ -5,9 +5,9 @@ namespace WebGLives.BusinessLogic.Services.Abstract;
 
 public interface IGamesService
 {
-    Task<Result<IEnumerable<Game>>> All();
-    Task<Result> Create(Game newGame);
-    Task<Result<Game>> Get(int id);
-    Task<Result> Update(int id, Game updated);
-    Task<Result> Delete(int id);
+    Task<Result<IEnumerable<Game>>> All(CancellationToken token = default);
+    Task<Result> Create(Game newGame, CancellationToken token = default);
+    Task<Result<Game>> Get(int id, CancellationToken token = default);
+    Task<Result> Update(int id, Game updated, CancellationToken token = default);
+    Task<Result> Delete(int id, CancellationToken token = default);
 }

@@ -12,33 +12,33 @@ public class GamesService : IGamesService
     public GamesService(IGamesRepository repository) =>
         _repository = repository;
 
-    public async Task<Result<IEnumerable<Game>>> All()
+    public async Task<Result<IEnumerable<Game>>> All(CancellationToken token = default)
     {
-        var games = await _repository.All();
+        var games = await _repository.All(token);
         return Result.Success(games);
     }
 
-    public async Task<Result> Create(Game newGame)
+    public async Task<Result> Create(Game newGame, CancellationToken token = default)
     {
-        var isCreated = await _repository.Create(newGame);
+        var isCreated = await _repository.Create(newGame, token);
         return isCreated ? Result.Success() : Result.Failure($"Game {newGame.Id} not created");
     }
 
-    public async Task<Result<Game>> Get(int id)
+    public async Task<Result<Game>> Get(int id, CancellationToken token = default)
     {
-        var game = await _repository.GetOrDefault(id);
+        var game = await _repository.GetOrDefault(id, token);
         return game is not null ? Result.Success(game) : Result.Failure<Game>($"Game {id} not found!");
     }
 
-    public async Task<Result> Update(int id, Game updated)
+    public async Task<Result> Update(int id, Game updated, CancellationToken token = default)
     {
-        var isUpdated = await _repository.Update(updated);
+        var isUpdated = await _repository.Update(updated, token);
         return isUpdated ? Result.Success() : Result.Failure($"Game {id} not updated!");
     }
 
-    public async Task<Result> Delete(int id)
+    public async Task<Result> Delete(int id, CancellationToken token = default)
     {
-        var isDeleted = await _repository.Delete(id);
+        var isDeleted = await _repository.Delete(id, token);
         return isDeleted ? Result.Success() : Result.Failure($"Game {id} not deleted!");
     }
 }
