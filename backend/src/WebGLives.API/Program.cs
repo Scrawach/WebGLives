@@ -38,15 +38,7 @@ builder.Services.AddDbContext<GamesDbContext>(options =>
     );
 });
 
-builder.Services.AddAutoMapper(cfg =>
-{
-    cfg.AddProfile<DataAccessMappingProfile>();
-});
-
-builder.Services.AddSingleton<IZipService, ZipService>();
-builder.Services.AddSingleton<IFilesService, FilesService>();
-builder.Services.AddSingleton<IGamesService, GamesService>();
-builder.Services.AddScoped<IGamesRepository, GamesRepository>();
+builder.Services.AddWebGLives();
 
 var app = builder.Build();
 app.UseCors("MyAllowSpecificOrigins");
