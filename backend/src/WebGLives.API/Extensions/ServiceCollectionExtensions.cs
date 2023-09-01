@@ -18,7 +18,7 @@ public static class ServiceCollectionExtensions
 
         collection.AddSingleton<IZipService, ZipService>();
         collection.AddSingleton<IFilesService, FilesService>();
-        collection.AddSingleton<IGamesService, GamesService>();
+        collection.AddScoped<IGamesService, GamesService>();
         collection.AddScoped<IGamesRepository, GamesRepository>();
 
         return collection;
