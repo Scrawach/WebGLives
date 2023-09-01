@@ -37,10 +37,14 @@ public class GamesController : ControllerBase
 
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> Delete(int id)
     {
-        await _gamesRepository.Delete(id);
-        return Ok();
+        var isDeleted = await _gamesRepository.Delete(id);
+        
+        return isDeleted 
+            ? Ok()
+            : NotFound();
     }
 }
