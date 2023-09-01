@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Requests;
 using WebGLives.API.Services.Abstract;
@@ -22,7 +21,7 @@ public class GamesController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Game>))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> All()
     {
         var games = await _games.All();
@@ -31,7 +30,7 @@ public class GamesController : ControllerBase
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Game))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Get(int id)
     {
         var game = await _games.Get(id);
@@ -39,8 +38,8 @@ public class GamesController : ControllerBase
     }
     
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<ActionResult> Create([FromForm] GameRequest request)
     {
         var game = await GameFrom(request);
@@ -49,8 +48,8 @@ public class GamesController : ControllerBase
     }
 
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<ActionResult> Update(int id, [FromForm] GameRequest request)
     {
         var game = await GameFrom(request);
@@ -60,7 +59,7 @@ public class GamesController : ControllerBase
 
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await _games.Delete(id);
