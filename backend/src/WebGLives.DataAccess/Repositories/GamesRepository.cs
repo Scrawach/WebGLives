@@ -36,26 +36,26 @@ public class GamesRepository : IGamesRepository
             : _mapper.Map<GameEntity, Game>(game);
     }
     
-    public async Task Create(Game game, CancellationToken token = default)
+    public async Task<bool> Create(Game game, CancellationToken token = default)
     {
         var entity = _mapper.Map<Game, GameEntity>(game);
         await _context.Games.AddAsync(entity, token);
-        await _context.SaveChangesAsync(token);
+        var created = await _context.SaveChangesAsync(token);
+        return created > 0;
     }
 
-    public async Task Update(Game game, CancellationToken token = default)
+    public async Task<bool> Update(Game game, CancellationToken token = default)
     {
         var entity = _mapper.Map<Game, GameEntity>(game);
         _context.Games.Update(entity);
-        await _context.SaveChangesAsync(token);
+        var updated = await _context.SaveChangesAsync(token);
+        return updated > 0;
     }
 
-    public async Task Delete(int id, CancellationToken token = default)
+    public async Task<bool> Delete(int id, CancellationToken token = default)
     {
-        if (_context.Games.Any(game => game.Id == id))
-        {
-            _context.Remove(id);
-            await _context.SaveChangesAsync(token);
-        }
+        _context.Remove(id);
+        var deleted = await _context.SaveChangesAsync(token);
+        return deleted > 0;
     }
 }
