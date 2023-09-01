@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WebGLives.API.Services;
 using WebGLives.API.Services.Abstract;
 using WebGLives.BusinessLogic.Services;
@@ -9,18 +10,23 @@ namespace WebGLives.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddWebGLives(this IServiceCollection collection)
+    public static IServiceCollection AddWebGLives(this IServiceCollection services, string? connectionString)
     {
-        collection.AddAutoMapper(cfg =>
+        services.AddDbContext<GamesDbContext>(options =>
+        {
+            options.UseNpgsql(connectionString);
+        });
+        
+        services.AddAutoMapper(cfg =>
         {
             cfg.AddProfile<DataAccessMappingProfile>();
         });
 
-        collection.AddSingleton<IZipService, ZipService>();
-        collection.AddSingleton<IFilesService, FilesService>();
-        collection.AddScoped<IGamesService, GamesService>();
-        collection.AddScoped<IGamesRepository, GamesRepository>();
+        services.AddSingleton<IZipService, ZipService>();
+        services.AddSingleton<IFilesService, FilesService>();
+        services.AddScoped<IGamesService, GamesService>();
+        services.AddScoped<IGamesRepository, GamesRepository>();
 
-        return collection;
+        return services;
     }
 }
