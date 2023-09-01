@@ -36,7 +36,7 @@ builder.Services.AddDbContext<GamesDbContext>(options =>
 {
     options.UseNpgsql
     (
-        builder.Configuration.GetConnectionString("DefaultConnection")
+        builder.Configuration.GetConnectionString(nameof(GamesDbContext))
     );
 });
 
