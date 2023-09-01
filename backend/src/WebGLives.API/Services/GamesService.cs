@@ -1,4 +1,4 @@
-using WebGLives.API.Requests;
+using CSharpFunctionalExtensions;
 using WebGLives.Core;
 using WebGLives.DataAccess.Repositories;
 
@@ -8,15 +8,30 @@ public class GamesService : IGamesService
 {
     private readonly IGamesRepository _repository;
 
-    public async Task<IEnumerable<Game>> All() =>
-        await _repository.All();
+    public GamesService(IGamesRepository repository) =>
+        _repository = repository;
 
-    public async Task Create(Game newGame) =>
-        await _repository.Create(newGame);
+    public async Task<Result<IEnumerable<Game>>> All()
+    {
+        var games = await _repository.All();
+        return Result.Success(games);
+    }
 
-    public Task<Game> Get(int id) =>
-        _repository.GetOrDefault(id);
+    public async Task<Result> Create(Game newGame)
+    {
+        var isCreated = await _repository.Create(newGame);
+        return isCreated ? Result.Success() : Result.Failure($"Game {newGame.Id} not created");
+    }
 
-    public Task<bool> Delete(int id) =>
-        _repository.Delete(id);
+    public async Task<Result<Game>> Get(int id)
+    {
+        var game = await _repository.GetOrDefault(id);
+        return game is not null ? Result.Success(game) : Result.Failure<Game>($"Game {id} not found!");
+    }
+
+    public async Task<Result> Delete(int id)
+    {
+        var isDeleted = await _repository.Delete(id);
+        return isDeleted ? Result.Success() : Result.Failure($"Game {id} not deleted!");
+    }
 }
