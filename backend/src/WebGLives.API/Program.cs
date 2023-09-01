@@ -42,6 +42,8 @@ builder.Services.AddAutoMapper(cfg =>
 
 builder.Services.AddSingleton<IRandomService, RandomService>();
 builder.Services.AddSingleton<IZipService, ZipService>();
+builder.Services.AddSingleton<IFilesService, FilesService>();
+builder.Services.AddSingleton<IGamesService, GamesService>();
 builder.Services.AddScoped<IGamesRepository, GamesRepository>();
 
 var app = builder.Build();
