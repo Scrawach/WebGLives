@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\WebGLives.BusinessLogic\WebGLives.BusinessLogic.csproj" />
       <ProjectReference Include="..\WebGLives.DataAccess\WebGLives.DataAccess.csproj" />
     </ItemGroup>
 

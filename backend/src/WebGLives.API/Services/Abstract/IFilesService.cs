@@ -1,4 +1,4 @@
-namespace WebGLives.API.Services;
+namespace WebGLives.API.Services.Abstract;
 
 public interface IFilesService
 {

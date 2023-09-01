@@ -1,8 +1,9 @@
 using CSharpFunctionalExtensions;
+using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core;
 using WebGLives.DataAccess.Repositories;
 
-namespace WebGLives.API.Services;
+namespace WebGLives.BusinessLogic.Services;
 
 public class GamesService : IGamesService
 {

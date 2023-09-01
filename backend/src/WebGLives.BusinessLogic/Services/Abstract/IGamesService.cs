@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
 using WebGLives.Core;
 
-namespace WebGLives.API.Services;
+namespace WebGLives.BusinessLogic.Services.Abstract;
 
 public interface IGamesService
 {

@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebGLives.API.Extensions;
 using WebGLives.API.Services;
+using WebGLives.API.Services.Abstract;
+using WebGLives.BusinessLogic.Services;
+using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.DataAccess;
 using WebGLives.DataAccess.Repositories;
 
@@ -40,7 +43,6 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<DataAccessMappingProfile>();
 });
 
-builder.Services.AddSingleton<IRandomService, RandomService>();
 builder.Services.AddSingleton<IZipService, ZipService>();
 builder.Services.AddSingleton<IFilesService, FilesService>();
 builder.Services.AddSingleton<IGamesService, GamesService>();
