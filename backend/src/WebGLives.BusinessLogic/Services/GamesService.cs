@@ -30,6 +30,12 @@ public class GamesService : IGamesService
         return game is not null ? Result.Success(game) : Result.Failure<Game>($"Game {id} not found!");
     }
 
+    public async Task<Result> Update(int id, Game updated)
+    {
+        var isUpdated = await _repository.Update(updated);
+        return isUpdated ? Result.Success() : Result.Failure($"Game {id} not updated!");
+    }
+
     public async Task<Result> Delete(int id)
     {
         var isDeleted = await _repository.Delete(id);

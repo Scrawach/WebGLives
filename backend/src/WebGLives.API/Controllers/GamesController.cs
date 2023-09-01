@@ -1,3 +1,4 @@
+using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Requests;
 using WebGLives.API.Services.Abstract;
@@ -25,11 +26,7 @@ public class GamesController : ControllerBase
     public async Task<IActionResult> All()
     {
         var games = await _games.All();
-
-        if (games.IsSuccess)
-            return Ok(games.Value);
-        
-        return BadRequest(games.Error);
+        return games.IsSuccess ? Ok(games.Value) : BadRequest(games.Error);
     }
 
     [HttpGet("{id:int}")]
@@ -37,12 +34,8 @@ public class GamesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Get(int id)
     {
-        var result = await _games.Get(id);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-        
-        return BadRequest(result.Error);
+        var game = await _games.Get(id);
+        return game.IsSuccess ? Ok(game.Value) : BadRequest(game.Error);
     }
     
     [HttpPost]
@@ -50,11 +43,19 @@ public class GamesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Create([FromForm] GameRequest request)
     {
-        var (gamePath, posterPath) = await _files.SaveGame(request.Title, request.Game, request.Icon);
-        var result = await _games.Create(new Game { Title = request.Title, Description = request.Description, GameUrl = gamePath, PosterUrl = posterPath});
-        return result.IsSuccess
-            ? Ok()
-            : BadRequest(result.Error);
+        var game = await GameFrom(request);
+        var created = await _games.Create(game);
+        return created.IsSuccess ? Ok() : BadRequest(created.Error);
+    }
+
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> Update(int id, [FromForm] GameRequest request)
+    {
+        var game = await GameFrom(request);
+        await _games.Update(id, game);
+        return Ok();
     }
 
     [HttpDelete("{id:int}")]
@@ -63,9 +64,12 @@ public class GamesController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var result = await _games.Delete(id);
+        return result.IsSuccess ? Ok() : BadRequest(result.Error);
+    }
 
-        return result.IsSuccess
-            ? Ok()
-            : BadRequest(result.Error);
+    private async Task<Game> GameFrom(GameRequest request)
+    {
+        var (gamePath, posterPath) = await _files.SaveGame(request.Title, request.Game, request.Icon);
+        return new Game { Title = request.Title, Description = request.Description, GameUrl = gamePath, PosterUrl = posterPath };
     }
 }
