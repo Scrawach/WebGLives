@@ -8,6 +8,8 @@ using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.DataAccess;
 using WebGLives.DataAccess.Repositories;
 
+const string cors = "MyAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -22,7 +24,7 @@ builder.Services.AddLogging(loggingBuilder =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "MyAllowSpecificOrigins", policy => { policy.WithOrigins("http://localhost:3000");});
+    options.AddPolicy(name: cors, policy => { policy.WithOrigins("http://localhost:3000");});
 });
 
 builder.Services.AddControllers();
@@ -41,7 +43,7 @@ builder.Services.AddDbContext<GamesDbContext>(options =>
 builder.Services.AddWebGLives();
 
 var app = builder.Build();
-app.UseCors("MyAllowSpecificOrigins");
+app.UseCors(cors);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
