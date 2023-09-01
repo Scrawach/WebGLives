@@ -5,7 +5,7 @@ namespace WebGLives.API.Extensions;
 
 public static class BuilderExtensions
 {
-    public static IApplicationBuilder UseGameStorage(this IApplicationBuilder app)
+    public static IApplicationBuilder UseWebGLivesStorage(this IApplicationBuilder app)
     {
         var contentTypeProvider = new FileExtensionContentTypeProvider();
         contentTypeProvider.Mappings[".unityweb"] = "application/octet-stream";

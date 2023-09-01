@@ -45,7 +45,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseGameStorage();
+app.UseWebGLivesStorage();
 
 app.UseAuthorization();
 
