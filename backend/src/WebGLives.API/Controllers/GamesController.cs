@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Requests;
-using WebGLives.API.Services;
 using WebGLives.API.Services.Abstract;
-using WebGLives.BusinessLogic.Services;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core;
 
@@ -23,7 +21,7 @@ public class GamesController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Game>))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> All()
     {
         var games = await _games.All();
@@ -36,21 +34,20 @@ public class GamesController : ControllerBase
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Game))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Get(int id)
     {
         var result = await _games.Get(id);
 
         if (result.IsSuccess)
             return Ok(result.Value);
-
+        
         return BadRequest(result.Error);
     }
     
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Create([FromForm] GameRequest request)
     {
         var (gamePath, posterPath) = await _files.SaveGame(request.Title, request.Game, request.Icon);
@@ -62,8 +59,7 @@ public class GamesController : ControllerBase
 
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await _games.Delete(id);
