@@ -5,21 +5,23 @@ export class Api {
     private static readonly url: string = "http://localhost:5072"
 
     public static async gamePages(): Promise<GameCardData[]> {
-        const response = await fetch(`${Api.url}/GamePages`)
+        const response = await fetch(`${Api.url}/games`)
         const json = await response.json();
         return json;
     }
 
     public static async gamePage(id: string): Promise<GameCardData> {
-        const response = await fetch(`${Api.url}/GamePages/${id}`)
+        const response = await fetch(`${Api.url}/games/${id}`)
         const json = await response.json();
+        json.gameUrl = `${Api.url}${json.gameUrl}`
+        json.posterUrl = `${Api.url}${json.posterUrl}`
         return json;
     }
 
     public static async upload(file: File): Promise<void> {
         const formData = new FormData();
         formData.append('file', file);
-        await fetch(`${Api.url}/api/files`, {
+        await fetch(`${Api.url}/games`, {
             method: 'POST',
             body: formData
         });
@@ -31,7 +33,7 @@ export class Api {
         request.append('title', data.title)
         request.append('description', data.description)
         request.append('icon', data.icon as File)
-        await fetch(`${Api.url}/api/files`, {
+        await fetch(`${Api.url}/games`, {
             method: 'POST',
             body: request,
         })
