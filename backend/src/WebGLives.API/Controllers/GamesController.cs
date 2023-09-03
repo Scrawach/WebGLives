@@ -53,8 +53,8 @@ public class GamesController : ControllerBase
     public async Task<ActionResult> Update(int id, [FromForm] GameRequest request)
     {
         var game = await GameFrom(request);
-        await _games.Update(id, game);
-        return Ok();
+        var update = await _games.Update(id, game);
+        return update.IsSuccess ? Ok() : BadRequest(update.Error);
     }
 
     [HttpDelete("{id:int}")]
