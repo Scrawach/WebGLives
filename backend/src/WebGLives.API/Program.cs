@@ -1,12 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebGLives.API.Extensions;
-using WebGLives.API.Services;
-using WebGLives.API.Services.Abstract;
-using WebGLives.BusinessLogic.Services;
-using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.DataAccess;
-using WebGLives.DataAccess.Repositories;
 
 const string cors = "MyAllowSpecificOrigins";
 
