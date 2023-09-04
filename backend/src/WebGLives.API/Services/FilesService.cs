@@ -37,25 +37,20 @@ public class FilesService : IFilesService
     private static string CombinePath(params string[] directories)
     {
         var builder = new StringBuilder();
+        
         foreach (var directory in directories) 
             builder.Append($"{Path.AltDirectorySeparatorChar}{directory}");
+        
         return builder.ToString();
     }
     
-    private static string FileExtensionFrom(string fullName) => 
-        fullName.Split('.').Last();
-
     private static string GetOrCreateRootDirectory(string directoryName)
     {
         var root = Path.Combine(BaseDirectory, directoryName);
-        if (DirectoryNotExist(root))
-            CreateDirectory(root);
+        
+        if (!Directory.Exists(root))
+            Directory.CreateDirectory(root);
+        
         return root;
     }
-    
-    private static bool DirectoryNotExist(string path) => 
-        !Directory.Exists(path);
-
-    private static DirectoryInfo CreateDirectory(string path) => 
-        Directory.CreateDirectory(path);
 }
