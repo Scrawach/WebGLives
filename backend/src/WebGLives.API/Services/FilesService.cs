@@ -15,7 +15,7 @@ public class FilesService : IFilesService
 
     public async Task<(string gamePath, string posterPath)> SaveGame(string title, IFormFile game, IFormFile icon)
     {
-        var root = RootDirectory(title);
+        var root = GetOrCreateRootDirectory(title);
         
         var filePath = Path.Combine(root, $"{title}.zip");
         var iconFileName = $"{title}.{Path.GetExtension(icon.FileName)}";
@@ -45,7 +45,7 @@ public class FilesService : IFilesService
     private static string FileExtensionFrom(string fullName) => 
         fullName.Split('.').Last();
 
-    private static string RootDirectory(string directoryName)
+    private static string GetOrCreateRootDirectory(string directoryName)
     {
         var root = Path.Combine(BaseDirectory, directoryName);
         if (DirectoryNotExist(root))
