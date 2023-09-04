@@ -10,8 +10,8 @@ export class Api {
         const gameCards = json as GameCardData[];
         
         gameCards.forEach(element => {
-            element.gameUrl = `${Api.url}${json.gameUrl}`
-            element.posterUrl = `${Api.url}${json.posterUrl}`
+            element.gameUrl = `${Api.url}${element.gameUrl}`
+            element.posterUrl = `${Api.url}${element.posterUrl}`
         });
 
         return gameCards;
