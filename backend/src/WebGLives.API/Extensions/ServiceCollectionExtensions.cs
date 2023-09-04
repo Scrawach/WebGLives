@@ -15,7 +15,11 @@ public static class ServiceCollectionExtensions
     {
         services.AddDbContext<GamesDbContext>(options =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql
+            (
+                connectionString,
+                npgsqlOptions => npgsqlOptions.MigrationsAssembly("WebGLives.Migrations")
+            );
         });
         
         services.AddAutoMapper(cfg =>
