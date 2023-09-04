@@ -7,7 +7,14 @@ export class Api {
     public static async gamePages(): Promise<GameCardData[]> {
         const response = await fetch(`${Api.url}/games`)
         const json = await response.json();
-        return json;
+        const gameCards = json as GameCardData[];
+        
+        gameCards.forEach(element => {
+            element.gameUrl = `${Api.url}${json.gameUrl}`
+            element.posterUrl = `${Api.url}${json.posterUrl}`
+        });
+
+        return gameCards;
     }
 
     public static async gamePage(id: string): Promise<GameCardData> {
