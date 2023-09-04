@@ -32,6 +32,12 @@ public class GamesService : IGamesService
 
     public async Task<Result> Update(int id, Game updated, CancellationToken token = default)
     {
+        var item = await Get(id, token);
+
+        if (item.IsFailure)
+            return item;
+
+        updated.Id = id;
         var isUpdated = await _repository.Update(updated, token);
         return isUpdated ? Result.Success() : Result.Failure($"Game {id} not updated!");
     }
