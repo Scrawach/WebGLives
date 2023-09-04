@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core;
-using WebGLives.DataAccess.Repositories;
+using WebGLives.Core.Repositories;
 
 namespace WebGLives.BusinessLogic.Services;
 

@@ -1,6 +1,4 @@
-﻿using WebGLives.Core;
-
-namespace WebGLives.DataAccess.Repositories;
+﻿namespace WebGLives.Core.Repositories;
 
 public interface IGamesRepository
 {

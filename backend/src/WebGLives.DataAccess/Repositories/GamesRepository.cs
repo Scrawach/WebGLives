@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WebGLives.Core;
+using WebGLives.Core.Repositories;
 using WebGLives.DataAccess.Entities;
 
 namespace WebGLives.DataAccess.Repositories;
