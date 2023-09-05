@@ -1,20 +1,10 @@
-using Serilog;
 using WebGLives.API.Extensions;
-using WebGLives.DataAccess;
 
 const string cors = "MyAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddLogging(loggingBuilder =>
-{
-    var logger = new LoggerConfiguration()
-        .WriteTo.Console()
-        .WriteTo.Seq("http://localhost:5341")
-        .CreateLogger();
-    loggingBuilder.AddSerilog(logger, dispose: true);
-});
 
 builder.Services.AddCors(options =>
 {
