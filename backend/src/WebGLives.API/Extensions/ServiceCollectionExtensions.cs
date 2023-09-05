@@ -10,12 +10,12 @@ using WebGLives.DataAccess.Repositories;
 
 namespace WebGLives.API.Extensions;
 
-
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddWebGLives(this IServiceCollection services, WebApplicationBuilder builder)
     {
         var logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
             .WriteTo.Console()
             .WriteTo.Seq("http://localhost:5341")
             .CreateLogger();
@@ -32,8 +32,6 @@ public static class ServiceCollectionExtensions
                 builder.Configuration.GetConnectionString(nameof(GamesDbContext)),
                 npgsqlOptions => npgsqlOptions.MigrationsAssembly("WebGLives.Migrations")
             );
-
-            options.LogTo(logger.Information);
         });
         
         services.AddAutoMapper(cfg =>
