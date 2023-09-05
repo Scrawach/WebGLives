@@ -40,7 +40,7 @@ public class GamesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<ActionResult> Create([FromForm] GameRequest request)
+    public async Task<ActionResult> Create([FromForm] UploadGameRequest request)
     {
         var game = await GameFrom(request);
         var created = await _games.Create(game);
@@ -50,7 +50,7 @@ public class GamesController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<ActionResult> Update(int id, [FromForm] GameRequest request)
+    public async Task<ActionResult> Update(int id, [FromForm] UploadGameRequest request)
     {
         var game = await GameFrom(request);
         var update = await _games.Update(id, game);
@@ -66,7 +66,7 @@ public class GamesController : ControllerBase
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }
 
-    private async Task<Game> GameFrom(GameRequest request)
+    private async Task<Game> GameFrom(UploadGameRequest request)
     {
         var (gamePath, posterPath) = await _files.SaveGame(request.Title, request.Game, request.Icon);
         return new Game { Title = request.Title, Description = request.Description, GameUrl = gamePath, PosterUrl = posterPath };

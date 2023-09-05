@@ -1,6 +1,6 @@
 ﻿namespace WebGLives.API.Requests;
 
-public class GameRequest
+public class UploadGameRequest
 {
     public string Title { get; set; }
     
@@ -9,7 +9,4 @@ public class GameRequest
     public string Description { get; set; }
     
     public IFormFile Game { get; set; }
-
-    public override string ToString() => 
-        $"{Title}: {Description}";
 }
