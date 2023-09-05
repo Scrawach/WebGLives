@@ -25,7 +25,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddWebGLives(connectionString: builder.Configuration.GetConnectionString(nameof(GamesDbContext)));
+builder.Services.AddWebGLives(builder);
 
 var app = builder.Build();
 app.UseCors(cors);

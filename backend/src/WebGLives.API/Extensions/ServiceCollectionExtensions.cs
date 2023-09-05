@@ -11,15 +11,17 @@ namespace WebGLives.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddWebGLives(this IServiceCollection services, string? connectionString)
+    public static IServiceCollection AddWebGLives(this IServiceCollection services, WebApplicationBuilder builder)
     {
         services.AddDbContext<GamesDbContext>(options =>
         {
             options.UseNpgsql
             (
-                connectionString,
+                builder.Configuration.GetConnectionString(nameof(GamesDbContext)),
                 npgsqlOptions => npgsqlOptions.MigrationsAssembly("WebGLives.Migrations")
             );
+
+            options.LogTo(Console.WriteLine);
         });
         
         services.AddAutoMapper(cfg =>
