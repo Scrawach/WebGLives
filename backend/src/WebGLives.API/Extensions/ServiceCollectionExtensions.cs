@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
         var logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
-            .WriteTo.Seq("http://localhost:5341")
+            .WriteTo.Seq(builder.Configuration.GetConnectionString(nameof(Serilog))!)
             .CreateLogger();
         
         builder.Services.AddLogging(loggingBuilder =>
