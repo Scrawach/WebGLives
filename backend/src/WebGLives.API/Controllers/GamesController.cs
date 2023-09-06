@@ -50,11 +50,9 @@ public class GamesController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<ActionResult> Update(int id, [FromForm] UploadGameRequest request)
+    public async Task<ActionResult> Update(int id, [FromForm] UpdateGameRequest request)
     {
-        var game = await GameFrom(request);
-        var update = await _games.Update(id, game);
-        return update.IsSuccess ? Ok() : BadRequest(update.Error);
+        return Ok();
     }
 
     [HttpDelete("{id:int}")]
