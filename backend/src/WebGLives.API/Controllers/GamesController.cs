@@ -47,12 +47,44 @@ public class GamesController : ControllerBase
         return created.IsSuccess ? Ok() : BadRequest(created.Error);
     }
 
-    [HttpPut]
+    [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<ActionResult> Update(int id, [FromForm] UpdateGameRequest request)
     {
-        return Ok();
+        var game = await _games.Get(id);
+
+        if (game.IsFailure)
+            return BadRequest(game.Error);
+
+        if (request.Title != null)
+            game.Value.Title = request.Title;
+
+        if (request.Description != null)
+            game.Value.Description = request.Description;
+
+        if (request.Game != null)
+        {
+            var gamePath = await _files.SaveGame(game.Value.Title, request.Game);
+
+            if (gamePath.IsFailure)
+                return BadRequest(gamePath.Error);
+            
+            game.Value.GameUrl = gamePath.Value;
+        }
+
+        if (request.Icon != null)
+        {
+            var iconPath = await _files.SaveIcon(game.Value.Title, request.Icon);
+
+            if (iconPath.IsFailure)
+                return BadRequest(iconPath.Error);
+
+            game.Value.PosterUrl = iconPath.Value;
+        }
+
+        var updated = await _games.Update(id, game.Value);
+        return updated.IsSuccess ? Ok() : BadRequest(updated.Error);
     }
 
     [HttpDelete("{id:int}")]
