@@ -1,4 +1,5 @@
 using System.Text;
+using CSharpFunctionalExtensions;
 using WebGLives.API.Extensions;
 using WebGLives.API.Services.Abstract;
 
@@ -13,27 +14,30 @@ public class FilesService : IFilesService
     public FilesService(IZipService zipService) =>
         _zipService = zipService;
 
-    public async Task<(string gamePath, string posterPath)> SaveGame(string title, IFormFile game, IFormFile icon)
+    public async Task<Result<string>> SaveIcon(string title, IFormFile icon)
     {
         var root = GetOrCreateRootDirectory(title);
+        var fileName = $"{title}.{Path.GetExtension(icon.FileName)}";
+        var path = Path.Combine(root, fileName);
         
-        var filePath = Path.Combine(root, $"{title}.zip");
-        var iconFileName = $"{title}.{Path.GetExtension(icon.FileName)}";
-        var iconPath = Path.Combine(root, iconFileName);
+        await icon.CopyToAsync(path);
         
-        await game.CopyToAsync(filePath);
-        await icon.CopyToAsync(iconPath);
-
-        if (_zipService.IsValid(filePath))
-            _zipService.Extract(filePath, root);
-
-        return 
-        (
-            CombinePath("games", $"{title}", $"{Path.GetFileNameWithoutExtension(game.FileName)}", "index.html"), 
-            CombinePath("games", $"{title}", $"{iconFileName}")
-        );
+        return CombinePath("games", $"{title}", $"{fileName}");
     }
-    
+
+    public async Task<Result<string>> SaveGame(string title, IFormFile game)
+    {
+        var root = GetOrCreateRootDirectory(title);
+        var path = Path.Combine(root, $"{title}.zip");
+        await game.CopyToAsync(path);
+
+        if (!_zipService.IsValid(path))
+            return Result.Failure<string>("Not valid zip archive!");
+        
+        _zipService.Extract(path, root);
+        return CombinePath("games", $"{title}", $"{Path.GetFileNameWithoutExtension(game.FileName)}", "index.html");
+    }
+
     private static string CombinePath(params string[] directories)
     {
         var builder = new StringBuilder();

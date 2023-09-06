@@ -66,7 +66,8 @@ public class GamesController : ControllerBase
 
     private async Task<Game> GameFrom(UploadGameRequest request)
     {
-        var (gamePath, posterPath) = await _files.SaveGame(request.Title, request.Game, request.Icon);
-        return new Game { Title = request.Title, Description = request.Description, GameUrl = gamePath, PosterUrl = posterPath };
+        var gamePath = await _files.SaveGame(request.Title, request.Game);
+        var posterPath = await _files.SaveIcon(request.Title, request.Icon);
+        return new Game { Title = request.Title, Description = request.Description, GameUrl = gamePath.Value, PosterUrl = posterPath.Value };
     }
 }
