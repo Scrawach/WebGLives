@@ -17,7 +17,7 @@ public class FilesService : IFilesService
     public async Task<Result<string>> SaveIcon(string title, IFormFile icon)
     {
         var root = GetOrCreateRootDirectory(title);
-        var fileName = $"{title}.{Path.GetExtension(icon.FileName)}";
+        var fileName = $"{title}{Path.GetExtension(icon.FileName)}";
         var path = Path.Combine(root, fileName);
         
         await icon.CopyToAsync(path);
