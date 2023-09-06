@@ -55,7 +55,11 @@ public class GamesRepository : IGamesRepository
 
     public async Task<bool> Delete(int id, CancellationToken token = default)
     {
-        _context.Remove(id);
+        var game = await _context.Games.FirstOrDefaultAsync(game => game.Id == id, token);
+
+        if (game is null) 
+            return false;
+        
         var deleted = await _context.SaveChangesAsync(token);
         return deleted > 0;
     }
