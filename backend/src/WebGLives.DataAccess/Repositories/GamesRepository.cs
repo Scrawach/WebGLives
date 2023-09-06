@@ -59,7 +59,8 @@ public class GamesRepository : IGamesRepository
 
         if (game is null) 
             return false;
-        
+
+        _context.Games.Remove(game);
         var deleted = await _context.SaveChangesAsync(token);
         return deleted > 0;
     }
