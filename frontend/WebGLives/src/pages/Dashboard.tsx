@@ -10,16 +10,14 @@ export const Dashboard: React.FC = () => {
 
 
     return (
-        <Container maxWidth={1000} bg="gray.200">
-            <SimpleGrid p="10px" columns={4} gap={5} minChildWidth={200}>
-                <GameCard
-                    id = {"0"}
-                    title = {"Stone Soul"}
-                    description = {"Best of the best game!"}
-                    icon = {"https://img.itch.zone/aW1nLzczNTE1MzgucG5n/315x250%23c/lbfSqO.png"}
-                    url = {""}
-                />
-            </SimpleGrid>
-        </Container>
+        <SimpleGrid p="10px" columns={4} gap={5} minChildWidth={200}>
+            <GameCard
+                id = {"0"}
+                title = {"Stone Soul"}
+                description = {"Best of the best game!"}
+                icon = {"https://img.itch.zone/aW1nLzczNTE1MzgucG5n/315x250%23c/lbfSqO.png"}
+                url = {""}
+            />
+        </SimpleGrid>
     );
 }

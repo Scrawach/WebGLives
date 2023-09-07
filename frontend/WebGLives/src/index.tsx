@@ -14,9 +14,7 @@ const root = ReactDOM.createRoot(container)
 root.render(
   <React.StrictMode>
     <ColorModeScript />
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <App />
   </React.StrictMode>,
 )
 
