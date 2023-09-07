@@ -3,13 +3,19 @@ import { DownloadIcon } from '@chakra-ui/icons';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone'
 
-export const Dropzone: React.FC = () => {
+export interface DropzoneProps {
+    onFileAccepted?: String;
+    dragActiveText?: String;
+    dragDeactiveText?: String;
+}
+
+export const Dropzone: React.FC<DropzoneProps> = ({onFileAccepted, dragActiveText, dragDeactiveText}) => {
     const onDrop = useCallback( (acceptedFiles: Blob[]) => {
         // Do something with the files
       }, [])
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
-    const dropText = isDragActive ? "Drop .zip file here ..." : "Dran \`n\` drop .zip file here, or click to select files";
+    const dropText = isDragActive ? dragActiveText : dragDeactiveText;
     const activeBg = useColorModeValue('gray.100', 'gray.600');
     const borderColor = useColorModeValue(
       isDragActive ? 'teal.300' : 'gray.300',

@@ -22,7 +22,7 @@ export const CreateGame: React.FC = () => {
                 <FormHelperText>Enter a game title.</FormHelperText>
             </FormControl>
 
-            <FormControl mb="40px">
+            <FormControl isRequired mb="40px">
                 <FormLabel>Game description:</FormLabel>
                 <Textarea 
                     placeholder="Enter a detailed description for your game..." 
@@ -30,16 +30,23 @@ export const CreateGame: React.FC = () => {
                 />
             </FormControl>
 
-            <FormControl display="flex" alignItems="center" mb="40px">
-                <Checkbox 
-                    name="isPriority" 
-                    colorScheme="purple"
-                    size="lg"
+            <FormControl isRequired mb="40px">
+                <FormLabel>Game Poster:</FormLabel>
+                <Dropzone 
+                    dragActiveText={"Drop image file here ..."}
+                    dragDeactiveText={"Dran \`n\` drop image file here, or click to select files"}
                 />
-                <FormLabel mb="0" ml="10px">Make a priority task</FormLabel>
+                <FormHelperText>Upload image poster for your game.</FormHelperText>
             </FormControl>
 
-            <Dropzone />
+            <FormControl isRequired mb="40px">
+                <FormLabel>Game Files:</FormLabel>
+                <Dropzone 
+                    dragActiveText={"Drop .zip file here ..."}
+                    dragDeactiveText={"Dran \`n\` drop .zip file here, or click to select files"}
+                />
+                <FormHelperText>Upload .zip file with your game.</FormHelperText>
+            </FormControl>
 
             <Button type="submit">Submit</Button>
         </Form>
