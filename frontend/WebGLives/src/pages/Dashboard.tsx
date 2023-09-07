@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Grid } from "@chakra-ui/react";
+import { Container, SimpleGrid } from "@chakra-ui/react";
 import { GameCardData } from "../types/GameCardData";
 import { GameCard } from "../components/GameCard"
 import { Api } from "../services/Api"
@@ -7,27 +7,19 @@ import { Api } from "../services/Api"
 export const Dashboard: React.FC = () => {
     const [gamePages, setGamePages] = useState<GameCardData[]>([]);
 
-    useEffect(() => {
-        async function fetchGamePages() {
-            var pages = await Api.gamePages();
-            setGamePages(pages);
-        }
-        fetchGamePages();
-    }, [])
+
 
     return (
-        <>
-            <Grid templateColumns='repeat(5, 1fr)' gap={6}>
-                {gamePages.map(game => (
-                    <GameCard
-                        id = {game.id}
-                        title = {game.title}
-                        description = {game.description}
-                        icon = {game.posterUrl}
-                        url = {game.gameUrl}
-                    />
-                ))}
-            </Grid>
-        </>
+        <Container maxWidth={1000} bg="gray.200">
+            <SimpleGrid p="10px" columns={4} gap={5} minChildWidth={200}>
+                <GameCard
+                    id = {"0"}
+                    title = {"Stone Soul"}
+                    description = {"Best of the best game!"}
+                    icon = {"https://img.itch.zone/aW1nLzczNTE1MzgucG5n/315x250%23c/lbfSqO.png"}
+                    url = {""}
+                />
+            </SimpleGrid>
+        </Container>
     );
 }
