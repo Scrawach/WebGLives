@@ -20,6 +20,8 @@ export interface GameCardProps {
 }
 
 export const GameCard: React.FC<GameCardProps> = ({id, title, description, icon, url}) => {
+    const gamePageUrl = `games/${id}`
+    
     return (
         <Box
             key={id}
@@ -32,7 +34,7 @@ export const GameCard: React.FC<GameCardProps> = ({id, title, description, icon,
             transition-timing-function="spring(1 100 10 10)"
             _hover={{ transform: "translateY(-4px)", shadow: "xl" }}
         >
-            <LinkOverlay href="#">
+            <LinkOverlay href={gamePageUrl}>
             
             <Image 
                 rounded="xl" 

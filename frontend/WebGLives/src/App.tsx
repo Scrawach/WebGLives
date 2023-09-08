@@ -16,7 +16,7 @@ const router = createBrowserRouter(
     <Route path="/">
       <Route index element={<Dashboard />} />
       <Route path="create" element={<CreateGame />} action={createAction} />
-      <Route path="game/:id" element={<GamePage />} />
+      <Route path="games/:id" element={<GamePage />} />
     </Route>
   )
 )

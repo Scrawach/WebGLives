@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { Api } from "../services/Api";
 import { GameCardData } from "../types/GameCardData";
+import { Box, Heading, Text } from "@chakra-ui/react";
 
 type GamePageDetails = {
     id: string;
@@ -20,19 +21,11 @@ export const GamePage: React.FC = () => {
         fetchGameData();
     }, [id])
 
-    //const location = useLocation();
-    //const {title, url} = location.state
     return (
-        <>
-            <div>
-                {gameCard?.title}
-            </div>
-            <div>
-                {gameCard?.description}
-            </div>
-            <div>
-                <iframe src={gameCard?.gameUrl} width="1080" height="800"/>
-            </div>
-        </>
+        <Box>
+            <Heading mx="40px">{gameCard?.title}</Heading>
+            <iframe key={id} src={gameCard?.gameUrl} seamless width="100%" height="660"/>
+            <Text mx="40px">{gameCard?.description}</Text>
+        </Box>
     );
 } 
