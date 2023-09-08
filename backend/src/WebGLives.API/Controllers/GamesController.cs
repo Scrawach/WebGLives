@@ -85,7 +85,7 @@ public class GamesController : FunctionalControllerBase
             game.Value.PosterUrl = iconPath.Value;
         }
 
-        var updated = await _games.Update(id, game.Value);
+        var updated = await _games.Update(game.Value);
         return ResponseFrom(updated);
     }
 

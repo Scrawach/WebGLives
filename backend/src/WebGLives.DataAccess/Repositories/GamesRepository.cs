@@ -28,15 +28,15 @@ public class GamesRepository : IGamesRepository
         return _mapper.Map<GameEntity[], Game[]>(games);
     }
     
-    public async Task<Result<Game, Error>> GetOrDefault(int id, CancellationToken token = default)
+    public async Task<Result<Game, Error>> GetOrDefault(int gameId, CancellationToken token = default)
     {
         var game = await _context.Games
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken: token);
+            .FirstOrDefaultAsync(x => x.Id == gameId, cancellationToken: token);
 
         return game is not null
             ? _mapper.Map<GameEntity, Game>(game)
-            : Result.Failure<Game, Error>(new GameNotFoundError(id));
+            : Result.Failure<Game, Error>(new GameNotFoundError(gameId));
     }
     
     public async Task<UnitResult<Error>> Create(Game game, CancellationToken token = default)
@@ -59,18 +59,18 @@ public class GamesRepository : IGamesRepository
             : UnitResult.Failure<Error>(new Error($"Game not updated!"));
     }
 
-    public async Task<UnitResult<Error>> Delete(int id, CancellationToken token = default)
+    public async Task<UnitResult<Error>> Delete(int gameId, CancellationToken token = default)
     {
-        var game = await _context.Games.FirstOrDefaultAsync(game => game.Id == id, token);
+        var game = await _context.Games.FirstOrDefaultAsync(game => game.Id == gameId, token);
 
         if (game is null) 
-            return UnitResult.Failure<Error>(new GameNotFoundError(id));
+            return UnitResult.Failure<Error>(new GameNotFoundError(gameId));
 
         _context.Games.Remove(game);
         var deleted = await _context.SaveChangesAsync(token);
         
         return deleted > 0
             ? UnitResult.Success<Error>()
-            : UnitResult.Failure<Error>(new Error($"Game {id} not deleted!"));
+            : UnitResult.Failure<Error>(new Error($"Game {gameId} not deleted!"));
     }
 }
