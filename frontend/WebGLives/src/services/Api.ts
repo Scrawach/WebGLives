@@ -26,15 +26,6 @@ export class Api {
         return json;
     }
 
-    public static async upload(file: File): Promise<void> {
-        const formData = new FormData();
-        formData.append('file', file);
-        await fetch(`${Api.url}/games`, {
-            method: 'POST',
-            body: formData
-        });
-    }
-
     public static async uploadGame(data: UploadGameRequest): Promise<void> {
         const request = new FormData()
         request.append('game', data.game as File)
