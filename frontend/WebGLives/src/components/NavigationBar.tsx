@@ -1,4 +1,4 @@
-import { Box, Spacer, Link, HStack, useColorModeValue, Button, Input, InputLeftElement, LinkOverlay, InputGroup } from "@chakra-ui/react";
+import { Box, Spacer, HStack, useColorModeValue, Button, Input, InputLeftElement, LinkOverlay, InputGroup } from "@chakra-ui/react";
 import { SmallAddIcon, SearchIcon, CalendarIcon } from "@chakra-ui/icons";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 

@@ -2,8 +2,8 @@ import { Center, Text, useColorModeValue } from '@chakra-ui/react';
 import { DownloadIcon } from '@chakra-ui/icons';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone'
-import { useState, ChangeEvent } from 'react';
-import { Flex, Textarea } from '@chakra-ui/react'
+import { useState } from 'react';
+import { Flex } from '@chakra-ui/react'
 
 export interface DropzoneProps {
     onFileAccepted: CallableFunction;

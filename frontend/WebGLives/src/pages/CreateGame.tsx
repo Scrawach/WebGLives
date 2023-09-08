@@ -6,16 +6,10 @@ import {
     Input, 
     Textarea, 
     Button, 
-    Image,
-    Checkbox, 
-    FormErrorMessage,
-    InputGroup,
-    Icon,
-    Divider
   } from '@chakra-ui/react'
 import { UploadGameRequest } from "../types/UploadGameRequest";
 import { ChangeEvent, useState } from 'react'
-import { Form, redirect, ActionFunction, useNavigate } from 'react-router-dom'
+import { Form, useNavigate } from 'react-router-dom'
 import { Dropzone } from '../components/Dropzone'
 import { Api } from '../services/Api';
 
@@ -91,17 +85,3 @@ export const CreateGame: React.FC = () => {
         </Box>
     )
 }
-
-export const createAction : ActionFunction = async ( {params, request} ) => {
-    const data = await request.formData()
-    const uploadGameRequest : UploadGameRequest = {
-        title: data.get('title') as string,
-        description: data.get('description') as string,
-        icon: data.get('poster') as File,
-        game: data.get('game') as File
-    }
-  
-    await Api.uploadGame(uploadGameRequest);
-  
-
-  }
