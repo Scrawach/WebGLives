@@ -9,7 +9,8 @@ import {
     Checkbox, 
     Divider
   } from '@chakra-ui/react'
-  import { Form } from 'react-router-dom'
+import { SyntheticEvent } from 'react'
+import { Form, redirect, ActionFunction } from 'react-router-dom'
 import { Dropzone } from '../components/Dropzone'
   
 export const CreateGame: React.FC = () => {
@@ -53,3 +54,16 @@ export const CreateGame: React.FC = () => {
         </Box>
     )
 }
+
+export const createAction : ActionFunction = async ( {params, request} ) => {
+    const data = await request.formData()
+    alert(data.get('dropzone'))
+    const task = {
+      title: data.get('title'),
+      description: data.get('description')
+    }
+  
+    console.log(task)
+  
+    return redirect('/')
+  }

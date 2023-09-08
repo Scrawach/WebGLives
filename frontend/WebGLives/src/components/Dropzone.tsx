@@ -34,7 +34,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({onFileAccepted, dragActiveTex
             borderColor={borderColor}
             {...getRootProps()}
         >
-            <input {...getInputProps()} />
+            <input {...getInputProps()} name="dropzone" />
             <DownloadIcon mr={2} />
             <Text>{dropText}</Text>
         </Center>
