@@ -9,6 +9,7 @@ import {
 import { NavigationBar } from "./components/NavigationBar";
 import { CreateGame } from "./pages/CreateGame";
 import { GamePage } from "./pages/GamePage";
+import { Footer } from "./components/Footer";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,9 +23,10 @@ const router = createBrowserRouter(
 
 export const App = () => (
   <ChakraProvider>
-    <Container maxWidth="1080px">
+    <Container maxWidth="1080px" minHeight="100vh">
       <NavigationBar />
       <RouterProvider router={router} />
+      <Footer />
     </Container>
   </ChakraProvider>
 )
