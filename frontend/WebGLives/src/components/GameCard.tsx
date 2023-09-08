@@ -48,7 +48,7 @@ export const GameCard: React.FC<GameCardProps> = ({id, title, description, icon,
             <Box
                 position="absolute"
                 top="0"
-                h="20%"
+                h="30%"
                 w="100%"
                 bgGradient="linear(#000000FF, #FFFFFF00)"
                 borderTopLeftRadius="xl"
@@ -62,14 +62,13 @@ export const GameCard: React.FC<GameCardProps> = ({id, title, description, icon,
             <Box 
                 position="absolute" 
                 bottom="0" 
-                h="30%" 
+                h="40%" 
                 w="100%" 
                 bgGradient="linear(#FFFFFF00, #000000FF)"
                 borderBottomLeftRadius="xl"
                 borderBottomRightRadius="xl"
             >
-                <Box h="20%"></Box>
-                <Flex p={3} alignItems="center">
+                <Flex p={3} my="40px" alignItems="center">
                     <Text align="left" color="gray.400">{title}</Text>
                     <Spacer />
                     <HStack fontSize="xs">
