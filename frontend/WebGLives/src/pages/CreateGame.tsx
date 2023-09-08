@@ -36,7 +36,7 @@ export const CreateGame: React.FC = () => {
             setTitle(e.target.value)
     }
 
-    const send = async () => {
+    const createRequest = async () => {
         const uploadGameRequest : UploadGameRequest = {
             title: title as string,
             description: description as string,
@@ -86,7 +86,7 @@ export const CreateGame: React.FC = () => {
                 <FormHelperText>Upload .zip file with your game.</FormHelperText>
             </FormControl>
 
-            <Button onClick={send}>Submit</Button>
+            <Button onClick={createRequest}>Submit</Button>
         </Form>
         </Box>
     )
