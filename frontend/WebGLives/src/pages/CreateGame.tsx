@@ -15,11 +15,12 @@ import {
   } from '@chakra-ui/react'
 import { UploadGameRequest } from "../types/UploadGameRequest";
 import { ChangeEvent, useState } from 'react'
-import { Form, redirect, ActionFunction } from 'react-router-dom'
+import { Form, redirect, ActionFunction, useNavigate } from 'react-router-dom'
 import { Dropzone } from '../components/Dropzone'
 import { Api } from '../services/Api';
 
 export const CreateGame: React.FC = () => {
+    const navigate = useNavigate()
     const [title, setTitle] = useState<string>();
     const [description, setDescription] = useState<string>();
     const [game, setGame] = useState<File>();
@@ -44,6 +45,7 @@ export const CreateGame: React.FC = () => {
         }
     
         await Api.uploadGame(uploadGameRequest);
+        navigate("/")
     }
 
     return (
