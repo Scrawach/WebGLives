@@ -2,6 +2,7 @@ using System.Text;
 using CSharpFunctionalExtensions;
 using WebGLives.API.Extensions;
 using WebGLives.API.Services.Abstract;
+using WebGLives.Core.Errors;
 
 namespace WebGLives.API.Services;
 
@@ -14,7 +15,7 @@ public class FilesService : IFilesService
     public FilesService(IZipService zipService) =>
         _zipService = zipService;
 
-    public async Task<Result<string>> SaveIcon(string title, IFormFile icon)
+    public async Task<Result<string, Error>> SaveIcon(string title, IFormFile icon)
     {
         var root = GetOrCreateRootDirectory(title);
         var fileName = $"{title}{Path.GetExtension(icon.FileName)}";
@@ -25,14 +26,14 @@ public class FilesService : IFilesService
         return CombinePath("games", $"{title}", $"{fileName}");
     }
 
-    public async Task<Result<string>> SaveGame(string title, IFormFile game)
+    public async Task<Result<string, Error>> SaveGame(string title, IFormFile game)
     {
         var root = GetOrCreateRootDirectory(title);
         var path = Path.Combine(root, $"{title}.zip");
         await game.CopyToAsync(path);
 
         if (!_zipService.IsValid(path))
-            return Result.Failure<string>("Not valid zip archive!");
+            return Result.Failure<string, Error>(new Error("Not valid zip archive!"));
         
         _zipService.Extract(path, root);
         return CombinePath("games", $"{title}", $"{Path.GetFileNameWithoutExtension(game.FileName)}", "index.html");

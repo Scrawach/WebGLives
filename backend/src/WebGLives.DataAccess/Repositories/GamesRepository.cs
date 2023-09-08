@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using WebGLives.Core;
+using WebGLives.Core.Errors;
 using WebGLives.Core.Repositories;
 using WebGLives.DataAccess.Entities;
 
@@ -17,7 +19,7 @@ public class GamesRepository : IGamesRepository
         _mapper = mapper;
     }
     
-    public async Task<IEnumerable<Game>> All(CancellationToken token = default)
+    public async Task<Result<IEnumerable<Game>, Error>> All(CancellationToken token = default)
     {
         var games = await _context.Games
             .AsNoTracking()
@@ -26,42 +28,49 @@ public class GamesRepository : IGamesRepository
         return _mapper.Map<GameEntity[], Game[]>(games);
     }
     
-    public async Task<Game?> GetOrDefault(int id, CancellationToken token = default)
+    public async Task<Result<Game, Error>> GetOrDefault(int id, CancellationToken token = default)
     {
         var game = await _context.Games
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken: token);
 
-        return game is null 
-            ? null 
-            : _mapper.Map<GameEntity, Game>(game);
+        return game is not null
+            ? _mapper.Map<GameEntity, Game>(game)
+            : Result.Failure<Game, Error>(new NotFoundError($"Game {id} not found!"));
     }
     
-    public async Task<bool> Create(Game game, CancellationToken token = default)
+    public async Task<UnitResult<Error>> Create(Game game, CancellationToken token = default)
     {
         var entity = _mapper.Map<Game, GameEntity>(game);
         await _context.Games.AddAsync(entity, token);
         var created = await _context.SaveChangesAsync(token);
-        return created > 0;
+        return created > 0
+            ? UnitResult.Success<Error>()
+            : UnitResult.Failure<Error>(new Error($"Game not created!"));
     }
 
-    public async Task<bool> Update(Game game, CancellationToken token = default)
+    public async Task<UnitResult<Error>> Update(Game game, CancellationToken token = default)
     {
         var entity = _mapper.Map<Game, GameEntity>(game);
         _context.Games.Update(entity);
         var updated = await _context.SaveChangesAsync(token);
-        return updated > 0;
+        return updated > 0
+            ? UnitResult.Success<Error>()
+            : UnitResult.Failure<Error>(new Error($"Game not updated!"));
     }
 
-    public async Task<bool> Delete(int id, CancellationToken token = default)
+    public async Task<UnitResult<Error>> Delete(int id, CancellationToken token = default)
     {
         var game = await _context.Games.FirstOrDefaultAsync(game => game.Id == id, token);
 
         if (game is null) 
-            return false;
+            return UnitResult.Failure<Error>(new NotFoundError($"Game {id} not found!"));
 
         _context.Games.Remove(game);
         var deleted = await _context.SaveChangesAsync(token);
-        return deleted > 0;
+        
+        return deleted > 0
+            ? UnitResult.Success<Error>()
+            : UnitResult.Failure<Error>(new Error($"Game {id} not deleted!"));
     }
 }
