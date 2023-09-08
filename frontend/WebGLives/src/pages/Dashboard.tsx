@@ -3,6 +3,8 @@ import { Box, SimpleGrid, Tab, Tabs, TabList, TabPanels, TabPanel } from "@chakr
 import { GameCardData } from "../types/GameCardData";
 import { GameCard } from "../components/GameCard"
 import { Api } from "../services/Api"
+import { AddIcon } from "@chakra-ui/icons";
+import { AddGameCard } from "../components/AddGameCard";
 
 export const Dashboard: React.FC = () => {
     const [gamePages, setGamePages] = useState<GameCardData[]>([]);
@@ -39,6 +41,7 @@ export const Dashboard: React.FC = () => {
                         icon = {game.posterUrl}
                         url = {game.gameUrl}
                     />))}
+                    <AddGameCard />
             </SimpleGrid>
             </>
         </Box>
