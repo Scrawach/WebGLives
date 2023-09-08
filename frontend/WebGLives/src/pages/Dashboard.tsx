@@ -7,7 +7,13 @@ import { Api } from "../services/Api"
 export const Dashboard: React.FC = () => {
     const [gamePages, setGamePages] = useState<GameCardData[]>([]);
 
-
+    useEffect(() => {
+        async function fetchGamePages() {
+            var pages = await Api.gamePages();
+            setGamePages(pages);
+        }
+        fetchGamePages();
+    }, [])
 
     return (
         <Box>
@@ -23,15 +29,18 @@ export const Dashboard: React.FC = () => {
                     <TabPanel></TabPanel>
                 </TabPanels>
             </Tabs>
+            <>
             <SimpleGrid p="10px" columns={4} gap={5} minChildWidth={200}>
-                <GameCard
-                    id = {"0"}
-                    title = {"Stone Soul"}
-                    description = {"Best of the best game!"}
-                    icon = {"https://img.itch.zone/aW1nLzczNTE1MzgucG5n/315x250%23c/lbfSqO.png"}
-                    url = {""}
-                />
+                {gamePages.map(game => 
+                    (<GameCard
+                        id = {game.id}
+                        title = {game.title}
+                        description = {game.description}
+                        icon = {game.posterUrl}
+                        url = {game.gameUrl}
+                    />))}
             </SimpleGrid>
+            </>
         </Box>
     );
 }
