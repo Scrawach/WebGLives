@@ -36,7 +36,7 @@ public class GamesRepository : IGamesRepository
 
         return game is not null
             ? _mapper.Map<GameEntity, Game>(game)
-            : Result.Failure<Game, Error>(new NotFoundError($"Game {id} not found!"));
+            : Result.Failure<Game, Error>(new GameNotFoundError(id));
     }
     
     public async Task<UnitResult<Error>> Create(Game game, CancellationToken token = default)
@@ -64,7 +64,7 @@ public class GamesRepository : IGamesRepository
         var game = await _context.Games.FirstOrDefaultAsync(game => game.Id == id, token);
 
         if (game is null) 
-            return UnitResult.Failure<Error>(new NotFoundError($"Game {id} not found!"));
+            return UnitResult.Failure<Error>(new GameNotFoundError(id));
 
         _context.Games.Remove(game);
         var deleted = await _context.SaveChangesAsync(token);
