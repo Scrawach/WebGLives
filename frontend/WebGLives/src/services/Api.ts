@@ -2,13 +2,13 @@ import { GameCardData } from "../types/GameCardData";
 import { UploadGameRequest } from "../types/UploadGameRequest";
 
 export class Api {
-    private static readonly url: string = "http://localhost:8000"
+    private static readonly url: string = "http://localhost:5072"
 
     public static async gamePages(): Promise<GameCardData[]> {
         const response = await fetch(`${Api.url}/games`)
         const json = await response.json();
         const gameCards = json as GameCardData[];
-        return gameCards;
+        
         gameCards.forEach(element => {
             element.gameUrl = `${Api.url}${element.gameUrl}`
             element.posterUrl = `${Api.url}${element.posterUrl}`
@@ -20,7 +20,7 @@ export class Api {
     public static async gamePage(id: string): Promise<GameCardData> {
         const response = await fetch(`${Api.url}/games/${id}`)
         const json = await response.json();
-        return json;
+
         json.gameUrl = `${Api.url}${json.gameUrl}`
         json.posterUrl = `${Api.url}${json.posterUrl}`
         return json;

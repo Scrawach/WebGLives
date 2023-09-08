@@ -2,17 +2,23 @@ import { Center, Text, useColorModeValue } from '@chakra-ui/react';
 import { DownloadIcon } from '@chakra-ui/icons';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone'
+import { useState, ChangeEvent } from 'react';
+import { Flex, Textarea } from '@chakra-ui/react'
 
 export interface DropzoneProps {
-    onFileAccepted?: String;
+    onFileAccepted: CallableFunction;
     dragActiveText?: String;
     dragDeactiveText?: String;
 }
 
 export const Dropzone: React.FC<DropzoneProps> = ({onFileAccepted, dragActiveText, dragDeactiveText}) => {
-    const onDrop = useCallback( (acceptedFiles: Blob[]) => {
-        // Do something with the files
+    const [file, setFile] = useState<File>();
+
+    const onDrop = useCallback( (acceptedFiles: File[]) => {
+        setFile(acceptedFiles[0])
+        onFileAccepted(acceptedFiles[0])
       }, [])
+    
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
     const dropText = isDragActive ? dragActiveText : dragDeactiveText;
@@ -34,9 +40,20 @@ export const Dropzone: React.FC<DropzoneProps> = ({onFileAccepted, dragActiveTex
             borderColor={borderColor}
             {...getRootProps()}
         >
-            <input {...getInputProps()} name="dropzone" />
-            <DownloadIcon mr={2} />
-            <Text>{dropText}</Text>
+            <input {...getInputProps()}/>            
+            {
+                file && 
+                <Flex alignContent="center">
+                    <Text>{file.name}</Text>
+                </Flex>
+            }
+            {
+                !file &&
+                <Flex alignContent="center">
+                    <DownloadIcon mr={2} />
+                    <Text>{dropText}</Text>
+                </Flex>
+            }
         </Center>
     )
 }

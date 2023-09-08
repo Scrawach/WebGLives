@@ -1,32 +1,32 @@
 {
-    "games": [ 
-        {
-            "id": 1,
-            "title": "Stone Soul",
-            "description": "Dark adventure",
-            "posterUrl": "https://img.itch.zone/aW1nLzczNTE1MzgucG5n/315x250%23c/lbfSqO.png",
-            "gameUrl": "https://v6p9d9t4.ssl.hwcdn.net/html/4707377/index.html"
-        },
-        {
-            "id": 2,
-            "title": "Cthulhu Defence",
-            "description": "Tower defense",
-            "posterUrl": "https://img.itch.zone/aW1nLzU1OTA3NjkucG5n/315x250%23c/9flDi3.png",
-            "gameUrl": "https://v6p9d9t4.ssl.hwcdn.net/html/3598804/CthulhuWEB/index.html"
-        },
-        {
-            "id": 3,
-            "title": "Cows Crasher",
-            "description": "About aliens",
-            "posterUrl": "https://img.itch.zone/aW1nLzExMDM5NzI2LnBuZw==/315x250%23c/46LGlb.png",
-            "gameUrl": "https://v6p9d9t4.ssl.hwcdn.net/html/7331557/cows-crasher-webgl/index.html"
-        },
-        {
-            "id": 4,
-            "title": "Treasure Hunter",
-            "description": "You are what you eat.",
-            "posterUrl": "https://img.itch.zone/aW1nLzU3NjgzMzkucG5n/315x250%23c/rOzJ5a.png",
-            "gameUrl": "https://v6p9d9t4.ssl.hwcdn.net/html/3710120/Treasure-Hunter-WEBGL/index.html"
-        }
-    ]
+  "games": [
+    {
+      "id": 1,
+      "title": "Stone Soul",
+      "description": "Dark adventure",
+      "posterUrl": "https://img.itch.zone/aW1nLzczNTE1MzgucG5n/315x250%23c/lbfSqO.png",
+      "gameUrl": "https://v6p9d9t4.ssl.hwcdn.net/html/4707377/index.html"
+    },
+    {
+      "id": 2,
+      "title": "Cthulhu Defence",
+      "description": "Tower defense",
+      "posterUrl": "https://img.itch.zone/aW1nLzU1OTA3NjkucG5n/315x250%23c/9flDi3.png",
+      "gameUrl": "https://v6p9d9t4.ssl.hwcdn.net/html/3598804/CthulhuWEB/index.html"
+    },
+    {
+      "id": 3,
+      "title": "Cows Crasher",
+      "description": "About aliens",
+      "posterUrl": "https://img.itch.zone/aW1nLzExMDM5NzI2LnBuZw==/315x250%23c/46LGlb.png",
+      "gameUrl": "https://v6p9d9t4.ssl.hwcdn.net/html/7331557/cows-crasher-webgl/index.html"
+    },
+    {
+      "id": 4,
+      "title": "Treasure Hunter",
+      "description": "You are what you eat.",
+      "posterUrl": "https://img.itch.zone/aW1nLzU3NjgzMzkucG5n/315x250%23c/rOzJ5a.png",
+      "gameUrl": "https://v6p9d9t4.ssl.hwcdn.net/html/3710120/Treasure-Hunter-WEBGL/index.html"
+    }
+  ]
 }
