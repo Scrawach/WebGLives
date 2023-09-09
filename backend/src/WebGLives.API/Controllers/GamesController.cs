@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Requests;
-using WebGLives.API.Services.Abstract;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core;
 
@@ -67,7 +66,7 @@ public class GamesController : FunctionalControllerBase
 
         if (request.Game != null)
         {
-            var gamePath = await _files.SaveGame(game.Value.Title, request.Game);
+            var gamePath = await _files.SaveGame(game.Value.Title, request.Game.OpenReadStream());
 
             if (gamePath.IsFailure)
                 return ResponseFrom(gamePath.Error);
@@ -77,7 +76,7 @@ public class GamesController : FunctionalControllerBase
 
         if (request.Icon != null)
         {
-            var iconPath = await _files.SaveIcon(game.Value.Title, request.Icon);
+            var iconPath = await _files.SaveIcon(game.Value.Title, request.Icon.OpenReadStream());
 
             if (iconPath.IsFailure)
                 return ResponseFrom(iconPath.Error);
@@ -101,8 +100,8 @@ public class GamesController : FunctionalControllerBase
 
     private async Task<Game> GameFrom(UploadGameRequest request)
     {
-        var gamePath = await _files.SaveGame(request.Title, request.Game);
-        var posterPath = await _files.SaveIcon(request.Title, request.Icon);
+        var gamePath = await _files.SaveGame(request.Title, request.Game.OpenReadStream());
+        var posterPath = await _files.SaveIcon(request.Title, request.Icon.OpenReadStream());
         return new Game { Title = request.Title, Description = request.Description, GameUrl = gamePath.Value, PosterUrl = posterPath.Value };
     }
 }

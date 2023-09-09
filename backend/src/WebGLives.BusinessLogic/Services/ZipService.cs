@@ -1,7 +1,7 @@
 ﻿using System.IO.Compression;
-using WebGLives.API.Services.Abstract;
+using WebGLives.BusinessLogic.Services.Abstract;
 
-namespace WebGLives.API.Services;
+namespace WebGLives.BusinessLogic.Services;
 
 public class ZipService : IZipService
 {

@@ -8,7 +8,7 @@ import {
     LinkOverlay 
 } from "@chakra-ui/react";
 
-import { ViewIcon } from '@chakra-ui/icons'
+import { ChatIcon, ViewIcon } from '@chakra-ui/icons'
 import { RatingBar } from "./RatingBar";
 
 export interface GameCardProps {

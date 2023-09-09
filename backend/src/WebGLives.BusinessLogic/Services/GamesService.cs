@@ -19,6 +19,11 @@ public class GamesService : IGamesService
     public async Task<UnitResult<Error>> Create(Game newGame, CancellationToken token = default) =>
         await _repository.Create(newGame, token);
 
+    public async Task<UnitResult<Error>> Update(int gameId, Stream gameArchive, CancellationToken token = default)
+    {
+        return UnitResult.Failure<Error>(new Error("hey!"));
+    }
+
     public async Task<Result<Game, Error>> Get(int gameId, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token);
 

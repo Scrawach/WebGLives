@@ -1,10 +1,9 @@
 using System.Text;
 using CSharpFunctionalExtensions;
-using WebGLives.API.Extensions;
-using WebGLives.API.Services.Abstract;
+using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core.Errors;
 
-namespace WebGLives.API.Services;
+namespace WebGLives.BusinessLogic.Services;
 
 public class FilesService : IFilesService
 {
@@ -15,28 +14,28 @@ public class FilesService : IFilesService
     public FilesService(IZipService zipService) =>
         _zipService = zipService;
 
-    public async Task<Result<string, Error>> SaveIcon(string title, IFormFile icon)
+    public async Task<Result<string, Error>> SaveIcon(string title, Stream icon)
     {
         var root = GetOrCreateRootDirectory(title);
-        var fileName = $"{title}{Path.GetExtension(icon.FileName)}";
+        var fileName = $"{title}.png";
         var path = Path.Combine(root, fileName);
-        
-        await icon.CopyToAsync(path);
+
+        await icon.CopyToAsync(new FileStream(path, FileMode.Create));
         
         return CombinePath("games", $"{title}", $"{fileName}");
     }
 
-    public async Task<Result<string, Error>> SaveGame(string title, IFormFile game)
+    public async Task<Result<string, Error>> SaveGame(string title, Stream game)
     {
         var root = GetOrCreateRootDirectory(title);
         var path = Path.Combine(root, $"{title}.zip");
-        await game.CopyToAsync(path);
+        await game.CopyToAsync(new FileStream(path, FileMode.Create));
 
         if (!_zipService.IsValid(path))
             return Result.Failure<string, Error>(new Error("Not valid zip archive!"));
         
         _zipService.Extract(path, root);
-        return CombinePath("games", $"{title}", $"{Path.GetFileNameWithoutExtension(game.FileName)}", "index.html");
+        return CombinePath("games", $"{title}", $"{Path.GetFileNameWithoutExtension(path)}", "index.html");
     }
 
     private static string CombinePath(params string[] directories)

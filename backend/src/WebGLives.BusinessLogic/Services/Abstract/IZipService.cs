@@ -1,4 +1,4 @@
-﻿namespace WebGLives.API.Services.Abstract;
+﻿namespace WebGLives.BusinessLogic.Services.Abstract;
 
 public interface IZipService
 {
