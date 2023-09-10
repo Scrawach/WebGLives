@@ -107,6 +107,24 @@ public class GamesController : FunctionalControllerBase
         var result = await _games.UpdateDescription(id, description);
         return ResponseFrom(result);
     }
+    
+    [HttpPut("{id:int}/poster")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    public async Task<IActionResult> UpdatePoster(int id, IFormFile poster)
+    {
+        return Forbid();
+    }
+    
+    [HttpPut("{id:int}/game")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    public async Task<IActionResult> UpdateGame(int id, IFormFile archive)
+    {
+        return Forbid();
+    }
 
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
