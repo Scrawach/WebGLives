@@ -40,10 +40,9 @@ public class GamesController : FunctionalControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> Create([FromForm] UploadGameRequest request)
+    public async Task<IActionResult> Create()
     {
-        var game = await GameFrom(request);
-        var createdResult = await _games.Create(game);
+        var createdResult = await _games.Create();
         return ResponseFrom(createdResult);
     }
 
@@ -53,38 +52,12 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Update(int id, [FromForm] UpdateGameRequest request)
     {
-        var game = await _games.Get(id);
-
-        if (game.IsFailure)
-            return ResponseFrom(game.Error);
-
-        if (request.Title != null)
-            game.Value.Title = request.Title;
-
-        if (request.Description != null)
-            game.Value.Description = request.Description;
-
-        if (request.Game != null)
-        {
-            var gamePath = await _files.SaveGame(game.Value.Title, request.Game.OpenReadStream());
-
-            if (gamePath.IsFailure)
-                return ResponseFrom(gamePath.Error);
-            
-            game.Value.GameUrl = gamePath.Value;
-        }
-
-        if (request.Icon != null)
-        {
-            var iconPath = await _files.SaveIcon(game.Value.Title, request.Icon.OpenReadStream());
-
-            if (iconPath.IsFailure)
-                return ResponseFrom(iconPath.Error);
-
-            game.Value.PosterUrl = iconPath.Value;
-        }
-
-        var updated = await _games.Update(game.Value);
+        var updated = await _games.Update(
+            id, 
+            request.Title, 
+            request.Description, 
+            request.Game?.OpenReadStream(),
+            request.Icon?.OpenReadStream());
         return ResponseFrom(updated);
     }
 
@@ -134,12 +107,5 @@ public class GamesController : FunctionalControllerBase
     {
         var result = await _games.Delete(id);
         return ResponseFrom(result);
-    }
-
-    private async Task<Game> GameFrom(UploadGameRequest request)
-    {
-        var gamePath = await _files.SaveGame(request.Title, request.Game.OpenReadStream());
-        var posterPath = await _files.SaveIcon(request.Title, request.Icon.OpenReadStream());
-        return new Game { Title = request.Title, Description = request.Description, GameUrl = gamePath.Value, PosterUrl = posterPath.Value };
     }
 }

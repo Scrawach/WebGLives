@@ -39,14 +39,14 @@ public class GamesRepository : IGamesRepository
             : Result.Failure<Game, Error>(new GameNotFoundError(gameId));
     }
     
-    public async Task<UnitResult<Error>> Create(Game game, CancellationToken token = default)
+    public async Task<Result<Game, Error>> Create(Game game, CancellationToken token = default)
     {
         var entity = _mapper.Map<Game, GameEntity>(game);
         await _context.Games.AddAsync(entity, token);
         var created = await _context.SaveChangesAsync(token);
         return created > 0
-            ? UnitResult.Success<Error>()
-            : UnitResult.Failure<Error>(new Error($"Game not created!"));
+            ? Result.Success<Game, Error>(game)
+            : Result.Failure<Game, Error>(new Error($"Game not created!"));
     }
 
     public async Task<UnitResult<Error>> Update(Game game, CancellationToken token = default)
