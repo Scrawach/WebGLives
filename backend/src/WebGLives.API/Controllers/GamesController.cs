@@ -88,6 +88,26 @@ public class GamesController : FunctionalControllerBase
         return ResponseFrom(updated);
     }
 
+    [HttpPut("{id:int}/title")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    public async Task<IActionResult> UpdateTitle(int id, string title)
+    {
+        var result = await _games.UpdateTitle(id, title);
+        return ResponseFrom(result);
+    }
+    
+    [HttpPut("{id:int}/description")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    public async Task<IActionResult> UpdateDescription(int id, string description)
+    {
+        var result = await _games.UpdateDescription(id, description);
+        return ResponseFrom(result);
+    }
+
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]

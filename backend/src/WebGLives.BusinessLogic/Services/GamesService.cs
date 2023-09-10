@@ -24,6 +24,29 @@ public class GamesService : IGamesService
         return UnitResult.Failure<Error>(new Error("hey!"));
     }
 
+    public async Task<UnitResult<Error>> UpdateTitle(int gameId, string title, CancellationToken token = default)
+    {
+        var game = await _repository.GetOrDefault(gameId, token);
+
+        if (game.IsFailure)
+            return game.Error;
+
+        game.Value.Title = title;
+        return await _repository.Update(game.Value, token);
+    }
+
+    public async Task<UnitResult<Error>> UpdateDescription(int gameId, string description,
+        CancellationToken token = default)
+    {
+        var game = await _repository.GetOrDefault(gameId, token);
+
+        if (game.IsFailure)
+            return game.Error;
+
+        game.Value.Description = description;
+        return await _repository.Update(game.Value, token);
+    }
+
     public async Task<Result<Game, Error>> Get(int gameId, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token);
 
