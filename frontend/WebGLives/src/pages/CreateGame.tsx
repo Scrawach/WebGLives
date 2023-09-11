@@ -95,7 +95,7 @@ export const CreateGame: React.FC = () => {
             <HStack>
                 <Button onClick={saveEdit}>Save</Button>
                 <Spacer />
-                <Button onClick={deleteGame}>Delete</Button>
+                <Button onClick={deleteGame} colorScheme="red">Delete</Button>
             </HStack>
         </Box>
     )

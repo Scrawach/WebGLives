@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Box, SimpleGrid, Tab, Tabs, TabList, TabPanels, TabPanel } from "@chakra-ui/react";
+import { Box, Grid, Tab, Tabs, TabList, TabPanels, TabPanel } from "@chakra-ui/react";
 import { GameCardData } from "../types/GameCardData";
 import { GameCard } from "../components/GameCard"
 import { Api } from "../services/Api"
-import { AddIcon } from "@chakra-ui/icons";
 import { AddGameCard } from "../components/AddGameCard";
 
 export const Dashboard: React.FC = () => {
@@ -32,7 +31,7 @@ export const Dashboard: React.FC = () => {
                 </TabPanels>
             </Tabs>
             <>
-            <SimpleGrid p="10px" columns={4} gap={5} minChildWidth={200}>
+            <Grid templateColumns="repeat(4, 1fr)" p="10px" gap={5}>
                 {gamePages.map(game => 
                     (<GameCard
                         id = {game.id}
@@ -42,7 +41,7 @@ export const Dashboard: React.FC = () => {
                         url = {game.gameUrl}
                     />))}
                     <AddGameCard />
-            </SimpleGrid>
+            </Grid>
             </>
         </Box>
     );
