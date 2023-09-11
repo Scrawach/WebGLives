@@ -9,14 +9,10 @@ namespace WebGLives.API.Controllers;
 [Route("[controller]")]
 public class GamesController : FunctionalControllerBase
 {
-    private readonly IFilesService _files;
     private readonly IGamesService _games;
 
-    public GamesController(IFilesService files, IGamesService games)
-    {
-        _files = files;
+    public GamesController(IGamesService games) =>
         _games = games;
-    }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Game>))]
@@ -46,21 +42,6 @@ public class GamesController : FunctionalControllerBase
         return ResponseFrom(createdResult);
     }
 
-    [HttpPut("{id:int}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> Update(int id, [FromForm] UpdateGameRequest request)
-    {
-        var updated = await _games.Update(
-            id, 
-            request.Title, 
-            request.Description, 
-            request.Game?.OpenReadStream(),
-            request.Icon?.OpenReadStream());
-        return ResponseFrom(updated);
-    }
-
     [HttpPut("{id:int}/title")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
@@ -87,7 +68,8 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> UpdatePoster(int id, IFormFile poster)
     {
-        return Forbid();
+        var result = await _games.UpdatePoster(id, poster.OpenReadStream());
+        return ResponseFrom(result);
     }
     
     [HttpPut("{id:int}/game")]
@@ -96,7 +78,8 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> UpdateGame(int id, IFormFile archive)
     {
-        return Forbid();
+        var result = await _games.UpdateGame(id, archive.OpenReadStream());
+        return ResponseFrom(result);
     }
 
     [HttpDelete("{id:int}")]
