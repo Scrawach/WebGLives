@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.API", "src\WebGLives.API\WebGLives.API.csproj", "{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.DataAccess", "src\WebGLives.DataAccess\WebGLives.DataAccess.csproj", "{77828F18-253A-4F5F-8727-A012599C7F75}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.DataAccess.Postgre", "src\WebGLives.DataAccess.Postgre\WebGLives.DataAccess.Postgre.csproj", "{77828F18-253A-4F5F-8727-A012599C7F75}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Core", "src\WebGLives.Core\WebGLives.Core.csproj", "{9D1B0D97-1A6D-4547-AF3E-6C3EE8877FE0}"
 EndProject

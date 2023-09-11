@@ -29,7 +29,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\WebGLives.BusinessLogic\WebGLives.BusinessLogic.csproj" />
-      <ProjectReference Include="..\WebGLives.DataAccess\WebGLives.DataAccess.csproj" />
+      <ProjectReference Include="..\WebGLives.DataAccess.Postgre\WebGLives.DataAccess.Postgre.csproj" />
       <ProjectReference Include="..\WebGLives.Migrations\WebGLives.Migrations.csproj" />
     </ItemGroup>
 

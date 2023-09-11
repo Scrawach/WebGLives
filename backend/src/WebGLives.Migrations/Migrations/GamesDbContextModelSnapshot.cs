@@ -21,7 +21,7 @@ namespace WebGLives.Migrations.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("WebGLives.DataAccess.Entities.GameEntity", b =>
+            modelBuilder.Entity("WebGLives.DataAccess.Postgre.Entities.GameEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
