@@ -45,7 +45,7 @@ public class GamesRepository : IGamesRepository
         await _context.Games.AddAsync(entity, token);
         var created = await _context.SaveChangesAsync(token);
         return created > 0
-            ? Result.Success<Game, Error>(game)
+            ? Result.Success<Game, Error>(_mapper.Map<GameEntity, Game>(entity))
             : Result.Failure<Game, Error>(new Error($"Game not created!"));
     }
 
