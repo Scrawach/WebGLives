@@ -48,7 +48,7 @@ public class GamesService : IGamesService
             .Tap(async game =>
             { 
                 await _files
-                    .SaveGame(gameId.ToString(), gameStream)
+                    .SaveGame(gameId.ToString(), gameStream, token)
                     .Tap(path => game.GameUrl = path);
             })
             .Tap(game => _repository.Update(game, token));
@@ -58,7 +58,7 @@ public class GamesService : IGamesService
             .Tap(async game =>
             { 
                 await _files
-                    .SaveIcon(gameId.ToString(), posterStream)
+                    .SaveIcon(gameId.ToString(), posterStream, token)
                     .Tap(path => game.PosterUrl = path);
             })
             .Tap(game => _repository.Update(game, token));
