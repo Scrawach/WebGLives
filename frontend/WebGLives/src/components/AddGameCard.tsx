@@ -1,12 +1,14 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Text, Button, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { Api } from "../services/Api";
 
 export const AddGameCard = () => {
     const navigate = useNavigate()
 
-    const createGame = () => {
-        navigate("/create")
+    const createGame = async () => {
+        const game = await Api.create();
+        navigate(`/edit/${game.id}`)
     }
 
     return (

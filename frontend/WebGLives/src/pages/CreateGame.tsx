@@ -1,19 +1,27 @@
 import { 
     Box, 
-    FormControl, 
+    HStack, 
     FormLabel, 
     FormHelperText, 
     Input, 
     Textarea, 
     Button, 
+    Text,
+    Spacer,
   } from '@chakra-ui/react'
 import { UploadGameRequest } from "../types/UploadGameRequest";
 import { ChangeEvent, useState } from 'react'
-import { Form, useNavigate } from 'react-router-dom'
+import { Form, useNavigate, useParams } from 'react-router-dom'
 import { Dropzone } from '../components/Dropzone'
 import { Api } from '../services/Api';
 
+type CreateProps = {
+    id: string;
+}
+
 export const CreateGame: React.FC = () => {
+    const { id } = useParams<CreateProps>();
+
     const navigate = useNavigate()
     const [title, setTitle] = useState<string>();
     const [description, setDescription] = useState<string>();
@@ -30,58 +38,65 @@ export const CreateGame: React.FC = () => {
             setTitle(e.target.value)
     }
 
-    const createRequest = async () => {
-        const uploadGameRequest : UploadGameRequest = {
-            title: title as string,
-            description: description as string,
-            icon: poster,
-            game: game
-        }
-    
-        await Api.uploadGame(uploadGameRequest);
-        navigate("/")
+    const saveEdit = async () => {
+        const targetId = id!
+
+        if (title)
+            await Api.updateTitle(targetId, title)
+        
+        if (description)
+            await Api.updateDescription(targetId, description)
+
+        if (poster)
+            await Api.updatePoster(targetId, poster)
+
+        if (game)
+            await Api.updateGame(targetId, game)
+
+        navigate(`/`)
+    }
+
+    const deleteGame = async () => {
+        const intId = parseInt(id!)
+        await Api.delete(id!)
+        navigate(`/`)
     }
 
     return (
         <Box alignItems="center" p={5}>
-        <Form method="post" action="/create">
-            <FormControl isRequired mb="40px">
-                <FormLabel>Game title:</FormLabel>
-                <Input type="text" name="title" onChange={handleTitleChange}/>
-                <FormHelperText>Enter a game title.</FormHelperText>
-            </FormControl>
+            <Text>Game title:</Text>
+            <Input placeholder="Enter a game title..." type="text" name="title" onChange={handleTitleChange}/>
+            <Spacer my="20px"/>
 
-            <FormControl isRequired mb="40px">
-                <FormLabel>Game description:</FormLabel>
-                <Textarea 
-                    onChange={handleDescriptionChange}
-                    placeholder="Enter a detailed description for your game..." 
-                    name="description"
-                />
-            </FormControl>
+            <Text>Game description:</Text>
+            <Textarea 
+                onChange={handleDescriptionChange}
+                placeholder="Enter a detailed description for your game..." 
+                name="description"
+            />
+            <Spacer my="20px"/>
 
-            <FormControl mb="40px">
-                <FormLabel>Game Poster:</FormLabel>
-                <Dropzone 
-                    onFileAccepted={setPoster}
-                    dragActiveText={"Drop image file here ..."}
-                    dragDeactiveText={"Dran \`n\` drop image file here, or click to select files"}
-                />
-                <FormHelperText>Upload image poster for your game.</FormHelperText>
-            </FormControl>
+            <Text>Game Poster:</Text>
+            <Dropzone 
+                onFileAccepted={setPoster}
+                dragActiveText={"Drop image file here ..."}
+                dragDeactiveText={"Dran \`n\` drop image file here, or click to select files"}
+            />
+            <Spacer my="20px"/>
 
-            <FormControl mb="40px">
-                <FormLabel>Game Files:</FormLabel>
-                <Dropzone 
-                    onFileAccepted={setGame}
-                    dragActiveText={"Drop .zip file here ..."}
-                    dragDeactiveText={"Dran \`n\` drop .zip file here, or click to select files"}
-                />
-                <FormHelperText>Upload .zip file with your game.</FormHelperText>
-            </FormControl>
+            <Text>Game Files:</Text>
+            <Dropzone 
+                onFileAccepted={setGame}
+                dragActiveText={"Drop .zip file here ..."}
+                dragDeactiveText={"Dran \`n\` drop .zip file here, or click to select files"}
+            />
+            <Spacer my="20px"/>
 
-            <Button onClick={createRequest}>Submit</Button>
-        </Form>
+            <HStack>
+                <Button onClick={saveEdit}>Save</Button>
+                <Spacer />
+                <Button onClick={deleteGame}>Delete</Button>
+            </HStack>
         </Box>
     )
 }

@@ -1,9 +1,16 @@
 import { Box, Spacer, HStack, useColorModeValue, Button, Input, InputLeftElement, LinkOverlay, InputGroup } from "@chakra-ui/react";
 import { SmallAddIcon, SearchIcon, CalendarIcon } from "@chakra-ui/icons";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
+import { useNavigate } from "react-router-dom";
+import { Api } from "../services/Api";
 
 export const NavigationBar : React.FC = () => {
-    const bgColor = useColorModeValue("gray.300", "gray.700");
+    const navigate = useNavigate()
+
+    const createGame = async () => {
+        const game = await Api.create();
+        navigate(`/edit/${game.id}`)
+    }
 
     return (
         <Box>
@@ -29,10 +36,8 @@ export const NavigationBar : React.FC = () => {
             </InputGroup>
 
             
-            <Button leftIcon={<SmallAddIcon />}>
-              <LinkOverlay href="/create"> 
-                New Game
-              </LinkOverlay>
+            <Button leftIcon={<SmallAddIcon />} onClick={createGame}>
+              New Game
             </Button>
  
             <ColorModeSwitcher />
