@@ -27,8 +27,11 @@ public class GamesService : IGamesService
     public async Task<Result<Game, Error>> Get(int gameId, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token);
 
-    public async Task<UnitResult<Error>> Delete(int gameId, CancellationToken token = default) =>
-        await _repository.Delete(gameId, token);
+    public async Task<UnitResult<Error>> Delete(int gameId, CancellationToken token = default)
+    {
+        _files.Delete(gameId.ToString());
+        return await _repository.Delete(gameId, token);
+    }
 
     public async Task<UnitResult<Error>> UpdateTitle(int gameId, string title, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token)

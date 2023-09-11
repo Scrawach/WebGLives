@@ -14,28 +14,38 @@ public class FilesService : IFilesService
     public FilesService(IZipService zipService) =>
         _zipService = zipService;
 
-    public async Task<Result<string, Error>> SaveIcon(string title, Stream icon)
+    public async Task<Result<string, Error>> SaveIcon(string title, Stream icon, CancellationToken token = default)
     {
         var root = GetOrCreateRootDirectory(title);
         var fileName = $"{title}.png";
         var path = Path.Combine(root, fileName);
 
-        await icon.CopyToAsync(new FileStream(path, FileMode.Create));
+        await icon.CopyToAsync(new FileStream(path, FileMode.Create), token);
         
         return CombinePath("games", $"{title}", $"{fileName}");
     }
 
-    public async Task<Result<string, Error>> SaveGame(string title, Stream game)
+    public async Task<Result<string, Error>> SaveGame(string title, Stream game, CancellationToken token = default)
     {
         var root = GetOrCreateRootDirectory(title);
         var path = Path.Combine(root, $"{title}.zip");
-        await game.CopyToAsync(new FileStream(path, FileMode.Create));
+        await game.CopyToAsync(new FileStream(path, FileMode.Create), token);
 
         if (!_zipService.IsValid(path))
             return Result.Failure<string, Error>(new Error("Not valid zip archive!"));
         
         _zipService.Extract(path, root);
         return CombinePath("games", $"{title}", $"{Path.GetFileNameWithoutExtension(path)}", "index.html");
+    }
+    
+    public UnitResult<Error> Delete(string title)
+    {
+        var root = GetOrCreateRootDirectory(title);
+        
+        if (Directory.Exists(root))
+            Directory.Delete(root, true);
+        
+        return UnitResult.Success<Error>();
     }
 
     private static string CombinePath(params string[] directories)
