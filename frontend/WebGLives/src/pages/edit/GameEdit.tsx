@@ -1,26 +1,23 @@
 import { 
     Box, 
     HStack, 
-    FormLabel, 
-    FormHelperText, 
     Input, 
     Textarea, 
     Button, 
     Text,
     Spacer,
   } from '@chakra-ui/react'
-import { UploadGameRequest } from "../types/UploadGameRequest";
 import { ChangeEvent, useState } from 'react'
-import { Form, useNavigate, useParams } from 'react-router-dom'
-import { Dropzone } from '../components/Dropzone'
-import { Api } from '../services/Api';
+import { useNavigate, useParams } from 'react-router-dom'
+import { Dropzone } from './Dropzone'
+import { Api } from '../../services/Api';
 
-type CreateProps = {
+type EditDetails = {
     id: string;
 }
 
-export const CreateGame: React.FC = () => {
-    const { id } = useParams<CreateProps>();
+export const GameEdit: React.FC = () => {
+    const { id } = useParams<EditDetails>();
 
     const navigate = useNavigate()
     const [title, setTitle] = useState<string>();

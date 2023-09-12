@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Box, Grid, Tab, Tabs, TabList, TabPanels, TabPanel } from "@chakra-ui/react";
-import { GameCardData } from "../types/GameCardData";
-import { GameCard } from "../components/GameCard"
-import { Api } from "../services/Api"
-import { AddGameCard } from "../components/AddGameCard";
+import { GameCardData } from "../../types/GameCardData";
+import { GameCard } from "./GameCard"
+import { Api } from "../../services/Api"
+import { AddGameCard } from "./AddGameCard";
 
 export const Dashboard: React.FC = () => {
     const [gamePages, setGamePages] = useState<GameCardData[]>([]);
