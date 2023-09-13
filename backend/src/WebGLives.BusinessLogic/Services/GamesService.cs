@@ -44,11 +44,10 @@ public class GamesService : IGamesService
                 })
             .Tap(game => _repository.Update(game, token));
 
-    public async Task<UnitResult<Error>> Delete(int gameId, CancellationToken token = default)
-    {
-        _files.Delete(gameId.ToString());
-        return await _repository.Delete(gameId, token);
-    }
+    public async Task<UnitResult<Error>> Delete(int gameId, CancellationToken token = default) =>
+        await _files
+            .Delete(gameId.ToString())
+            .Tap(() => _repository.Delete(gameId, token));
 
     public async Task<UnitResult<Error>> UpdateTitle(int gameId, string title, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token)
