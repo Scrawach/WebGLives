@@ -26,6 +26,24 @@ public class GamesService : IGamesService
     public async Task<Result<Game, Error>> Get(int gameId, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token);
 
+    public async Task<UnitResult<Error>> Update(int gameId, UpdateGameData data, CancellationToken token = default) =>
+        await _repository.GetOrDefault(gameId, token)
+            .TapIf(data.Title is not null, game => game.Title = data.Title)
+            .TapIf(data.Description is not null, game => game.Description = data.Description)
+            .TapIf(data.Poster is not null, async game =>
+                {
+                    await _files
+                        .SaveIcon(gameId.ToString(), data.Poster!, token)
+                        .Tap(path => game.PosterUrl = path);
+                })
+            .TapIf(data.Game is not null, async game =>
+                { 
+                    await _files
+                        .SaveGame(gameId.ToString(), data.Game!, token)
+                        .Tap(path => game.GameUrl = path);
+                })
+            .Tap(game => _repository.Update(game, token));
+
     public async Task<UnitResult<Error>> Delete(int gameId, CancellationToken token = default)
     {
         _files.Delete(gameId.ToString());

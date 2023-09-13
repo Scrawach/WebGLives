@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WebGLives.API.Extensions;
 using WebGLives.API.Requests;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core;
@@ -33,6 +34,13 @@ public class GamesController : FunctionalControllerBase
     public async Task<IActionResult> Create() =>
         await AsyncResponseFrom(_games.Create());
 
+    [HttpPut("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]   
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateGameRequest request) =>
+        await AsyncResponseFrom(_games.Update(id, request.ToData()));
+    
     [HttpPut("{id:int}/title")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
