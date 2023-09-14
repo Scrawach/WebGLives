@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using WebGLives.API.Contracts;
 using WebGLives.API.Extensions;
-using WebGLives.API.Requests;
 using WebGLives.BusinessLogic.Services.Abstract;
-using WebGLives.Core;
 
 namespace WebGLives.API.Controllers;
 

@@ -1,4 +1,4 @@
-namespace WebGLives.API.Requests;
+namespace WebGLives.API.Contracts;
 
 public class UpdateGameRequest
 {
