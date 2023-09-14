@@ -6,6 +6,7 @@ import {
     Button, 
     Text,
     Spacer,
+    useToast,
   } from '@chakra-ui/react'
 import { ChangeEvent, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -24,6 +25,7 @@ export const GameEdit: React.FC = () => {
     const [description, setDescription] = useState<string>();
     const [game, setGame] = useState<File>();
     const [poster, setPoster] = useState<File>();
+    const toast = useToast()
 
     const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         if (e.target)
@@ -50,11 +52,16 @@ export const GameEdit: React.FC = () => {
         if (game)
             await Api.updateGame(targetId, game)
 
+        toast({
+            title: "Game success edit.",
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+        })
         navigate(`/`)
     }
 
     const deleteGame = async () => {
-        const intId = parseInt(id!)
         await Api.delete(id!)
         navigate(`/`)
     }
