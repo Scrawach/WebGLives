@@ -38,19 +38,7 @@ export const GameEdit: React.FC = () => {
     }
 
     const saveEdit = async () => {
-        const targetId = id!
-
-        if (title)
-            await Api.updateTitle(targetId, title)
-        
-        if (description)
-            await Api.updateDescription(targetId, description)
-
-        if (poster)
-            await Api.updatePoster(targetId, poster)
-
-        if (game)
-            await Api.updateGame(targetId, game)
+        await Api.update(id!, title, description, poster, game)
 
         toast({
             title: "Game success edit.",

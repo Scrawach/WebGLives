@@ -37,6 +37,25 @@ export class Api {
         await fetch(`${Api.url}/games/${id}`, { method: 'DELETE' });
     }
 
+    public static async update(id: string, title?: string, description?: string,
+        poster?: File, game?: File) : Promise<void> {
+        const request = new FormData()
+
+        if (title)
+            request.append('title', title)
+        
+        if (description)
+            request.append('description', description)
+        
+        if (poster)
+            request.append('poster', poster)
+        
+        if (game)
+            request.append('game', game)
+
+        await fetch(`${Api.url}/games/${id}`, { method: `PUT`, body: request })
+    }
+
     public static async updateTitle(id: string, title: string): Promise<void> {
         await fetch(`${Api.url}/games/${id}/title?title=${title}`, { method: `PUT`})
     }
