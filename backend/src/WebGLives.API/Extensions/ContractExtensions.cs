@@ -11,6 +11,6 @@ public static class ContractExtensions
             Title = request.Title,
             Description = request.Description,
             Game = request.Game?.OpenReadStream(),
-            Poster = request.Game?.OpenReadStream()
+            Poster = request.Poster?.OpenReadStream()
         };
 }

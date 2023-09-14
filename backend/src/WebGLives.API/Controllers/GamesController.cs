@@ -38,7 +38,7 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]   
-    public async Task<IActionResult> Update(int id, [FromBody] UpdateGameRequest request) =>
+    public async Task<IActionResult> Update(int id, [FromForm] UpdateGameRequest request) =>
         await AsyncResponseFrom(_games.Update(id, request.ToData()));
     
     [HttpPut("{id:int}/title")]
