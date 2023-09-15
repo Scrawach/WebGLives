@@ -29,6 +29,10 @@ public class FilesService : IFilesService
             return Result.Failure<string, Error>(new Error("Not valid zip archive!"));
         
         _zipService.Extract(path, root);
+
+        var extractedFolder = Directory.GetDirectories(root).FirstOrDefault();
+        Directory.Move(extractedFolder!, Path.Combine(root, title));
+        
         return CombinePath("games", $"{title}", $"{Path.GetFileNameWithoutExtension(path)}", "index.html");
     }
 
