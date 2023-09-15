@@ -20,7 +20,8 @@ public class FilesService : IFilesService
         var fileName = $"{title}.png";
         var path = Path.Combine(root, fileName);
 
-        await icon.CopyToAsync(new FileStream(path, FileMode.Create), token);
+        await using var fileStream = new FileStream(path, FileMode.Create);
+        await icon.CopyToAsync(fileStream, token);
         
         return CombinePath("games", $"{title}", $"{fileName}");
     }
