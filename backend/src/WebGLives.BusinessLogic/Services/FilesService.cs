@@ -29,7 +29,9 @@ public class FilesService : IFilesService
     {
         var root = GetOrCreateRootDirectory(title);
         var path = Path.Combine(root, $"{title}.zip");
-        await game.CopyToAsync(new FileStream(path, FileMode.Create), token);
+        
+        await using (var fileStream = new FileStream(path, FileMode.Create)) 
+            await game.CopyToAsync(fileStream, token);
 
         if (!_zipService.IsValid(path))
             return Result.Failure<string, Error>(new Error("Not valid zip archive!"));
