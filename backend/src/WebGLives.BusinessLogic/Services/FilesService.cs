@@ -16,31 +16,22 @@ public class FilesService : IFilesService
 
     public async Task<Result<string, Error>> SaveIcon(string title, Stream icon, CancellationToken token = default)
     {
-        var root = GetOrCreateRootDirectory(title);
         var fileName = $"{title}.png";
-        var path = Path.Combine(root, fileName);
-
-        await using var fileStream = new FileStream(path, FileMode.Create);
-        await icon.CopyToAsync(fileStream, token);
-        
+        await SaveFile(title, fileName, icon, token);
         return CombinePath("games", $"{title}", $"{fileName}");
     }
 
     public async Task<Result<string, Error>> SaveGame(string title, Stream game, CancellationToken token = default)
     {
-        var root = GetOrCreateRootDirectory(title);
-        var path = Path.Combine(root, $"{title}.zip");
+        var (root, path) = await SaveFile(title, $"{title}.zip", game, token);
         
-        await using (var fileStream = new FileStream(path, FileMode.Create)) 
-            await game.CopyToAsync(fileStream, token);
-
         if (!_zipService.IsValid(path))
             return Result.Failure<string, Error>(new Error("Not valid zip archive!"));
         
         _zipService.Extract(path, root);
         return CombinePath("games", $"{title}", $"{Path.GetFileNameWithoutExtension(path)}", "index.html");
     }
-    
+
     public UnitResult<Error> Delete(string title)
     {
         var root = GetOrCreateRootDirectory(title);
@@ -49,6 +40,16 @@ public class FilesService : IFilesService
             Directory.Delete(root, true);
         
         return UnitResult.Success<Error>();
+    }
+
+    private static async Task<(string rootFolder, string pathToFile)> SaveFile(string title, string fileName, Stream file, CancellationToken token = default)
+    {
+        var root = GetOrCreateRootDirectory(title);
+        var path = Path.Combine(root, fileName);
+
+        await using var fileStream = new FileStream(path, FileMode.Create);
+        await file.CopyToAsync(fileStream, token);
+        return (root, path);
     }
 
     private static string CombinePath(params string[] directories)
