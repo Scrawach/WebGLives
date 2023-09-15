@@ -47,10 +47,9 @@ export class Api {
         if (description)
             request.append('description', description)
         
-        if (poster) {
-            alert(poster)
+        if (poster)
             request.append('poster', poster)
-        }
+        
         
         if (game)
             request.append('game', game)
