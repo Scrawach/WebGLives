@@ -37,9 +37,12 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]   
-    public async Task<IActionResult> Update(int id, [FromForm] UpdateGameRequest request, CancellationToken token = default) =>
-        await AsyncResponseFrom(_games.Update(id, request.ToData(), token));
-    
+    public async Task<IActionResult> Update(int id, [FromForm] UpdateGameRequest request, CancellationToken token = default)
+    {
+        await using var updatedData = request.ToData();
+        return await AsyncResponseFrom(_games.Update(id, updatedData, token));
+    }
+
     [HttpPut("{id:int}/title")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
@@ -58,15 +61,21 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdatePoster(int id, IFormFile poster, CancellationToken token = default) =>
-        await AsyncResponseFrom(_games.UpdatePoster(id, poster.OpenReadStream(), token));
+    public async Task<IActionResult> UpdatePoster(int id, IFormFile poster, CancellationToken token = default)
+    {
+        await using var updatedData = poster.OpenReadStream();
+        return await AsyncResponseFrom(_games.UpdatePoster(id, updatedData, token));
+    }
 
     [HttpPut("{id:int}/game")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdateGame(int id, IFormFile archive, CancellationToken token = default) =>
-        await AsyncResponseFrom(_games.UpdateGame(id, archive.OpenReadStream(), token));
+    public async Task<IActionResult> UpdateGame(int id, IFormFile archive, CancellationToken token = default)
+    {
+        await using var updatedData = archive.OpenReadStream();
+        return await AsyncResponseFrom(_games.UpdateGame(id, updatedData, token));
+    }
 
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
