@@ -47,14 +47,14 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdateTitle(int id, string title, CancellationToken token = default) =>
+    public async Task<IActionResult> UpdateTitle(int id, [FromBody] string title, CancellationToken token = default) =>
         await AsyncResponseFrom(_games.UpdateTitle(id, title, token));
 
     [HttpPut("{id:int}/description")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdateDescription(int id, string description, CancellationToken token = default) =>
+    public async Task<IActionResult> UpdateDescription(int id, [FromBody] string description, CancellationToken token = default) =>
         await AsyncResponseFrom(_games.UpdateDescription(id, description, token));
 
     [HttpPut("{id:int}/poster")]
