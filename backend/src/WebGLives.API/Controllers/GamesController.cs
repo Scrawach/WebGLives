@@ -17,61 +17,61 @@ public class GamesController : FunctionalControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<GameResponse>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> All() =>
-        await AsyncResponseFrom(GameResponse.From(_games.All()));
+    public async Task<IActionResult> All(CancellationToken token = default) =>
+        await AsyncResponseFrom(GameResponse.From(_games.All(token)));
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> Get(int id) =>
-        await AsyncResponseFrom(GameResponse.From(_games.Get(id)));
+    public async Task<IActionResult> Get(int id, CancellationToken token = default) =>
+        await AsyncResponseFrom(GameResponse.From(_games.Get(id, token)));
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> Create() =>
-        await AsyncResponseFrom(GameResponse.From(_games.Create()));
+    public async Task<IActionResult> Create(CancellationToken token = default) =>
+        await AsyncResponseFrom(GameResponse.From(_games.Create(token)));
 
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]   
-    public async Task<IActionResult> Update(int id, [FromForm] UpdateGameRequest request) =>
-        await AsyncResponseFrom(_games.Update(id, request.ToData()));
+    public async Task<IActionResult> Update(int id, [FromForm] UpdateGameRequest request, CancellationToken token = default) =>
+        await AsyncResponseFrom(_games.Update(id, request.ToData(), token));
     
     [HttpPut("{id:int}/title")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdateTitle(int id, string title) =>
-        await AsyncResponseFrom(_games.UpdateTitle(id, title));
+    public async Task<IActionResult> UpdateTitle(int id, string title, CancellationToken token = default) =>
+        await AsyncResponseFrom(_games.UpdateTitle(id, title, token));
 
     [HttpPut("{id:int}/description")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdateDescription(int id, string description) =>
-        await AsyncResponseFrom(_games.UpdateDescription(id, description));
+    public async Task<IActionResult> UpdateDescription(int id, string description, CancellationToken token = default) =>
+        await AsyncResponseFrom(_games.UpdateDescription(id, description, token));
 
     [HttpPut("{id:int}/poster")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdatePoster(int id, IFormFile poster) =>
-        await AsyncResponseFrom(_games.UpdatePoster(id, poster.OpenReadStream()));
+    public async Task<IActionResult> UpdatePoster(int id, IFormFile poster, CancellationToken token = default) =>
+        await AsyncResponseFrom(_games.UpdatePoster(id, poster.OpenReadStream(), token));
 
     [HttpPut("{id:int}/game")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdateGame(int id, IFormFile archive) =>
-        await AsyncResponseFrom(_games.UpdateGame(id, archive.OpenReadStream()));
+    public async Task<IActionResult> UpdateGame(int id, IFormFile archive, CancellationToken token = default) =>
+        await AsyncResponseFrom(_games.UpdateGame(id, archive.OpenReadStream(), token));
 
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> Delete(int id) =>
-        await AsyncResponseFrom(_games.Delete(id));
+    public async Task<IActionResult> Delete(int id, CancellationToken token = default) =>
+        await AsyncResponseFrom(_games.Delete(id, token));
 }
