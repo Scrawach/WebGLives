@@ -58,11 +58,11 @@ export class Api {
     }
 
     public static async updateTitle(id: string, title: string): Promise<void> {
-        await fetch(`${Api.url}/games/${id}/title?title=${title}`, { method: `PUT`})
+        await fetch(`${Api.url}/games/${id}/title`, { method: `PUT`, body: title})
     }
 
     public static async updateDescription(id: string, description: string): Promise<void> {
-        await fetch(`${Api.url}/games/${id}/description?description=${description}`, { method: `PUT`})
+        await fetch(`${Api.url}/games/${id}/description`, { method: `PUT`, body: description})
     }
 
     public static async updatePoster(id: string, poster: File): Promise<void> {
