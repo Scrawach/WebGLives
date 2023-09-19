@@ -30,18 +30,12 @@ public class GamesService : IGamesService
         await _repository.GetOrDefault(gameId, token)
             .TapIf(data.Title is not null, game => game.Title = data.Title)
             .TapIf(data.Description is not null, game => game.Description = data.Description)
-            .TapIf(data.Poster is not null, async game =>
-                {
-                    await _files
-                        .SaveIcon(gameId.ToString(), data.Poster!, token)
-                        .Tap(path => game.PosterUrl = path);
-                })
-            .TapIf(data.Game is not null, async game =>
-                { 
-                    await _files
-                        .SaveGame(gameId.ToString(), data.Game!, token)
-                        .Tap(path => game.GameUrl = path);
-                })
+            .CheckIf(data.Poster is not null, async game => await _files
+                .SaveIcon(gameId.ToString(), data.Poster!, token)
+                .Tap(path => game.PosterUrl = path))
+            .CheckIf(data.Game is not null, async game => await _files
+                .SaveGame(gameId.ToString(), data.Game!, token)
+                .Tap(path => game.GameUrl = path))
             .Tap(game => _repository.Update(game, token));
 
     public async Task<UnitResult<Error>> Delete(int gameId, CancellationToken token = default) =>
@@ -61,22 +55,16 @@ public class GamesService : IGamesService
 
     public async Task<UnitResult<Error>> UpdateGame(int gameId, Stream gameStream, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token)
-            .Tap(async game =>
-            { 
-                await _files
-                    .SaveGame(gameId.ToString(), gameStream, token)
-                    .Tap(path => game.GameUrl = path);
-            })
+            .Check(async game => await _files
+                .SaveGame(gameId.ToString(), gameStream, token)
+                .Tap(path => game.GameUrl = path))
             .Tap(game => _repository.Update(game, token));
 
     public async Task<UnitResult<Error>> UpdatePoster(int gameId, Stream posterStream, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token)
-            .Tap(async game =>
-            { 
-                await _files
-                    .SaveIcon(gameId.ToString(), posterStream, token)
-                    .Tap(path => game.PosterUrl = path);
-            })
+            .Check(async game => await _files
+                .SaveIcon(gameId.ToString(), posterStream, token)
+                .Tap(path => game.PosterUrl = path))
             .Tap(game => _repository.Update(game, token));
     
 }
