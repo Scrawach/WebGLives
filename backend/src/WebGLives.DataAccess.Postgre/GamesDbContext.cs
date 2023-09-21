@@ -1,10 +1,11 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebGLives.DataAccess.Configurations;
 using WebGLives.DataAccess.Entities;
 
 namespace WebGLives.DataAccess;
 
-public class GamesDbContext : DbContext
+public class GamesDbContext : IdentityDbContext
 {
     public GamesDbContext(DbContextOptions<GamesDbContext> options) : base(options) { }
     
@@ -12,6 +13,7 @@ public class GamesDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        base.OnModelCreating(builder);
         builder.ApplyConfiguration(new GameEntityConfiguration());
     }
 }

@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using WebGLives.API.Extensions;
+using WebGLives.DataAccess;
 
 const string cors = "MyAllowSpecificOrigins";
 
@@ -16,9 +18,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddWebGLives(builder);
+builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<GamesDbContext>();
 
 var app = builder.Build();
 app.UseCors(cors);
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
