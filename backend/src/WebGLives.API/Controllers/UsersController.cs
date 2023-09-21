@@ -15,7 +15,7 @@ public class UsersController : FunctionalControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IEnumerable<IdentityError>))]
     public async Task<IActionResult> CreateUser([FromForm] CreateUserRequest request)
     {
         var user = new IdentityUser(request.Login);
