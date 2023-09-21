@@ -9,9 +9,13 @@ namespace WebGLives.API.Controllers;
 public class UsersController : FunctionalControllerBase
 {
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly SignInManager<IdentityUser> _signInManager;
 
-    public UsersController(UserManager<IdentityUser> userManager) =>
+    public UsersController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+    {
         _userManager = userManager;
+        _signInManager = signInManager;
+    }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -23,5 +27,21 @@ public class UsersController : FunctionalControllerBase
         return result.Succeeded
             ? Ok()
             : BadRequest(result.Errors);
+    }
+
+    [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Microsoft.AspNetCore.Identity.SignInResult))]
+    public async Task<IActionResult> Login([FromForm] LoginRequest request)
+    {
+        var result = await _signInManager.PasswordSignInAsync(request.Login, request.Password, request.RememberMe, true);
+        return Ok(result);
+    }
+
+    [HttpPost("logout")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return Ok();
     }
 }
