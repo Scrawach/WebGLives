@@ -7,17 +7,20 @@ import {
     Text,
     Spacer,
     useToast,
+    Image,
   } from '@chakra-ui/react'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Dropzone } from './Dropzone'
 import { Api } from '../../services/Api';
+import { GameCardData } from '../../types/GameCardData';
 
 type EditDetails = {
     id: string;
 }
 
 export const GameEdit: React.FC = () => {
+    const [gamePage, setGamePage] = useState<GameCardData>();
     const { id } = useParams<EditDetails>();
 
     const navigate = useNavigate()
@@ -54,14 +57,23 @@ export const GameEdit: React.FC = () => {
         navigate(`/`)
     }
 
+    useEffect(() => {
+        async function fetchGamePages() {
+            var page = await Api.gamePage(id!);
+            setGamePage(page);
+        }
+        fetchGamePages();
+    }, [])
+
     return (
         <Box alignItems="center" p={5}>
             <Text>Game title:</Text>
-            <Input placeholder="Enter a game title..." type="text" name="title" onChange={handleTitleChange}/>
+            <Input defaultValue={gamePage?.title} placeholder="Enter a game title..." type="text" name="title" onChange={handleTitleChange}/>
             <Spacer my="20px"/>
 
             <Text>Game description:</Text>
             <Textarea 
+                defaultValue={gamePage?.description}
                 onChange={handleDescriptionChange}
                 placeholder="Enter a detailed description for your game..." 
                 name="description"
@@ -69,11 +81,21 @@ export const GameEdit: React.FC = () => {
             <Spacer my="20px"/>
 
             <Text>Game Poster:</Text>
-            <Dropzone 
-                onFileAccepted={setPoster}
-                dragActiveText={"Drop image file here ..."}
-                dragDeactiveText={"Dran \`n\` drop image file here, or click to select files"}
-            />
+
+            <HStack direction="row" align="stretch">
+                <Image 
+                    rounded="xl"
+                    h="250px"
+                    fit="cover"
+                    src={gamePage?.posterUrl}
+                    bg="white"
+                /> 
+                <Dropzone 
+                    onFileAccepted={setPoster}
+                    dragActiveText={"Drop image file here ..."}
+                    dragDeactiveText={"Dran \`n\` drop image file here, or click to select files"}
+                />
+            </HStack>
             <Spacer my="20px"/>
 
             <Text>Game Files:</Text>

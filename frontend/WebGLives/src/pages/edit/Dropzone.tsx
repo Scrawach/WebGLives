@@ -31,6 +31,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({onFileAccepted, dragActiveTex
     return (
         <Center
             p={10}
+            w="full"
             cursor="pointer"
             bg={isDragActive ? activeBg : 'transparent'}
             _hover={{ bg: activeBg }}

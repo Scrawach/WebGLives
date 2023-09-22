@@ -11,8 +11,11 @@ export class Api {
         const gameCards = json as GameCardData[];
         //return gameCards;
         gameCards.forEach(element => {
-            element.gameUrl = `${Api.url}${element.gameUrl}`
-            element.posterUrl = `${Api.url}${element.posterUrl}`
+            if (element.gameUrl)
+                element.gameUrl = `${Api.url}${element.gameUrl}`
+            
+            if (element.posterUrl)
+                element.posterUrl = `${Api.url}${element.posterUrl}`
         });
 
         return gameCards;
@@ -22,8 +25,11 @@ export class Api {
         const response = await fetch(`${Api.url}/games/${id}`)
         const json = await response.json();
         //return json;
-        json.gameUrl = `${Api.url}${json.gameUrl}`
-        json.posterUrl = `${Api.url}${json.posterUrl}`
+        if (json.gameUrl)
+            json.gameUrl = `${Api.url}${json.gameUrl}`
+        
+        if (json.posterUrl)
+            json.posterUrl = `${Api.url}${json.posterUrl}`
         return json;
     }
 
