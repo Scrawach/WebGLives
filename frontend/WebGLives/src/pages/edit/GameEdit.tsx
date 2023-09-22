@@ -85,7 +85,7 @@ export const GameEdit: React.FC = () => {
             <HStack direction="row" align="stretch">
                 <Image 
                     rounded="xl"
-                    h="250px"
+                    h={gamePage?.posterUrl && "250px"}
                     fit="cover"
                     src={gamePage?.posterUrl}
                     bg="white"
