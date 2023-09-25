@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Security.Cryptography;
 using CSharpFunctionalExtensions;
 using JWT;
 using JWT.Algorithms;
@@ -16,22 +17,26 @@ public class JwtTokenService : IJwtTokenService
     private readonly long _expirationTime = DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds();
 
     public Result<string> GenerateAccessToken(params Claim[] claims) =>
-        JwtBuilder.Create()
-            .WithAlgorithm(_algorithm)
-            .WithSecret(Secret)
+        CreateJwtBuilder()
             .ExpirationTime(_expirationTime)
             .WithVerifySignature(true)
             .AddClaims(claims)
             .WithVerifySignature(true)
             .Encode();
 
+    public Result<string> GenerateRefreshToken()
+    {
+        var randomNumbers = new byte[32];
+        using var random = RandomNumberGenerator.Create();
+        random.GetBytes(randomNumbers);
+        return Convert.ToBase64String(randomNumbers);
+    }
+    
     public Result<IEnumerable<Claim>> Decode(string accessToken)
     {
         try
         {
-            var claims = JwtBuilder.Create()
-                .WithAlgorithm(_algorithm)
-                .WithSecret(Secret)
+            var claims = CreateJwtBuilder()
                 .MustVerifySignature()
                 .WithValidationParameters(ValidationParameters.Default)
                 .Decode<IDictionary<string, object>>(accessToken)
@@ -55,4 +60,9 @@ public class JwtTokenService : IJwtTokenService
             return Result.Failure<IEnumerable<Claim>>("Token has not valid format!");
         }
     }
+
+    private JwtBuilder CreateJwtBuilder() =>
+        JwtBuilder.Create()
+            .WithAlgorithm(_algorithm)
+            .WithSecret(Secret);
 }
