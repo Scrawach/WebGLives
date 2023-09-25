@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Contracts;
@@ -36,22 +35,7 @@ public class TokensController : FunctionalControllerBase
         if (!isSuccess)
             return BadRequest("Invalid password");
 
-        await _userManager.RemoveAuthenticationTokenAsync(user, "LocalLogin", "RefreshToken");
-        var newRefreshToken = _jwtToken.GenerateRefreshToken();
-        await _userManager.SetAuthenticationTokenAsync(user, "LocalLogin", "RefreshToken", newRefreshToken.Value);
-
-        var token = _jwtToken.GenerateAccessToken
-        (
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Name, user.UserName!)
-        );
-
-        var response = new AuthenticatedResponse
-        {
-            AccessToken = token.Value,
-            RefreshToken = newRefreshToken.Value
-        };
-        
+        var response = await Login(user);
         return Ok(response);
     }
 
@@ -61,9 +45,9 @@ public class TokensController : FunctionalControllerBase
     public async Task<IActionResult> Decode(string token)
     {
         var claims = _jwtToken.Decode(token);
-        if (claims.IsSuccess)
-            return Ok(claims.Value.Identity.Name);
-        return BadRequest(claims.Error);
+        return claims.IsSuccess
+            ? Ok(claims.Value.Identity.Name)
+            : BadRequest(claims.Error);
     }
 
     [HttpPut("refresh")]
@@ -71,6 +55,10 @@ public class TokensController : FunctionalControllerBase
     public async Task<IActionResult> Refresh([FromForm] TokenRefreshRequest request)
     {
         var principalClaims = _jwtToken.DecodeExpired(request.AccessToken);
+
+        if (principalClaims.IsFailure)
+            return BadRequest("Invalid access token!");
+        
         var username = principalClaims.Value.Identity.Name;
         var user = await _userManager.FindByNameAsync(username);
 
@@ -81,23 +69,28 @@ public class TokensController : FunctionalControllerBase
 
         if (request.RefreshToken != refreshToken)
             return BadRequest("Invalid refresh token!");
-        
+
+        var response = await Login(user);
+        return Ok(response);
+    }
+
+    private async Task<AuthenticatedResponse> Login(IdentityUser user)
+    {
         var newAccessToken = _jwtToken.GenerateAccessToken
         (
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Name, user.UserName!)
         );
+        
         await _userManager.RemoveAuthenticationTokenAsync(user, "LocalLogin", "RefreshToken");
         var newRefreshToken = _jwtToken.GenerateRefreshToken();
         await _userManager.SetAuthenticationTokenAsync(user, "LocalLogin", "RefreshToken", newRefreshToken.Value);
-        
-        var response = new AuthenticatedResponse
+
+        return new AuthenticatedResponse
         {
             AccessToken = newAccessToken.Value,
             RefreshToken = newRefreshToken.Value
         };
-        
-        return Ok(response);
     }
     
 }
