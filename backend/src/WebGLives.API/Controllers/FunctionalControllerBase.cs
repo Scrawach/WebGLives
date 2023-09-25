@@ -26,6 +26,11 @@ public abstract class FunctionalControllerBase : ControllerBase
         result.IsSuccess
             ? Ok(result.Value)
             : ResponseFrom(result.Error);
+    
+    protected IActionResult ResponseFrom<TResult>(Result<TResult> result) =>
+        result.IsSuccess
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
 
     protected IActionResult ResponseFrom<TError>(UnitResult<TError> result) where TError : Error =>
         result.IsSuccess

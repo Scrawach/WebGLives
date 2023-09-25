@@ -41,7 +41,7 @@ public class TokensController : FunctionalControllerBase
             new Claim(ClaimTypes.NameIdentifier, user.Id)
         );
 
-        return Ok(token);
+        return ResponseFrom(token);
     }
 
     [HttpGet]
@@ -50,6 +50,6 @@ public class TokensController : FunctionalControllerBase
     {
         var user = User;
         var claims = _jwtToken.Decode(token);
-        return Ok(claims);
+        return ResponseFrom(claims);
     }
 }
