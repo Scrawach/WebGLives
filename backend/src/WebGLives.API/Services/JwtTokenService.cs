@@ -37,7 +37,7 @@ public class JwtTokenService : IJwtTokenService
         Decode(accessToken, ValidationParameters.Default
             .With(parameter => parameter.ValidateExpirationTime = false));
 
-    public Result<ClaimsPrincipal> Decode(string token, ValidationParameters parameters)
+    private Result<ClaimsPrincipal> Decode(string token, ValidationParameters parameters)
     {
         try
         {
