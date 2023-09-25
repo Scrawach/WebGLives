@@ -14,14 +14,12 @@ public class JwtTokenService : IJwtTokenService
     private const string Secret = "without secrets";
     
     private readonly IJwtAlgorithm _algorithm = new HMACSHA256Algorithm();
-    private readonly long _expirationTime = DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds();
 
     public Result<string> GenerateAccessToken(params Claim[] claims) =>
         CreateJwtBuilder()
-            .ExpirationTime(_expirationTime)
+            .ExpirationTime(DateTime.Now.AddMinutes(1))
             .WithVerifySignature(true)
             .AddClaims(claims)
-            .WithVerifySignature(true)
             .Encode();
 
     public Result<string> GenerateRefreshToken()
@@ -32,32 +30,41 @@ public class JwtTokenService : IJwtTokenService
         return Convert.ToBase64String(randomNumbers);
     }
     
-    public Result<IEnumerable<Claim>> Decode(string accessToken)
+    public Result<ClaimsPrincipal> Decode(string accessToken) =>
+        Decode(accessToken, ValidationParameters.Default);
+
+    public Result<ClaimsPrincipal> DecodeExpired(string accessToken) =>
+        Decode(accessToken, ValidationParameters.Default
+            .With(parameter => parameter.ValidateExpirationTime = false));
+
+    public Result<ClaimsPrincipal> Decode(string token, ValidationParameters parameters)
     {
         try
         {
             var claims = CreateJwtBuilder()
                 .MustVerifySignature()
-                .WithValidationParameters(ValidationParameters.Default)
-                .Decode<IDictionary<string, object>>(accessToken)
-                .Select(claimData => new Claim(claimData.Key, claimData.Value.ToString() ?? string.Empty));
-            return Result.Success(claims);
+                .WithValidationParameters(parameters)
+                .Decode<IDictionary<string, object>>(token)
+                .Select(claimData => new Claim(claimData.Key, claimData.Value.ToString() ?? string.Empty))
+                .ToArray();
+
+            return Result.Success(new ClaimsPrincipal(new ClaimsIdentity(claims)));
         }
         catch (TokenNotYetValidException)
         {
-            return Result.Failure<IEnumerable<Claim>>("Token is not valid yet!");
+            return Result.Failure<ClaimsPrincipal>("Token is not valid yet!");
         }
         catch (TokenExpiredException)
         {
-            return Result.Failure<IEnumerable<Claim>>("Token has expired!");
+            return Result.Failure<ClaimsPrincipal>("Token has expired!");
         }
         catch (SignatureVerificationException)
         {            
-            return Result.Failure<IEnumerable<Claim>>("Token has invalid signature!");
+            return Result.Failure<ClaimsPrincipal>("Token has invalid signature!");
         }
         catch (Exception)
         {
-            return Result.Failure<IEnumerable<Claim>>("Token has not valid format!");
+            return Result.Failure<ClaimsPrincipal>("Token has not valid format!");
         }
     }
 
