@@ -21,7 +21,7 @@ public class TokensController : FunctionalControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticatedResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Create([FromForm] LoginRequest request)
@@ -57,6 +57,7 @@ public class TokensController : FunctionalControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Decode(string token)
     {
         var claims = _jwtToken.Decode(token);
@@ -66,7 +67,8 @@ public class TokensController : FunctionalControllerBase
     }
 
     [HttpPut("refresh")]
-    public async Task<IActionResult> Refresh(TokenRefreshRequest request)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticatedResponse))]
+    public async Task<IActionResult> Refresh([FromForm] TokenRefreshRequest request)
     {
         var principalClaims = _jwtToken.DecodeExpired(request.AccessToken);
         var username = principalClaims.Value.Identity.Name;
