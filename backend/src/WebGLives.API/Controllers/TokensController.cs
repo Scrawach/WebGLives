@@ -11,6 +11,8 @@ namespace WebGLives.API.Controllers;
 [Route("[controller]")]
 public class TokensController : FunctionalControllerBase
 {
+    private const string Secret = "without secret";
+    
     private readonly UserManager<IdentityUser> _userManager;
 
     public TokensController(UserManager<IdentityUser> userManager) =>
@@ -34,7 +36,7 @@ public class TokensController : FunctionalControllerBase
 
         var token = JwtBuilder.Create()
             .WithAlgorithm(new HMACSHA256Algorithm())
-            .WithSecret("Without Secret")
+            .WithSecret(Secret)
             .ExpirationTime(DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds())
             .AddClaim(ClaimTypes.NameIdentifier, user.Id)
             .WithVerifySignature(true)
@@ -50,7 +52,7 @@ public class TokensController : FunctionalControllerBase
         var user = User;
         var json = JwtBuilder.Create()
             .WithAlgorithm(new HMACSHA256Algorithm())
-            .WithSecret("Without secret")
+            .WithSecret(Secret)
             .MustVerifySignature()
             .Decode(token);
         return Ok(json);
