@@ -1,9 +1,8 @@
 using System.Security.Claims;
-using JWT.Algorithms;
-using JWT.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Contracts;
+using WebGLives.API.Services;
 
 namespace WebGLives.API.Controllers;
 
@@ -11,12 +10,14 @@ namespace WebGLives.API.Controllers;
 [Route("[controller]")]
 public class TokensController : FunctionalControllerBase
 {
-    private const string Secret = "without secret";
-    
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IJwtTokenService _jwtToken;
 
-    public TokensController(UserManager<IdentityUser> userManager) =>
+    public TokensController(UserManager<IdentityUser> userManager, IJwtTokenService jwtToken)
+    {
         _userManager = userManager;
+        _jwtToken = jwtToken;
+    }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
@@ -34,13 +35,11 @@ public class TokensController : FunctionalControllerBase
         if (!isSuccess)
             return BadRequest("Invalid password");
 
-        var token = JwtBuilder.Create()
-            .WithAlgorithm(new HMACSHA256Algorithm())
-            .WithSecret(Secret)
-            .ExpirationTime(DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds())
-            .AddClaim(ClaimTypes.NameIdentifier, user.Id)
-            .WithVerifySignature(true)
-            .Encode();
+
+        var token = _jwtToken.GenerateAccessToken
+        (
+            new Claim(ClaimTypes.NameIdentifier, user.Id)
+        );
 
         return Ok(token);
     }
@@ -50,11 +49,7 @@ public class TokensController : FunctionalControllerBase
     public async Task<IActionResult> Decode(string token)
     {
         var user = User;
-        var json = JwtBuilder.Create()
-            .WithAlgorithm(new HMACSHA256Algorithm())
-            .WithSecret(Secret)
-            .MustVerifySignature()
-            .Decode(token);
-        return Ok(json);
+        var claims = _jwtToken.Decode(token);
+        return Ok(claims);
     }
 }

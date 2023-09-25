@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using WebGLives.API.Controllers;
+using WebGLives.API.Services;
 using WebGLives.BusinessLogic.Services;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core.Repositories;
@@ -39,6 +41,7 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IZipService, ZipService>();
         services.AddSingleton<IFilesService, FilesService>();
+        services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IGamesService, GamesService>();
         services.AddScoped<IGamesRepository, GamesRepository>();
 
