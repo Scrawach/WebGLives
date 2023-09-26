@@ -36,9 +36,9 @@ public class FilesService : IFilesService
         return CombinePath(GamesFolder, folderName, Path.GetFileNameWithoutExtension(path), "index.html");
     }
 
-    public UnitResult<Error> Delete(string title)
+    public UnitResult<Error> Delete(string folderName)
     {
-        var root = GetOrCreateRootDirectory(title);
+        var root = Path.Combine(BaseDirectory, folderName);
         
         if (Directory.Exists(root))
             Directory.Delete(root, true);
