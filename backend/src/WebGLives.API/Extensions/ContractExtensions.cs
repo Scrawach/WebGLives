@@ -1,4 +1,5 @@
 using WebGLives.API.Contracts;
+using WebGLives.BusinessLogic;
 using WebGLives.BusinessLogic.Services.Abstract;
 
 namespace WebGLives.API.Extensions;

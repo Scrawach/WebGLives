@@ -1,4 +1,4 @@
-namespace WebGLives.BusinessLogic.Services.Abstract;
+namespace WebGLives.BusinessLogic;
 
 public class UpdateGameData : IDisposable, IAsyncDisposable
 {
