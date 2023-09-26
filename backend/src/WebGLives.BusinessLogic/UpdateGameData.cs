@@ -1,11 +1,13 @@
+using WebGLives.Core;
+
 namespace WebGLives.BusinessLogic;
 
 public class UpdateGameData : IDisposable, IAsyncDisposable
 {
     public string? Title;
     public string? Description;
-    public Stream? Poster;
-    public Stream? Game;
+    public FileData? Poster;
+    public FileData? Game;
 
     public void Dispose()
     {

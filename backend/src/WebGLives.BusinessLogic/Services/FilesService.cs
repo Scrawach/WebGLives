@@ -1,12 +1,14 @@
 using System.Text;
 using CSharpFunctionalExtensions;
 using WebGLives.BusinessLogic.Services.Abstract;
+using WebGLives.Core;
 using WebGLives.Core.Errors;
 
 namespace WebGLives.BusinessLogic.Services;
 
 public class FilesService : IFilesService
 {
+    private const string GamesFolder = "games";
     private static readonly string BaseDirectory = Path.Combine(Path.GetTempPath(), "WebGLives", "games");
 
     private readonly IZipService _zipService;
@@ -14,26 +16,24 @@ public class FilesService : IFilesService
     public FilesService(IZipService zipService) =>
         _zipService = zipService;
 
-    public async Task<Result<string, Error>> SaveIcon(string title, Stream icon, CancellationToken token = default)
+    public async Task<Result<string, Error>> Save(string folderName, FileData file, CancellationToken token = default)
     {
-        var fileName = $"{title}.png";
-        await SaveFile(title, fileName, icon, token);
-        return CombinePath("games", $"{title}", $"{fileName}");
+        var fileName = $"{folderName}{file.GetExtension()}";
+        await SaveFile(folderName, fileName, file.Stream, token);
+        return CombinePath(GamesFolder, folderName, fileName);
     }
 
-    public async Task<Result<string, Error>> SaveGame(string title, Stream game, CancellationToken token = default)
+    public async Task<Result<string, Error>> SaveZip(string folderName, FileData gameArchive, CancellationToken token = default)
     {
-        var (root, path) = await SaveFile(title, $"{title}.zip", game, token);
+        var (root, path) = await SaveFile(folderName, gameArchive.Name, gameArchive.Stream, token);
         
         if (!_zipService.IsValid(path))
             return Result.Failure<string, Error>(new Error("Not valid zip archive!"));
         
         _zipService.Extract(path, root);
 
-        var extractedFolder = Directory.GetDirectories(root).FirstOrDefault();
-        Directory.Move(extractedFolder!, Path.Combine(root, title));
-        
-        return CombinePath("games", $"{title}", $"{Path.GetFileNameWithoutExtension(path)}", "index.html");
+        MoveExtractedFolderToRoot(folderName, root);
+        return CombinePath(GamesFolder, folderName, Path.GetFileNameWithoutExtension(path), "index.html");
     }
 
     public UnitResult<Error> Delete(string title)
@@ -65,7 +65,7 @@ public class FilesService : IFilesService
         
         return builder.ToString();
     }
-    
+
     private static string GetOrCreateRootDirectory(string directoryName)
     {
         var root = Path.Combine(BaseDirectory, directoryName);
@@ -74,5 +74,11 @@ public class FilesService : IFilesService
             Directory.CreateDirectory(root);
         
         return root;
+    }
+
+    private static void MoveExtractedFolderToRoot(string folderName, string root)
+    {
+        var extractedFolder = Directory.GetDirectories(root).FirstOrDefault();
+        Directory.Move(extractedFolder!, Path.Combine(root, folderName));
     }
 }

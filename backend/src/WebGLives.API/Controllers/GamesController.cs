@@ -63,7 +63,7 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> UpdatePoster(int id, IFormFile poster, CancellationToken token = default)
     {
-        await using var updatedData = poster.OpenReadStream();
+        await using var updatedData = poster.ToData();
         return await AsyncResponseFrom(_games.UpdatePoster(id, updatedData, token));
     }
 
@@ -73,7 +73,7 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> UpdateGame(int id, IFormFile archive, CancellationToken token = default)
     {
-        await using var updatedData = archive.OpenReadStream();
+        await using var updatedData = archive.ToData();
         return await AsyncResponseFrom(_games.UpdateGame(id, updatedData, token));
     }
 

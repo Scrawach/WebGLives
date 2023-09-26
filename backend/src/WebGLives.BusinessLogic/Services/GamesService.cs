@@ -31,10 +31,10 @@ public class GamesService : IGamesService
             .TapIf(data.Title is not null, game => game.Title = data.Title)
             .TapIf(data.Description is not null, game => game.Description = data.Description)
             .CheckIf(data.Poster is not null, async game => await _files
-                .SaveIcon(gameId.ToString(), data.Poster!, token)
+                .Save(gameId.ToString(), data.Poster!, token)
                 .Tap(path => game.PosterUrl = path))
             .CheckIf(data.Game is not null, async game => await _files
-                .SaveGame(gameId.ToString(), data.Game!, token)
+                .SaveZip(gameId.ToString(), data.Game!, token)
                 .Tap(path => game.GameUrl = path))
             .Tap(game => _repository.Update(game, token));
 
@@ -53,17 +53,17 @@ public class GamesService : IGamesService
             .Tap(game => game.Description = description)
             .Tap(game => _repository.Update(game, token));
 
-    public async Task<UnitResult<Error>> UpdateGame(int gameId, Stream gameStream, CancellationToken token = default) =>
+    public async Task<UnitResult<Error>> UpdateGame(int gameId, FileData file, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token)
             .Check(async game => await _files
-                .SaveGame(gameId.ToString(), gameStream, token)
+                .SaveZip(gameId.ToString(), file, token)
                 .Tap(path => game.GameUrl = path))
             .Tap(game => _repository.Update(game, token));
 
-    public async Task<UnitResult<Error>> UpdatePoster(int gameId, Stream posterStream, CancellationToken token = default) =>
+    public async Task<UnitResult<Error>> UpdatePoster(int gameId, FileData file, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token)
             .Check(async game => await _files
-                .SaveIcon(gameId.ToString(), posterStream, token)
+                .Save(gameId.ToString(), file, token)
                 .Tap(path => game.PosterUrl = path))
             .Tap(game => _repository.Update(game, token));
     
