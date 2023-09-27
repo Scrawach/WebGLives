@@ -1,12 +1,13 @@
 using System.Security.Claims;
 using CSharpFunctionalExtensions;
+using WebGLives.Core.Errors;
 
 namespace WebGLives.API.Services;
 
 public interface IJwtTokenService
 {
-    Result<string> GenerateAccessToken(params Claim[] claims);
-    Result<string> GenerateRefreshToken();
-    Result<ClaimsPrincipal> Decode(string accessToken);
-    Result<ClaimsPrincipal> DecodeExpired(string accessToken);
+    string GenerateAccessToken(params Claim[] claims);
+    string GenerateRefreshToken();
+    Result<ClaimsPrincipal, Error> Decode(string accessToken);
+    Result<ClaimsPrincipal, Error> DecodeExpired(string accessToken);
 }

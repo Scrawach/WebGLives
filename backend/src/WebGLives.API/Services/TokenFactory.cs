@@ -8,6 +8,9 @@ namespace WebGLives.API.Services;
 
 public class TokenFactory : ITokenFactory
 {
+    private const string LocalProvider = "LocalLogin";
+    private const string RefreshTokenName = "RefreshToken";
+    
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IJwtTokenService _jwtTokenService;
 
@@ -16,65 +19,55 @@ public class TokenFactory : ITokenFactory
         _userManager = userManager;
         _jwtTokenService = jwtTokenService;
     }
+    
+    public async Task<Result<AuthenticatedResponse, Error>> Create(LoginRequest request) =>
+        await _userManager
+            .FindByNameAsync(request.Login)
+            .ToResultAsync(new Error("User with this login not found!"))
+            .Ensure(async user => await _userManager.CheckPasswordAsync(user, request.Password), new Error("Invalid password!"))
+            .Map(async user => await Authentication(user));
 
-    public async Task<Result<AuthenticatedResponse, Error>> Create(LoginRequest request)
+    public async Task<UnitResult<Error>> Decode(string token) =>
+        _jwtTokenService.Decode(token);
+    
+    public async Task<Result<AuthenticatedResponse, Error>>  Refresh(TokenRefreshRequest request) =>
+        await _jwtTokenService
+            .DecodeExpired(request.AccessToken)
+                .Ensure(claims => claims.Identity is not null, new Error("Invalid claims identity!"))
+                .Ensure(claims => claims.Identity!.Name is not null, new Error("Invalid claims username!"))
+                .Map(claims => claims.Identity!.Name!)
+            .Map(username => _userManager.FindByNameAsync(username))
+                .Ensure(user => user is not null, new NotFoundError("User with this login not found!"))
+                .Map(user => (user: user!, refreshToken: request.RefreshToken))
+            .Ensure(IsValidRefreshToken, new Error("Invalid refresh token!"))
+            .Map(async login => await Authentication(login.user));
+
+    private async Task<bool> IsValidRefreshToken((IdentityUser user, string refreshToken) data)
     {
-        var user = await _userManager.FindByNameAsync(request.Login);
-
-        if (user == null)
-            return Result.Failure<AuthenticatedResponse, Error>(new NotFoundError("User with this login not found"));
-
-        var isSuccess = await _userManager.CheckPasswordAsync(user, request.Password);
-
-        if (!isSuccess)
-            return Result.Failure<AuthenticatedResponse, Error>(new Error("Invalid password"));
-
-        return await Login(user);
+        var oldRefreshToken = await _userManager.GetAuthenticationTokenAsync(data.user, LocalProvider, RefreshTokenName);
+        return data.refreshToken == oldRefreshToken;
     }
-
-    public async Task<UnitResult<Error>> Decode(string token)
+    
+    private async Task<AuthenticatedResponse> Authentication(IdentityUser user)
     {
-        var result = _jwtTokenService.Decode(token);
-        return result.IsSuccess ? UnitResult.Success<Error>() : UnitResult.Failure(new Error("Invalid decode format"));
-    }
-
-    public async Task<Result<AuthenticatedResponse, Error>>  Refresh(TokenRefreshRequest request)
-    {
-        var principalClaims = _jwtTokenService.DecodeExpired(request.AccessToken);
-
-        if (principalClaims.IsFailure)
-            return Result.Failure<AuthenticatedResponse, Error>(new Error("Invalid access token!"));
-        
-        var username = principalClaims.Value.Identity.Name;
-        var user = await _userManager.FindByNameAsync(username);
-
-        if (user is null)
-            return Result.Failure<AuthenticatedResponse, Error>(new Error("Invalid token refresh request!"));
-
-        var refreshToken = await _userManager.GetAuthenticationTokenAsync(user, "LocalLogin", "RefreshToken");
-
-        if (request.RefreshToken != refreshToken)
-            return Result.Failure<AuthenticatedResponse, Error>(new Error("Invalid refresh token!"));
-
-        return await Login(user);
-    }
-
-    private async Task<AuthenticatedResponse> Login(IdentityUser user)
-    {
-        var newAccessToken = _jwtTokenService.GenerateAccessToken
-        (
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Name, user.UserName!)
-        );
-        
-        await _userManager.RemoveAuthenticationTokenAsync(user, "LocalLogin", "RefreshToken");
-        var newRefreshToken = _jwtTokenService.GenerateRefreshToken();
-        await _userManager.SetAuthenticationTokenAsync(user, "LocalLogin", "RefreshToken", newRefreshToken.Value);
+        await _userManager.RemoveAuthenticationTokenAsync(user, LocalProvider, RefreshTokenName);
+        var (accessToken, refreshToken) = GenerateTokens(user);
+        await _userManager.SetAuthenticationTokenAsync(user, LocalProvider, RefreshTokenName, refreshToken);
 
         return new AuthenticatedResponse
         {
-            AccessToken = newAccessToken.Value,
-            RefreshToken = newRefreshToken.Value
+            AccessToken = accessToken,
+            RefreshToken = refreshToken
         };
     }
+
+    private (string access, string refresh) GenerateTokens(IdentityUser user) =>
+        (
+            _jwtTokenService.GenerateAccessToken
+            (
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName!)
+            ), 
+            _jwtTokenService.GenerateRefreshToken()
+        );
 }
