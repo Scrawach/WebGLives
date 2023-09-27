@@ -42,6 +42,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IZipService, ZipService>();
         services.AddSingleton<IFilesService, FilesService>();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
+        services.AddSingleton<ITokenFactory, TokenFactory>();
         services.AddScoped<IGamesService, GamesService>();
         services.AddScoped<IGamesRepository, GamesRepository>();
 
