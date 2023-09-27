@@ -32,9 +32,12 @@ public class TokenFactory : ITokenFactory
         return await Login(user);
     }
 
-    public async Task<Result> Decode(string token) =>
-        _jwtTokenService.Decode(token);
-    
+    public async Task<UnitResult<Error>> Decode(string token)
+    {
+        var result = _jwtTokenService.Decode(token);
+        return result.IsSuccess ? UnitResult.Success<Error>() : UnitResult.Failure(new Error("Invalid decode format"));
+    }
+
     public async Task<Result<AuthenticatedResponse, Error>>  Refresh(TokenRefreshRequest request)
     {
         var principalClaims = _jwtTokenService.DecodeExpired(request.AccessToken);
