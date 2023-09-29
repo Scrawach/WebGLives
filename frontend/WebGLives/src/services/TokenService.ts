@@ -8,12 +8,13 @@ export class TokenService {
 
     private readonly tokensPath: string = `${this.url}/tokens`
 
-    public async create(credentials: Credentials): Promise<Response> {
+    public async create(credentials: Credentials): Promise<Tokens> {
         const data = new FormData();
         data.append(`Login`, credentials.login);
         data.append(`Password`, credentials.password);
 
-        return await fetch(this.tokensPath, { method: `POST`, body: data});
+        const response = await fetch(this.tokensPath, { method: `POST`, body: data});
+        return await response.json();
     }
 
     public async decode(token: string): Promise<Response> {
