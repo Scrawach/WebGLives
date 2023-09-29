@@ -1,7 +1,7 @@
-import { GameServiceBase } from "./GameServiceBase";
+import { GameService } from "./GameService";
 import { Game } from "../types/Game";
 
-export class BackendGameService extends GameServiceBase {
+export class BackendGameService extends GameService {
     public async all(): Promise<Game[]> {
         const games = await super.all();
         games.forEach(this.convertRelativeToAbsolutePaths);
