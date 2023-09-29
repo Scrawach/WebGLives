@@ -13,13 +13,11 @@ import { RatingBar } from "../../components/RatingBar";
 
 export interface GameCardProps {
     id: string;
-    title: string;
-    description?: string;
+    title?: string;
     icon?: string;
-    url: string;
 }
 
-export const GameCard: React.FC<GameCardProps> = ({id, title, description, icon, url}) => {
+export const GameCard: React.FC<GameCardProps> = ({id, title, icon}) => {
     const gamePageUrl = `games/${id}`
     
     return (

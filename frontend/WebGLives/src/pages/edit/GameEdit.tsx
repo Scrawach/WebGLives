@@ -13,14 +13,14 @@ import { ChangeEvent, useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Dropzone } from './Dropzone'
 import { Api } from '../../services/Api';
-import { GameCardData } from '../../types/GameCardData';
+import { Game } from '../../types/Game';
 
 type EditDetails = {
     id: string;
 }
 
 export const GameEdit: React.FC = () => {
-    const [gamePage, setGamePage] = useState<GameCardData>();
+    const [gamePage, setGamePage] = useState<Game>();
     const { id } = useParams<EditDetails>();
 
     const navigate = useNavigate()
@@ -41,7 +41,13 @@ export const GameEdit: React.FC = () => {
     }
 
     const saveEdit = async () => {
-        await Api.update(id!, title, description, poster, game)
+        await Api.games.update({
+            id: id!, 
+            title: title, 
+            description: description, 
+            poster: poster, 
+            game: game
+        });
 
         toast({
             title: "Game success edit.",
@@ -53,14 +59,14 @@ export const GameEdit: React.FC = () => {
     }
 
     const deleteGame = async () => {
-        await Api.delete(id!)
+        await Api.games.delete(id!)
         navigate(`/`)
     }
 
     useEffect(() => {
         async function fetchGamePages() {
-            var page = await Api.gamePage(id!);
-            setGamePage(page);
+            var game = await Api.games.get(id!);
+            setGamePage(game);
         }
         fetchGamePages();
     }, [])

@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { Box, Grid, Tab, Tabs, TabList, TabPanels, TabPanel } from "@chakra-ui/react";
-import { GameCardData } from "../../types/GameCardData";
 import { GameCard } from "./GameCard"
 import { Api } from "../../services/Api"
 import { AddGameCard } from "./AddGameCard";
+import { Game } from "../../types/Game";
 
 export const Dashboard: React.FC = () => {
-    const [gamePages, setGamePages] = useState<GameCardData[]>([]);
+    const [games, setGames] = useState<Game[]>([]);
 
     useEffect(() => {
-        async function fetchGamePages() {
-            var pages = await Api.gamePages();
-            setGamePages(pages);
+        async function fetchGames() {
+            var games = await Api.games.all();
+            setGames(games);
         }
-        fetchGamePages();
+        fetchGames();
     }, [])
 
     return (
@@ -32,13 +32,11 @@ export const Dashboard: React.FC = () => {
             </Tabs>
             <>
             <Grid templateColumns="repeat(4, 1fr)" p="10px" gap={5}>
-                {gamePages.map(game => 
+                {games.map(game => 
                     (<GameCard
                         id = {game.id}
                         title = {game.title}
-                        description = {game.description}
                         icon = {game.posterUrl}
-                        url = {game.gameUrl}
                     />))}
                     <AddGameCard />
             </Grid>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { Api } from "../services/Api";
-import { GameCardData } from "../types/GameCardData";
+import { Game } from "../types/Game";
 import { Box, Heading, Text, Button, HStack, Spacer } from "@chakra-ui/react";
 
 type GamePageDetails = {
@@ -10,13 +10,13 @@ type GamePageDetails = {
 
 export const GamePage: React.FC = () => {
     const { id } = useParams<GamePageDetails>();
-    const [gameCard, setGameCard] = useState<GameCardData>()
+    const [gameCard, setGameCard] = useState<Game>()
     const navigate = useNavigate()
     
     useEffect(() => {
         async function fetchGameData() {
-            const data: GameCardData = await Api.gamePage(id!)
-            setGameCard(data)
+            const game: Game = await Api.games.get(id!)
+            setGameCard(game)
         }
         fetchGameData();
     }, [id])

@@ -1,31 +1,15 @@
+import { Game } from "../types/Game";
+import { UpdateGame } from "../types/UpdateGame";
+
 export interface GameService {
-    all(): Game[];
-    get(id: number): number | Game; 
-}
+    all(): Promise<Game[]>;
+    get(id: string): Promise<Game>;
+    create(): Promise<Game>;
+    delete(id: string): Promise<Response>;
+    update(data: UpdateGame): Promise<Response>;
 
-interface Game {
-
-}
-
-class BackendGameService implements GameService {
-    constructor(
-        readonly url: string
-        ) { }
-
-    public async all(): Promise<Game[]> {
-        const response = await fetch(this.url);
-        const json = await response.json();
-        return json;
-    }
-
-    public async get(id: number): Promise<number | Game> {
-        const response = await fetch(`${this.url}/${id}`);
-        const json = await response.json();
-        return json
-    }
-}
-
-class Test {
-    public static games: GameService = new BackendGameService("");
-    
+    updateTitle(id: string, title: string): Promise<Response>;
+    updateDescription(id: string, description: string): Promise<Response>;
+    updatePoster(id: string, poster: File): Promise<Response>;
+    updateGame(id: string, game: File): Promise<Response>;
 }

@@ -7,7 +7,7 @@ export const AddGameCard = () => {
     const navigate = useNavigate()
 
     const createGame = async () => {
-        const game = await Api.create();
+        const game = await Api.games.create();
         navigate(`/edit/${game.id}`)
     }
 
