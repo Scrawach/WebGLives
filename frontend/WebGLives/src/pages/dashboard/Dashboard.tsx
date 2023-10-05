@@ -4,7 +4,6 @@ import { GameCard } from "./GameCard"
 import { Api } from "../../services/Api"
 import { AddGameCard } from "./AddGameCard";
 import { Game } from "../../types/Game";
-import { TokenGameCard } from "./TokenGameCard";
 
 export const Dashboard: React.FC = () => {
     const [games, setGames] = useState<Game[]>([]);
@@ -40,7 +39,6 @@ export const Dashboard: React.FC = () => {
                         icon = {game.posterUrl}
                     />))}
                     <AddGameCard />
-                    <TokenGameCard />
             </Grid>
             </>
         </Box>
