@@ -12,9 +12,9 @@ export const LoginForm: React.FC = () => {
     return (
         <> 
         <Stack spacing={4}>
-            <FormControl id="email">
-                <FormLabel>Email address</FormLabel>
-                <Input type="email" />
+            <FormControl id="login">
+                <FormLabel>Login</FormLabel>
+                <Input type="login" />
             </FormControl>
             <FormControl id="password">
                 <FormLabel>Password</FormLabel>
