@@ -1,8 +1,9 @@
-import { Box, Spacer, HStack, Button, Input, InputLeftElement, LinkOverlay, InputGroup } from "@chakra-ui/react";
+import { useDisclosure, Box, Spacer, HStack, Button, Input, InputLeftElement, LinkOverlay, InputGroup } from "@chakra-ui/react";
 import { SmallAddIcon, SearchIcon, CalendarIcon } from "@chakra-ui/icons";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import { useNavigate } from "react-router-dom";
 import { Api } from "../services/Api";
+import { LoginModalPage } from "../pages/login/LoginModalPage";
 
 export const NavigationBar : React.FC = () => {
     const navigate = useNavigate()
@@ -11,6 +12,9 @@ export const NavigationBar : React.FC = () => {
         const game = await Api.games.create();
         navigate(`/edit/${game.id}`)
     }
+
+    const {isOpen, onOpen, onClose} = useDisclosure()
+    const isLogin = true;
 
     return (
         <Box>
@@ -35,11 +39,19 @@ export const NavigationBar : React.FC = () => {
               <Input type="tel" placeholder="Search..." />
             </InputGroup>
 
-            
-            <Button leftIcon={<SmallAddIcon />} onClick={createGame}>
-              New Game
-            </Button>
- 
+            {isLogin && 
+              <Button leftIcon={<SmallAddIcon />} onClick={onOpen}>
+                Sign Up
+              </Button>
+            }
+
+            {!isLogin && 
+              <Button leftIcon={<SmallAddIcon />} onClick={createGame}>
+                New Game
+              </Button>
+            }
+
+            <LoginModalPage isOpen={isOpen} onClose={onClose}/>
             <ColorModeSwitcher />
           </HStack>
         </Box>
