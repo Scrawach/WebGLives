@@ -41,7 +41,7 @@ export const NavigationBar : React.FC = () => {
 
             {isLogin && 
               <Button onClick={onOpen}>
-                Sign Up
+                Login
               </Button>
             }
 

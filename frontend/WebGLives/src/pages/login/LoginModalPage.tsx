@@ -1,5 +1,6 @@
 import React from "react";
 import { 
+    Text,
     Modal, 
     ModalOverlay, 
     ModalContent, 
@@ -8,7 +9,9 @@ import {
     ModalBody, 
     ModalFooter 
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { LoginForm } from "./LoginForm";
+import { SignUpForm } from "./SignUpForm";
 
 export interface LoginModalPageProps {
     isOpen: boolean;
@@ -16,17 +19,21 @@ export interface LoginModalPageProps {
 }
 
 export const LoginModalPage: React.FC<LoginModalPageProps> = ({isOpen, onClose}) => {
+    const [isSignUp, setSignUp] = useState<boolean>();
+    
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay>
                     <ModalContent>
                         <ModalHeader>
-                            Sing up
+                            {!isSignUp && <Text>Login</Text>}
+                            {isSignUp && <Text>Sign Up</Text>}
                         </ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
-                            <LoginForm />
+                            {!isSignUp && <LoginForm onSignUp={() => setSignUp(true)}/>}
+                            {isSignUp && <SignUpForm onLogin={() => setSignUp(false)}/>}
                         </ModalBody>
                         <ModalFooter />
                     </ModalContent>

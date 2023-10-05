@@ -11,39 +11,40 @@ import {
     Input,
 } from "@chakra-ui/react";
 
-export interface LoginFormProps {
-    onSignUp?: () => void;
+export interface SignUpFormProps {
+    onLogin?: () => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({onSignUp}) => {
+export const SignUpForm: React.FC<SignUpFormProps> = ({onLogin}) => {
     return (
         <> 
         <Stack spacing={4}>
-            <FormControl id="login">
-                <HStack justify='space-between'>
+            <FormControl id="login" isRequired>
+                <HStack justify={'space-between'}>
                     <FormLabel>Login</FormLabel>
                     <HStack>
-                        <Text fontSize="sm">Need an account?</Text>
-                        <Link fontSize="sm" color="blue.500" onClick={onSignUp}>Sign up</Link>
+                        <Text fontSize="sm">Already have an account?</Text>
+                        <Link fontSize="sm" color="blue.500" onClick={onLogin}>Log in</Link>
                     </HStack>
                 </HStack>
                 <Input type="login" />
             </FormControl>
-            <FormControl id="password">
+            <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
                 <Input type="password" />
             </FormControl>
-            <Stack spacing={5}>
-                <Checkbox>Remember me</Checkbox>
+            <FormControl id="repeatPassword" isRequired>
+                <FormLabel>Repeat Password</FormLabel>
+                <Input type="repeatPassword" />
+            </FormControl>
                 <Button
                     bg={'blue.400'}
                     color={'white'}
                     _hover={{
                     bg: 'blue.500',
                     }}>
-                    Login
+                    Sign in
                 </Button>
-            </Stack>
         </Stack>
         </>
     )
