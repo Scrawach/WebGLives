@@ -40,7 +40,7 @@ export const NavigationBar : React.FC = () => {
             </InputGroup>
 
             {isLogin && 
-              <Button leftIcon={<SmallAddIcon />} onClick={onOpen}>
+              <Button onClick={onOpen}>
                 Sign Up
               </Button>
             }
