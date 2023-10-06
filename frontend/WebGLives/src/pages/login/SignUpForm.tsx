@@ -7,7 +7,6 @@ import {
     Stack,
     FormControl,
     FormLabel,
-    Checkbox,
     Input,
 } from "@chakra-ui/react";
 import { useLoginForm } from "./useLoginForm";

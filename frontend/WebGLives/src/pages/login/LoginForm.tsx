@@ -21,7 +21,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({onLogin, onSignUpClicked}) 
     const { login, password, handleLogin, handlePassword } = useLoginForm();
 
     const onLoginProcess = () => {
-        alert(login)
         if (onLogin)
             onLogin(login, password);
     }
