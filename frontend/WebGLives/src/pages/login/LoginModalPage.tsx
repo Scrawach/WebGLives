@@ -32,8 +32,8 @@ export const LoginModalPage: React.FC<LoginModalPageProps> = ({isOpen, onClose})
                         </ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
-                            {!isSignUp && <LoginForm onSignUp={() => setSignUp(true)}/>}
-                            {isSignUp && <SignUpForm onLogin={() => setSignUp(false)}/>}
+                            {!isSignUp && <LoginForm onSignUpClicked={() => setSignUp(true)}/>}
+                            {isSignUp && <SignUpForm onLoginClicked={() => setSignUp(false)}/>}
                         </ModalBody>
                         <ModalFooter />
                     </ModalContent>
