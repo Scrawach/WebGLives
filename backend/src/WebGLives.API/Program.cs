@@ -55,8 +55,6 @@ app.UseHttpLogging();
 
 app.UseWebGLivesStorage();
 
-app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
