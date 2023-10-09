@@ -1,3 +1,4 @@
+using JWT.Algorithms;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebGLives.API.Services;
@@ -40,7 +41,7 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IZipService, ZipService>();
         services.AddSingleton<IFilesService, FilesService>();
-        services.AddSingleton<IJwtTokenService, JwtTokenService>();
+        services.AddSingleton<IJwtTokenService>(new JwtTokenService("without secrets", new HMACSHA256Algorithm()));
         services.AddScoped<ITokenFactory, TokenFactory>();
         services.AddScoped<IGamesService, GamesService>();
         services.AddScoped<IGamesRepository, GamesRepository>();

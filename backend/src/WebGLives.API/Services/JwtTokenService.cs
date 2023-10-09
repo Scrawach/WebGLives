@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using CSharpFunctionalExtensions;
@@ -12,9 +13,14 @@ namespace WebGLives.API.Services;
 
 public class JwtTokenService : IJwtTokenService
 {
-    private const string Secret = "without secrets";
-    
-    private readonly IJwtAlgorithm _algorithm = new HMACSHA256Algorithm();
+    private readonly string _secret;
+    private readonly IJwtAlgorithm _algorithm;
+
+    public JwtTokenService(string secret, IJwtAlgorithm algorithm)
+    {
+        _secret = secret;
+        _algorithm = algorithm;
+    }
 
     public string GenerateAccessToken(params Claim[] claims) =>
         CreateJwtBuilder()
@@ -72,5 +78,5 @@ public class JwtTokenService : IJwtTokenService
     private JwtBuilder CreateJwtBuilder() =>
         JwtBuilder.Create()
             .WithAlgorithm(_algorithm)
-            .WithSecret(Secret);
+            .WithSecret(_secret);
 }
