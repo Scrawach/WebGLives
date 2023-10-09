@@ -24,7 +24,7 @@ public class JwtTokenService : IJwtTokenService
 
     public string GenerateAccessToken(params Claim[] claims) =>
         CreateJwtBuilder()
-            .ExpirationTime(DateTime.Now.AddMinutes(1))
+            .ExpirationTime(DateTime.Now.AddSeconds(1))
             .WithVerifySignature(true)
             .AddClaims(claims)
             .Encode();
@@ -36,9 +36,6 @@ public class JwtTokenService : IJwtTokenService
         random.GetBytes(randomNumbers);
         return Convert.ToBase64String(randomNumbers);
     }
-
-    public Result<ClaimsPrincipal, Error> Decode(string accessToken) =>
-        Decode(accessToken, ValidationParameters.Default);
 
     public Result<ClaimsPrincipal, Error> DecodeExpired(string accessToken) =>
         Decode(accessToken, ValidationParameters.Default

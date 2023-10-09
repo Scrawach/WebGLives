@@ -8,6 +8,5 @@ public interface IJwtTokenService
 {
     string GenerateAccessToken(params Claim[] claims);
     string GenerateRefreshToken();
-    Result<ClaimsPrincipal, Error> Decode(string accessToken);
     Result<ClaimsPrincipal, Error> DecodeExpired(string accessToken);
 }
