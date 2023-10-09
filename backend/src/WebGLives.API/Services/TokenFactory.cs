@@ -26,9 +26,6 @@ public class TokenFactory : ITokenFactory
             .ToResultAsync(new Error("User with this login not found!"))
             .Ensure(async user => await _userManager.CheckPasswordAsync(user, request.Password), new Error("Invalid password!"))
             .Map(async user => await Authentication(user));
-
-    public async Task<UnitResult<Error>> Decode(string token) =>
-        _jwtTokenService.Decode(token);
     
     public async Task<Result<AuthenticatedResponse, Error>>  Refresh(TokenRefreshRequest request) =>
         await _jwtTokenService

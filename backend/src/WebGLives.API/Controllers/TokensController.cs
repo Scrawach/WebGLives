@@ -20,12 +20,6 @@ public class TokensController : FunctionalControllerBase
     public async Task<IActionResult> Create([FromForm] LoginRequest request) =>
         await AsyncResponseFrom(_tokens.Create(request));
 
-    [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> Decode(string token) =>
-        await AsyncResponseFrom(_tokens.Decode(token));
-
     [HttpPut("refresh")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticatedResponse))]
     public async Task<IActionResult> Refresh([FromForm] TokenRefreshRequest request) =>
