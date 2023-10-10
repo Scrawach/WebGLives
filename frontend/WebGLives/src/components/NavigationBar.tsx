@@ -1,10 +1,11 @@
-import { useDisclosure, Text, Box, Spacer, HStack, Button, Input, InputLeftElement, LinkOverlay, InputGroup } from "@chakra-ui/react";
-import { SmallAddIcon, SearchIcon, CalendarIcon } from "@chakra-ui/icons";
+import { useDisclosure, Text, Box, Spacer, HStack, Button, Input, InputLeftElement, LinkOverlay, InputGroup, Avatar } from "@chakra-ui/react";
+import { SmallAddIcon, SearchIcon, CalendarIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import { useNavigate } from "react-router-dom";
 import { Api } from "../services/Api";
 import { LoginModalPage } from "../pages/login/LoginModalPage";
 import { Profile } from "../services/Profile";
+import { ProfileBar } from "./ProfileBar";
 
 export const NavigationBar : React.FC = () => {
     const navigate = useNavigate()
@@ -25,7 +26,7 @@ export const NavigationBar : React.FC = () => {
         <Box>
           <HStack
             p={4}
-            spacing={8}
+            spacing={4}
             align="center"
           >
             
@@ -55,12 +56,7 @@ export const NavigationBar : React.FC = () => {
                 <Button leftIcon={<SmallAddIcon />} onClick={createGame}>
                   New Game
                 </Button>
-                <Text>
-                  {Profile.getUsername()}
-                </Text>
-                <Button onClick={handleLogout}>
-                  Logout
-                </Button>
+                <ProfileBar username={Profile.getUsername()!} onLogout={handleLogout}/>
               </>
             }
 
