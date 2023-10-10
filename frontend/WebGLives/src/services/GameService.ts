@@ -1,5 +1,7 @@
 import { Game } from "../types/Game"
 import { UpdateGame } from "../types/UpdateGame";
+import { Api } from "./Api";
+import { Profile } from "./Profile";
 
 export class GameService {
     constructor(
@@ -19,7 +21,24 @@ export class GameService {
     }
 
     public async create(): Promise<Game> {
-        const response = await fetch(this.gamesPath, { method: `POST` });
+        const response = await fetch(this.gamesPath, 
+            { 
+                method: `POST`,
+                headers: this.authenticationHeaders()
+            });
+
+        if (response.status == 401)
+        {
+            const tokens = await Api.auth.refresh(Profile.tokens()!);
+            Profile.login(Profile.getUsername()!, tokens);
+            const response = await fetch(this.gamesPath, 
+                { 
+                    method: `POST`,
+                    headers: this.authenticationHeaders()
+                });
+            return await response.json();           
+        }
+
         return await response.json();
     }
 
@@ -59,5 +78,12 @@ export class GameService {
         const request = new FormData()
         request.append('game', game)
         return await fetch(`${this.gamesPath}/${id}/game`, { method: `PUT`, body: request})
+    }
+
+    authenticationHeaders(): HeadersInit {
+        const headers = new Headers();
+        const tokens = Profile.tokens();
+        headers.set("Authorization", `Bearer ${tokens?.accessToken}`)
+        return headers;
     }
 }

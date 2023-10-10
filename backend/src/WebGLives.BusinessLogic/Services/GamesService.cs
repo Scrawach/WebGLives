@@ -20,7 +20,7 @@ public class GamesService : IGamesService
     public async Task<Result<IEnumerable<Game>, Error>> All(CancellationToken token = default) =>
         await _repository.All(token);
 
-    public async Task<Result<Game, Error>> Create(CancellationToken token = default) =>
+    public async Task<Result<Game, Error>> Create(int ownerId, CancellationToken token = default) =>
         await _repository.Create(new Game(), token);
 
     public async Task<Result<Game, Error>> Get(int gameId, CancellationToken token = default) =>
