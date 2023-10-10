@@ -1,3 +1,4 @@
+import { AuthenticationService } from "./AuthenticationService";
 import { GameService } from "./GameService";
 import { TokenService } from "./TokenService";
 
@@ -7,4 +8,5 @@ export class Api {
 
     public static readonly games: GameService = new GameService(Api.jsonServerUrl);
     public static readonly tokens: TokenService = new TokenService(Api.url);
+    public static readonly auth: AuthenticationService = new AuthenticationService(Api.url);
 }
