@@ -12,6 +12,8 @@ import {
 import { useState } from "react";
 import { LoginForm } from "./LoginForm";
 import { SignUpForm } from "./SignUpForm";
+import { Api } from "../../services/Api";
+import { Profile } from "../../services/Profile";
 
 export interface LoginModalPageProps {
     isOpen: boolean;
@@ -21,6 +23,17 @@ export interface LoginModalPageProps {
 export const LoginModalPage: React.FC<LoginModalPageProps> = ({isOpen, onClose}) => {
     const [isSignUp, setSignUp] = useState<boolean>();
     
+    const handleLogin = async (login: string, password: string) => {
+        const tokens = await Api.auth.login(login, password);
+        Profile.login(login, tokens);
+    }
+
+    const handleSignUp = async (login: string, password: string) => {
+        const response = await Api.auth.register(login, password);
+        const tokens = await Api.auth.login(login, password);
+        Profile.login(login, tokens);
+    }
+
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -32,8 +45,8 @@ export const LoginModalPage: React.FC<LoginModalPageProps> = ({isOpen, onClose})
                         </ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
-                            {!isSignUp && <LoginForm onSignUpClicked={() => setSignUp(true)}/>}
-                            {isSignUp && <SignUpForm onLoginClicked={() => setSignUp(false)}/>}
+                            {!isSignUp && <LoginForm onLogin={handleLogin} onSignUpClicked={() => setSignUp(true)}/>}
+                            {isSignUp && <SignUpForm onSignUp={handleSignUp} onLoginClicked={() => setSignUp(false)}/>}
                         </ModalBody>
                         <ModalFooter />
                     </ModalContent>
