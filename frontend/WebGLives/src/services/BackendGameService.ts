@@ -4,7 +4,11 @@ import { Game } from "../types/Game";
 export class BackendGameService extends GameService {
     public async all(): Promise<Game[]> {
         const games = await super.all();
-        games.forEach(this.convertRelativeToAbsolutePaths);
+
+        games.forEach(game => {
+            this.convertRelativeToAbsolutePaths(game);
+        });
+
         return games;
     }
 

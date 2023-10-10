@@ -60,14 +60,4 @@ export class GameService {
         request.append('game', game)
         return await fetch(`${this.gamesPath}/${id}/game`, { method: `PUT`, body: request})
     }
-
-    convertRelativeToAbsolutePaths(game: Game): Game{
-        if (game.gameUrl)
-            game.gameUrl = `${this.url}${game.gameUrl}`
-        
-        if (game.posterUrl)
-            game.posterUrl = `${this.url}${game.posterUrl}`
-
-        return game;
-    }
 }
