@@ -17,7 +17,16 @@ export class AuthenticationService {
     public async login(login: string, password: string): Promise<Tokens> {
         const request = this.LoginFormData(login, password);
         const response = await fetch(`${this.tokensPath}`, { method: 'POST', body: request });
-        return await response.json();
+        const json = await response.json();
+        return json;
+    }
+
+    public async refresh(previous: Tokens): Promise<Tokens> {
+        const data = new FormData();
+        data.append('AccessToken', previous.accessToken);
+        data.append(`RefreshToken`, previous.refreshToken);
+        const result = await fetch(`${this.tokensPath}/refresh`, { method: `PUT`, body: data });
+        return await result.json();
     }
 
     private LoginFormData(login: string, password: string): FormData {
