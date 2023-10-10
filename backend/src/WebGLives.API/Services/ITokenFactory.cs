@@ -6,6 +6,6 @@ namespace WebGLives.API.Services;
 
 public interface ITokenFactory
 {
-    Task<Result<AuthenticatedResponse, Error>> Create(LoginRequest credentials);
-    Task<Result<AuthenticatedResponse, Error>> Refresh(TokenRefreshRequest credentials);
+    Task<Result<AuthenticatedResponse, Error>> Create(string login, string password);
+    Task<Result<AuthenticatedResponse, Error>> Refresh(string accessToken, string refreshToken);
 }

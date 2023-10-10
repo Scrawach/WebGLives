@@ -20,22 +20,22 @@ public class TokenFactory : ITokenFactory
         _jwtTokenService = jwtTokenService;
     }
     
-    public async Task<Result<AuthenticatedResponse, Error>> Create(LoginRequest request) =>
+    public async Task<Result<AuthenticatedResponse, Error>> Create(string login, string password) =>
         await _userManager
-            .FindByNameAsync(request.Login)
+            .FindByNameAsync(login)
             .ToResultAsync(new Error("User with this login not found!"))
-            .Ensure(async user => await _userManager.CheckPasswordAsync(user, request.Password), new Error("Invalid password!"))
+            .Ensure(async user => await _userManager.CheckPasswordAsync(user, password), new Error("Invalid password!"))
             .Map(async user => await Authentication(user));
     
-    public async Task<Result<AuthenticatedResponse, Error>>  Refresh(TokenRefreshRequest request) =>
+    public async Task<Result<AuthenticatedResponse, Error>>  Refresh(string accessToken, string refreshToken) =>
         await _jwtTokenService
-            .DecodeExpired(request.AccessToken)
+            .DecodeExpired(accessToken)
                 .Ensure(claims => claims.Identity is not null, new Error("Invalid claims identity!"))
                 .Ensure(claims => claims.Identity!.Name is not null, new Error("Invalid claims username!"))
                 .Map(claims => claims.Identity!.Name!)
             .Map(username => _userManager.FindByNameAsync(username))
                 .Ensure(user => user is not null, new NotFoundError("User with this login not found!"))
-                .Map(user => (user: user!, refreshToken: request.RefreshToken))
+                .Map(user => (user: user!, refreshToken: refreshToken))
             .Ensure(IsValidRefreshToken, new Error("Invalid refresh token!"))
             .Map(async login => await Authentication(login.user));
 

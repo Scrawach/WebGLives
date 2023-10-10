@@ -18,7 +18,7 @@ public class TokensController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Create([FromForm] LoginRequest request) =>
-        await AsyncResponseFrom(_tokens.Create(request));
+        await AsyncResponseFrom(_tokens.Create(request.Login, request.Password));
 
     [HttpPut("refresh")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticatedResponse))]
