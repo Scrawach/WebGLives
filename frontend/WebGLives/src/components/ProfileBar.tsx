@@ -1,5 +1,5 @@
 import { 
-    Text, 
+    Box, 
     HStack,
     Link, 
     Button, 
@@ -25,10 +25,8 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({username, avatar, onLogou
         <>
             <HStack spacing="10px">
                 <Menu>
-                    <MenuButton> 
-                    <Avatar size="sm" name={username} src={avatar}>
-
-                    </Avatar>
+                    <MenuButton > 
+                        <Avatar size="sm" name={username} src={avatar} />
                     </MenuButton>
                     <MenuList>
                         <MenuGroup title={username}>
