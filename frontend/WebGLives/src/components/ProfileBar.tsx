@@ -1,18 +1,13 @@
 import { 
-    Box, 
     HStack,
-    Link, 
-    Button, 
     Avatar, 
     Menu,
     MenuList,
     MenuItem,
     MenuGroup,
     MenuButton,
-    IconButton,
     MenuDivider
 } from "@chakra-ui/react";
-import { SettingsIcon } from "@chakra-ui/icons";
 
 export interface ProfileBarProps {
     username?: string;

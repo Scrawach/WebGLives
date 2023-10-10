@@ -1,5 +1,19 @@
-import { useDisclosure, Text, Box, Spacer, HStack, Button, Input, InputLeftElement, LinkOverlay, InputGroup, Avatar } from "@chakra-ui/react";
-import { SmallAddIcon, SearchIcon, CalendarIcon, ArrowForwardIcon } from "@chakra-ui/icons";
+import { 
+  useDisclosure, 
+  Box, 
+  Spacer, 
+  HStack, 
+  Button, 
+  Input, 
+  InputLeftElement, 
+  LinkOverlay, 
+  InputGroup, 
+} from "@chakra-ui/react";
+import { 
+  SmallAddIcon, 
+  SearchIcon, 
+  CalendarIcon 
+} from "@chakra-ui/icons";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 import { useNavigate } from "react-router-dom";
 import { Api } from "../services/Api";
