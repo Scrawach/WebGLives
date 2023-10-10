@@ -24,7 +24,7 @@ public class JwtTokenService : IJwtTokenService
 
     public string GenerateAccessToken(params Claim[] claims) =>
         CreateJwtBuilder()
-            .ExpirationTime(DateTime.Now.AddSeconds(1))
+            .ExpirationTime(DateTime.Now.AddMinutes(10))
             .WithVerifySignature(true)
             .AddClaims(claims)
             .Encode();
