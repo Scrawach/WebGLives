@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WebGLives.API.Contracts;
 using WebGLives.API.Contracts.Auth;
 using WebGLives.Core.Users;
 
