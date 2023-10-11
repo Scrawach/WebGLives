@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.BusinessLogic", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Migrations", "src\WebGLives.Migrations\WebGLives.Migrations.csproj", "{D76DF361-086F-49F7-BBCB-193D68F46C11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Auth.Identity", "src\WebGLives.Auth.Identity\WebGLives.Auth.Identity.csproj", "{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{D76DF361-086F-49F7-BBCB-193D68F46C11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D76DF361-086F-49F7-BBCB-193D68F46C11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D76DF361-086F-49F7-BBCB-193D68F46C11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

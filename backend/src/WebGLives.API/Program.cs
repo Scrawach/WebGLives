@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebGLives.API.Extensions;
+using WebGLives.Auth.Identity.Repositories;
+using WebGLives.Core.Users;
 using WebGLives.DataAccess;
 
 const string cors = "MyAllowSpecificOrigins";
@@ -48,7 +50,7 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityRequirement(new OpenApiSecurityRequirement { { jwtSecurityScheme, Array.Empty<string>() } });
 });
 builder.Services.AddWebGLives(builder);
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<GamesDbContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>

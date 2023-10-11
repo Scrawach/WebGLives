@@ -1,30 +1,27 @@
 using System.Security.Claims;
 using CSharpFunctionalExtensions;
-using Microsoft.AspNetCore.Identity;
 using WebGLives.API.Contracts;
 using WebGLives.Core.Errors;
+using WebGLives.Core.Repositories;
+using WebGLives.Core.Users;
 
 namespace WebGLives.API.Services;
 
 public class TokenFactory : ITokenFactory
 {
-    private const string LocalProvider = "LocalLogin";
-    private const string RefreshTokenName = "RefreshToken";
-    
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly IUsersRepository _users;
     private readonly IJwtTokenService _jwtTokenService;
 
-    public TokenFactory(UserManager<IdentityUser> userManager, IJwtTokenService jwtTokenService)
+    public TokenFactory(IUsersRepository users, IJwtTokenService jwtTokenService)
     {
-        _userManager = userManager;
+        _users = users;
         _jwtTokenService = jwtTokenService;
     }
     
     public async Task<Result<AuthenticatedResponse, Error>> Create(string login, string password) =>
-        await _userManager
+        await _users
             .FindByNameAsync(login)
-            .ToResultAsync(new Error("User with this login not found!"))
-            .Ensure(async user => await _userManager.CheckPasswordAsync(user, password), new Error("Invalid password!"))
+            .Tap(async user => await _users.CheckPasswordAsync(user, password))
             .Map(async user => await Authentication(user));
     
     public async Task<Result<AuthenticatedResponse, Error>>  Refresh(string accessToken, string refreshToken) =>
@@ -33,23 +30,22 @@ public class TokenFactory : ITokenFactory
                 .Ensure(claims => claims.Identity is not null, new Error("Invalid claims identity!"))
                 .Ensure(claims => claims.Identity!.Name is not null, new Error("Invalid claims username!"))
                 .Map(claims => claims.Identity!.Name!)
-            .Map(username => _userManager.FindByNameAsync(username))
-                .Ensure(user => user is not null, new NotFoundError("User with this login not found!"))
-                .Map(user => (user: user!, refreshToken: refreshToken))
+            .Map(username => _users.FindByNameAsync(username))
+            .Map(user => (user: user.Value, refreshToken: refreshToken))
             .Ensure(IsValidRefreshToken, new Error("Invalid refresh token!"))
             .Map(async login => await Authentication(login.user));
 
-    private async Task<bool> IsValidRefreshToken((IdentityUser user, string refreshToken) data)
+    private async Task<bool> IsValidRefreshToken((IUser user, string refreshToken) data)
     {
-        var oldRefreshToken = await _userManager.GetAuthenticationTokenAsync(data.user, LocalProvider, RefreshTokenName);
-        return data.refreshToken == oldRefreshToken;
+        var oldRefreshToken = await _users.GetAuthenticationTokenAsync(data.user);
+        return data.refreshToken == oldRefreshToken.Value;
     }
     
-    private async Task<AuthenticatedResponse> Authentication(IdentityUser user)
+    private async Task<AuthenticatedResponse> Authentication(IUser user)
     {
-        await _userManager.RemoveAuthenticationTokenAsync(user, LocalProvider, RefreshTokenName);
+        await _users.RemoveAuthenticationTokenAsync(user);
         var (accessToken, refreshToken) = GenerateTokens(user);
-        await _userManager.SetAuthenticationTokenAsync(user, LocalProvider, RefreshTokenName, refreshToken);
+        await _users.SetAuthenticationTokenAsync(user, refreshToken);
 
         return new AuthenticatedResponse
         {
@@ -58,7 +54,7 @@ public class TokenFactory : ITokenFactory
         };
     }
 
-    private (string access, string refresh) GenerateTokens(IdentityUser user) =>
+    private (string access, string refresh) GenerateTokens(IUser user) =>
         (
             _jwtTokenService.GenerateAccessToken
             (

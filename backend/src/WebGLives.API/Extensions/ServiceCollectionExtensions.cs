@@ -2,6 +2,7 @@ using JWT.Algorithms;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebGLives.API.Services;
+using WebGLives.Auth.Identity.Repositories;
 using WebGLives.BusinessLogic.Services;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core.Repositories;
@@ -45,6 +46,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITokenFactory, TokenFactory>();
         services.AddScoped<IGamesService, GamesService>();
         services.AddScoped<IGamesRepository, GamesRepository>();
+        services.AddScoped<IUsersRepository, UsersRepository>();
 
         return services;
     }
