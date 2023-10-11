@@ -3,7 +3,6 @@ using CSharpFunctionalExtensions;
 using WebGLives.Auth.Identity;
 using WebGLives.Auth.Identity.Services;
 using WebGLives.Core.Errors;
-using WebGLives.Core.Repositories;
 using WebGLives.Core.Users;
 
 namespace WebGLives.API.Services;
