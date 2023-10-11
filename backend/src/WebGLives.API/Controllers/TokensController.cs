@@ -22,8 +22,8 @@ public class TokensController : FunctionalControllerBase
     public async Task<IActionResult> Create([FromForm] LoginRequest request) =>
         await AsyncResponseFrom(AuthenticatedResponse.From(_tokens.Create(request.Login, request.Password)));
 
-    [HttpPut("refresh")]
     [Authorize]
+    [HttpPut("refresh")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticatedResponse))]
     public async Task<IActionResult> Refresh([FromForm] TokenRefreshRequest request) =>
         await AsyncResponseFrom(AuthenticatedResponse.From(_tokens.Refresh(Username!, request.RefreshToken)));
