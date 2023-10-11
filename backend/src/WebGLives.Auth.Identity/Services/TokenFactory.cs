@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using CSharpFunctionalExtensions;
-using WebGLives.API.Contracts;
+using WebGLives.Auth.Identity;
+using WebGLives.Auth.Identity.Services;
 using WebGLives.Core.Errors;
 using WebGLives.Core.Repositories;
 using WebGLives.Core.Users;
@@ -18,20 +19,14 @@ public class TokenFactory : ITokenFactory
         _jwtTokenService = jwtTokenService;
     }
     
-    public async Task<Result<AuthenticatedResponse, Error>> Create(string login, string password) =>
-        await _users
-            .FindByNameAsync(login)
-            .Tap(async user => await _users.CheckPasswordAsync(user, password))
+    public async Task<Result<Tokens, Error>> Create(string login, string password) =>
+        await _users.FindByNameAsync(login)
+            .Check(async entity => await _users.CheckPasswordAsync(entity, password))
             .Map(async user => await Authentication(user));
-    
-    public async Task<Result<AuthenticatedResponse, Error>>  Refresh(string accessToken, string refreshToken) =>
-        await _jwtTokenService
-            .DecodeExpired(accessToken)
-                .Ensure(claims => claims.Identity is not null, new Error("Invalid claims identity!"))
-                .Ensure(claims => claims.Identity!.Name is not null, new Error("Invalid claims username!"))
-                .Map(claims => claims.Identity!.Name!)
-            .Map(username => _users.FindByNameAsync(username))
-            .Map(user => (user: user.Value, refreshToken: refreshToken))
+
+    public async Task<Result<Tokens, Error>> Refresh(string username, string refreshToken) =>
+        await _users.FindByNameAsync(username)
+            .Map(user => (user, refreshToken))
             .Ensure(IsValidRefreshToken, new Error("Invalid refresh token!"))
             .Map(async login => await Authentication(login.user));
 
@@ -41,16 +36,16 @@ public class TokenFactory : ITokenFactory
         return data.refreshToken == oldRefreshToken.Value;
     }
     
-    private async Task<AuthenticatedResponse> Authentication(IUser user)
+    private async Task<Tokens> Authentication(IUser user)
     {
         await _users.RemoveAuthenticationTokenAsync(user);
         var (accessToken, refreshToken) = GenerateTokens(user);
         await _users.SetAuthenticationTokenAsync(user, refreshToken);
 
-        return new AuthenticatedResponse
+        return new Tokens
         {
-            AccessToken = accessToken,
-            RefreshToken = refreshToken
+            Access = accessToken,
+            Refresh = refreshToken
         };
     }
 

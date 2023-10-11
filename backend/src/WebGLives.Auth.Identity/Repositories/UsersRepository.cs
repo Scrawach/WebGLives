@@ -42,9 +42,8 @@ public class UsersRepository : IUsersRepository
         await Find(user).Ensure(RemoveAuthenticationTokenAsync, new Error($"Can't remove token for {user.UserName}!"));
 
     public async Task<UnitResult<Error>> SetAuthenticationTokenAsync(IUser user, string token) =>
-        await Find(user)
-            .Ensure(async entity => await SetAuthenticationTokenAsync(entity, token), new Error($"Can't set token for {user.UserName}!"));
-
+        await Find(user).Ensure(SetAuthenticationTokenAsync(token), new Error($"Can't set token for {user.UserName}!"));
+    
     private Task<Result<User, Error>> Find(IUser user) =>
         _userManager
             .FindByNameAsync(user.UserName)
@@ -63,10 +62,11 @@ public class UsersRepository : IUsersRepository
         var result = await _userManager.RemoveAuthenticationTokenAsync(entity, LocalProvider, RefreshTokenName);
         return result.Succeeded;
     }
-
-    private async Task<bool> SetAuthenticationTokenAsync(User entity, string token)
-    {
-        var result = await _userManager.SetAuthenticationTokenAsync(entity, LocalProvider, RefreshTokenName, token);
-        return result.Succeeded;
-    }
+    
+    private Func<User, Task<bool>> SetAuthenticationTokenAsync(string token) =>
+        async entity =>
+        {
+            var result = await _userManager.SetAuthenticationTokenAsync(entity, LocalProvider, RefreshTokenName, token);
+            return result.Succeeded;
+        };
 }

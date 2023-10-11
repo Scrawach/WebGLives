@@ -5,7 +5,9 @@ using WebGLives.Core.Errors;
 namespace WebGLives.API.Controllers;
 
 public abstract class FunctionalControllerBase : ControllerBase
-{    
+{
+    protected string? Username => User.Identity?.Name;
+    
     protected async Task<IActionResult> AsyncResponseFrom<TResult, TError>(Task<Result<TResult, TError>> resultTask) where TError : Error =>
         ResponseFrom(await resultTask.ConfigureAwait(Result.Configuration.DefaultConfigureAwait));
 

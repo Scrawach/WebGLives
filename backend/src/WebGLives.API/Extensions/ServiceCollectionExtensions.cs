@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebGLives.API.Services;
 using WebGLives.Auth.Identity.Repositories;
+using WebGLives.Auth.Identity.Services;
 using WebGLives.BusinessLogic.Services;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core.Repositories;

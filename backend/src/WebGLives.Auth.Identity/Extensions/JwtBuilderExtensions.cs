@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using JWT.Builder;
 
-namespace WebGLives.API.Extensions;
+namespace WebGLives.Auth.Identity.Extensions;
 
 public static class JwtBuilderExtensions
 {

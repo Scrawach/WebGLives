@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Contracts;
-using WebGLives.API.Services;
+using WebGLives.Auth.Identity.Services;
 
 namespace WebGLives.API.Controllers;
 
@@ -21,7 +22,8 @@ public class TokensController : FunctionalControllerBase
         await AsyncResponseFrom(_tokens.Create(request.Login, request.Password));
 
     [HttpPut("refresh")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticatedResponse))]
     public async Task<IActionResult> Refresh([FromForm] TokenRefreshRequest request) =>
-        await AsyncResponseFrom(_tokens.Refresh(request.AccessToken, request.RefreshToken));
+        await AsyncResponseFrom(_tokens.Refresh(Username!, request.RefreshToken));
 }
