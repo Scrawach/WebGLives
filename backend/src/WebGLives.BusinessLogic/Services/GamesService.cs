@@ -36,35 +36,35 @@ public class GamesService : IGamesService
             .CheckIf(data.Game is not null, async game => await _files
                 .SaveZip(gameId.ToString(), data.Game!, token)
                 .Tap(path => game.GameUrl = path))
-            .Tap(game => _repository.Update(game, token));
+            .Check(game => _repository.Update(game, token));
 
     public async Task<UnitResult<Error>> Delete(int gameId, CancellationToken token = default) =>
         await _files
             .Delete(gameId.ToString())
-            .Tap(() => _repository.Delete(gameId, token));
+            .Check(() => _repository.Delete(gameId, token));
 
     public async Task<UnitResult<Error>> UpdateTitle(int gameId, string title, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token)
             .Tap(game => game.Title = title)
-            .Tap(game => _repository.Update(game, token));
+            .Check(game => _repository.Update(game, token));
 
     public async Task<UnitResult<Error>> UpdateDescription(int gameId, string description, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token)
             .Tap(game => game.Description = description)
-            .Tap(game => _repository.Update(game, token));
+            .Check(game => _repository.Update(game, token));
 
     public async Task<UnitResult<Error>> UpdateGame(int gameId, FileData file, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token)
             .Check(async game => await _files
                 .SaveZip(gameId.ToString(), file, token)
                 .Tap(path => game.GameUrl = path))
-            .Tap(game => _repository.Update(game, token));
+            .Check(game => _repository.Update(game, token));
 
     public async Task<UnitResult<Error>> UpdatePoster(int gameId, FileData file, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token)
             .Check(async game => await _files
                 .Save(gameId.ToString(), file, token)
                 .Tap(path => game.PosterUrl = path))
-            .Tap(game => _repository.Update(game, token));
+            .Check(game => _repository.Update(game, token));
     
 }
