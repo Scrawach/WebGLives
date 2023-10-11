@@ -1,10 +1,9 @@
 using CSharpFunctionalExtensions;
 using WebGLives.Core.Errors;
-using WebGLives.Core.Users;
 
-namespace WebGLives.Core.Repositories;
+namespace WebGLives.Core.Users;
 
-public interface IUsersRepository
+public interface IUserService
 {
     Task<UnitResult<Error>> CreateAsync(string username, string password);
     Task<Result<IUser, Error>> FindByNameAsync(string username);

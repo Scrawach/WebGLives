@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using WebGLives.Core.Users;
 
-namespace WebGLives.Auth.Identity.Repositories;
+namespace WebGLives.Auth.Identity;
 
 public class User : IdentityUser, IUser
 {

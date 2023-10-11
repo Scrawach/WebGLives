@@ -1,19 +1,18 @@
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
 using WebGLives.Core.Errors;
-using WebGLives.Core.Repositories;
 using WebGLives.Core.Users;
 
-namespace WebGLives.Auth.Identity.Repositories;
+namespace WebGLives.Auth.Identity.Services;
 
-public class UsersRepository : IUsersRepository
+public class UserService : IUserService
 {
     private const string LocalProvider = "LocalLogin";
     private const string RefreshTokenName = "RefreshToken";
 
     private readonly UserManager<User> _userManager;
 
-    public UsersRepository(UserManager<User> userManager) =>
+    public UserService(UserManager<User> userManager) =>
         _userManager = userManager;
 
     public async Task<UnitResult<Error>> CreateAsync(string username, string password)
@@ -24,14 +23,11 @@ public class UsersRepository : IUsersRepository
             : UnitResult.Failure(new Error("Create user error"));
     }
 
-    public async Task<Result<IUser, Error>> FindByNameAsync(string username)
-    { 
-        var user = await _userManager.FindByNameAsync(username);
-        return user != null 
-            ? Result.Success<IUser, Error>(user) 
-            : Result.Failure<IUser, Error>(new UserNotFound(username));
-    }
-    
+    public async Task<Result<IUser, Error>> FindByNameAsync(string username) =>
+        await _userManager.FindByNameAsync(username)
+            .ToResultAsync<User, Error>(new UserNotFound(username))
+            .Map<User, IUser, Error>(user => user);
+
     public async Task<UnitResult<Error>> CheckPasswordAsync(IUser user, string password) =>
         await Find(user).Ensure(IsCorrectPassword(password), new Error("Invalid password!"));
 

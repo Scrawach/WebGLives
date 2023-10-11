@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WebGLives.Auth.Identity.Repositories;
+using WebGLives.Auth.Identity;
 using WebGLives.DataAccess.Configurations;
 using WebGLives.DataAccess.Entities;
 

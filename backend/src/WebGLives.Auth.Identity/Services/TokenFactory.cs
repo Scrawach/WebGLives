@@ -10,10 +10,10 @@ namespace WebGLives.API.Services;
 
 public class TokenFactory : ITokenFactory
 {
-    private readonly IUsersRepository _users;
+    private readonly IUserService _users;
     private readonly IJwtTokenService _jwtTokenService;
 
-    public TokenFactory(IUsersRepository users, IJwtTokenService jwtTokenService)
+    public TokenFactory(IUserService users, IJwtTokenService jwtTokenService)
     {
         _users = users;
         _jwtTokenService = jwtTokenService;

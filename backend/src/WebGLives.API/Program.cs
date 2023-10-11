@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebGLives.API.Extensions;
-using WebGLives.Auth.Identity.Repositories;
+using WebGLives.Auth.Identity;
 using WebGLives.Core.Users;
 using WebGLives.DataAccess;
 
