@@ -1,4 +1,4 @@
-namespace WebGLives.API.Contracts;
+namespace WebGLives.API.Contracts.Auth;
 
 public class TokenRefreshRequest
 {

@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 using WebGLives.Core;
 using WebGLives.Core.Errors;
 
-namespace WebGLives.API.Contracts;
+namespace WebGLives.API.Contracts.Games;
 
 public class GameResponse
 {

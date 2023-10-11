@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Contracts;
+using WebGLives.API.Contracts.Auth;
 using WebGLives.Auth.Identity.Services;
 
 namespace WebGLives.API.Controllers;

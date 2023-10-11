@@ -1,6 +1,6 @@
-namespace WebGLives.API.Contracts;
+namespace WebGLives.API.Contracts.Auth;
 
-public class CreateUserRequest
+public class LoginRequest
 {
     public string Login { get; set; }
     public string Password { get; set; }

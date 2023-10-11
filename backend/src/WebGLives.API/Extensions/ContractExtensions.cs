@@ -1,4 +1,5 @@
 using WebGLives.API.Contracts;
+using WebGLives.API.Contracts.Games;
 using WebGLives.BusinessLogic;
 using WebGLives.Core;
 

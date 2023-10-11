@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 using WebGLives.Auth.Identity;
 using WebGLives.Core.Errors;
 
-namespace WebGLives.API.Contracts;
+namespace WebGLives.API.Contracts.Auth;
 
 public class AuthenticatedResponse
 {
