@@ -31,7 +31,7 @@ export class GameService extends BaseService {
         if (response.status == 401)
         {
             const tokens = await Api.auth.refresh(Profile.tokens()!);
-            Profile.login(Profile.getUsername()!, tokens);
+            Profile.save(Profile.getUsername()!, tokens);
             const response = await fetch(this.gamesPath, 
                 { 
                     method: `POST`,

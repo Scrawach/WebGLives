@@ -30,7 +30,7 @@ export const NavigationBar : React.FC = () => {
     }
 
     const handleLogout = async () => {
-      Profile.logout();
+      Profile.clear();
       window.location.reload();
     }
 

@@ -8,13 +8,13 @@ export class Profile {
         return localStorage.getItem(this.usernameKey);
     }
 
-    public static login(username: string, tokens: Tokens): void {
+    public static save(username: string, tokens: Tokens): void {
         const data = JSON.stringify(tokens);
         localStorage.setItem(this.usernameKey, username);
         localStorage.setItem(this.tokensKey, data);
     }
 
-    public static logout(): void {
+    public static clear(): void {
         localStorage.removeItem(this.tokensKey);
         localStorage.removeItem(this.usernameKey);
     }

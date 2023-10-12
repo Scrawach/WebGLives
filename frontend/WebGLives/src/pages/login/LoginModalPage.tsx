@@ -25,13 +25,13 @@ export const LoginModalPage: React.FC<LoginModalPageProps> = ({isOpen, onClose})
     
     const handleLogin = async (login: string, password: string) => {
         const tokens = await Api.auth.login(login, password);
-        Profile.login(login, tokens);
+        Profile.save(login, tokens);
     }
 
     const handleSignUp = async (login: string, password: string) => {
         const response = await Api.auth.register(login, password);
         const tokens = await Api.auth.login(login, password);
-        Profile.login(login, tokens);
+        Profile.save(login, tokens);
     }
 
     return (
