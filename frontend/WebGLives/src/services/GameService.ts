@@ -1,12 +1,13 @@
 import { Game } from "../types/Game"
 import { UpdateGame } from "../types/UpdateGame";
 import { Api } from "./Api";
+import { BaseService } from "./BaseService";
 import { Profile } from "./Profile";
 
-export class GameService {
+export class GameService extends BaseService {
     constructor(
         readonly url: string
-        ) { }
+        ) { super() }
 
     private readonly gamesPath: string = `${this.url}/games`
 
@@ -24,7 +25,7 @@ export class GameService {
         const response = await fetch(this.gamesPath, 
             { 
                 method: `POST`,
-                headers: this.authenticationHeaders()
+                headers: this.getAuthorizationHeader()
             });
 
         if (response.status == 401)
@@ -34,7 +35,7 @@ export class GameService {
             const response = await fetch(this.gamesPath, 
                 { 
                     method: `POST`,
-                    headers: this.authenticationHeaders()
+                    headers: this.getAuthorizationHeader()
                 });
             return await response.json();           
         }
@@ -78,12 +79,5 @@ export class GameService {
         const request = new FormData()
         request.append('game', game)
         return await fetch(`${this.gamesPath}/${id}/game`, { method: `PUT`, body: request})
-    }
-
-    authenticationHeaders(): HeadersInit {
-        const headers = new Headers();
-        const tokens = Profile.tokens();
-        headers.set("Authorization", `Bearer ${tokens?.accessToken}`)
-        return headers;
     }
 }
