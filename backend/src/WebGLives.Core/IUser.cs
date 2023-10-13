@@ -1,4 +1,4 @@
-namespace WebGLives.Core.Users;
+namespace WebGLives.Core;
 
 public interface IUser
 {

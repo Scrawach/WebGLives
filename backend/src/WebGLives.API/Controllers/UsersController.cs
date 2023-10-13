@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Contracts.Auth;
-using WebGLives.Core.Users;
+using WebGLives.Core.Repositories;
 
 namespace WebGLives.API.Controllers;
 
@@ -9,9 +9,9 @@ namespace WebGLives.API.Controllers;
 [Route("[controller]")]
 public class UsersController : FunctionalControllerBase
 {
-    private readonly IUsersService _users;
+    private readonly IUsersRepository _users;
 
-    public UsersController(IUsersService users) =>
+    public UsersController(IUsersRepository users) =>
         _users = users;
 
     [HttpPost]

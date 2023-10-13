@@ -2,16 +2,16 @@ using CSharpFunctionalExtensions;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core;
 using WebGLives.Core.Errors;
-using WebGLives.Core.Users;
+using WebGLives.Core.Repositories;
 
 namespace WebGLives.BusinessLogic.Services;
 
 public class AuthorizedGameService : IAuthorizedGameService
 {
     private readonly IGamesService _games;
-    private readonly IUsersService _users;
+    private readonly IUsersRepository _users;
 
-    public AuthorizedGameService(IGamesService games, IUsersService users)
+    public AuthorizedGameService(IGamesService games, IUsersRepository users)
     {
         _games = games;
         _users = users;

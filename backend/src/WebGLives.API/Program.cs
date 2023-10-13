@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebGLives.API.Extensions;
 using WebGLives.Auth.Identity;
-using WebGLives.Core.Users;
 using WebGLives.DataAccess;
 
 const string cors = "MyAllowSpecificOrigins";

@@ -1,18 +1,19 @@
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
+using WebGLives.Core;
 using WebGLives.Core.Errors;
-using WebGLives.Core.Users;
+using WebGLives.Core.Repositories;
 
 namespace WebGLives.Auth.Identity.Services;
 
-public class UsersService : IUsersService
+public class UsersRepository : IUsersRepository
 {
     private const string LocalProvider = "LocalLogin";
     private const string RefreshTokenName = "RefreshToken";
 
     private readonly UserManager<User> _userManager;
 
-    public UsersService(UserManager<User> userManager) =>
+    public UsersRepository(UserManager<User> userManager) =>
         _userManager = userManager;
 
     public async Task<UnitResult<Error>> CreateAsync(string username, string password)
