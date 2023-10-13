@@ -11,13 +11,9 @@ namespace WebGLives.API.Controllers;
 public class GamesController : FunctionalControllerBase
 {
     private readonly IGamesService _games;
-    private readonly IAuthorizedGameService _authGames;
     
-    public GamesController(IGamesService games, IAuthorizedGameService authGames)
-    {
+    public GamesController(IGamesService games) => 
         _games = games;
-        _authGames = authGames;
-    }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<GameResponse>))]
@@ -37,7 +33,7 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Create(CancellationToken token = default) =>
-        await AsyncResponseFrom(GameResponse.From(_authGames.Create(Username, token)));
+        await AsyncResponseFrom(GameResponse.From(_games.Create(Username!, token)));
 
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
