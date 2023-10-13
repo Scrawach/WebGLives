@@ -3,6 +3,7 @@ using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core;
 using WebGLives.Core.Errors;
 using WebGLives.Core.Repositories;
+using WebGLives.Core.Users;
 
 namespace WebGLives.BusinessLogic.Services;
 
@@ -20,8 +21,8 @@ public class GamesService : IGamesService
     public async Task<Result<IEnumerable<Game>, Error>> All(CancellationToken token = default) =>
         await _repository.All(token);
 
-    public async Task<Result<Game, Error>> Create(int ownerId, CancellationToken token = default) =>
-        await _repository.Create(new Game(), token);
+    public async Task<Result<Game, Error>> Create(int userId, CancellationToken token = default) =>
+        await _repository.Create(new Game { UserId = userId }, token);
 
     public async Task<Result<Game, Error>> Get(int gameId, CancellationToken token = default) =>
         await _repository.GetOrDefault(gameId, token);

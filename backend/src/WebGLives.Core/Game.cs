@@ -10,4 +10,5 @@ public class Game
     public string? Description { get; set; }
     public string? PosterUrl { get; set; }
     public string? GameUrl { get; set; }
+    public int UserId { get; set; }
 }

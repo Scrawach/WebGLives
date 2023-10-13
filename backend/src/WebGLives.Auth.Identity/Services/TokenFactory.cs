@@ -1,18 +1,16 @@
 using System.Security.Claims;
 using CSharpFunctionalExtensions;
-using WebGLives.Auth.Identity;
-using WebGLives.Auth.Identity.Services;
 using WebGLives.Core.Errors;
 using WebGLives.Core.Users;
 
-namespace WebGLives.API.Services;
+namespace WebGLives.Auth.Identity.Services;
 
 public class TokenFactory : ITokenFactory
 {
-    private readonly IUserService _users;
+    private readonly IUsersService _users;
     private readonly IJwtTokenService _jwtTokenService;
 
-    public TokenFactory(IUserService users, IJwtTokenService jwtTokenService)
+    public TokenFactory(IUsersService users, IJwtTokenService jwtTokenService)
     {
         _users = users;
         _jwtTokenService = jwtTokenService;
@@ -52,7 +50,7 @@ public class TokenFactory : ITokenFactory
         (
             _jwtTokenService.GenerateAccessToken
             (
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName!)
             ), 
             _jwtTokenService.GenerateRefreshToken()

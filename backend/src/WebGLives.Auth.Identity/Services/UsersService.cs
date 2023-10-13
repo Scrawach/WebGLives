@@ -5,14 +5,14 @@ using WebGLives.Core.Users;
 
 namespace WebGLives.Auth.Identity.Services;
 
-public class UserService : IUserService
+public class UsersService : IUsersService
 {
     private const string LocalProvider = "LocalLogin";
     private const string RefreshTokenName = "RefreshToken";
 
     private readonly UserManager<User> _userManager;
 
-    public UserService(UserManager<User> userManager) =>
+    public UsersService(UserManager<User> userManager) =>
         _userManager = userManager;
 
     public async Task<UnitResult<Error>> CreateAsync(string username, string password)

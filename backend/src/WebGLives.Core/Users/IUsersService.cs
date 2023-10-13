@@ -3,7 +3,7 @@ using WebGLives.Core.Errors;
 
 namespace WebGLives.Core.Users;
 
-public interface IUserService
+public interface IUsersService
 {
     Task<UnitResult<Error>> CreateAsync(string username, string password);
     Task<Result<IUser, Error>> FindByNameAsync(string username);

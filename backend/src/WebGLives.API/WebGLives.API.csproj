@@ -37,4 +37,8 @@
       <ProjectReference Include="..\WebGLives.Migrations\WebGLives.Migrations.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Services\" />
+    </ItemGroup>
+
 </Project>

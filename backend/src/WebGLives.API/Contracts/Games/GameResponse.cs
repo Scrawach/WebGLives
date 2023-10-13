@@ -8,6 +8,8 @@ public class GameResponse
 {
     public int Id { get; set; }
     
+    public int UserId { get; set; }
+    
     public string? Title { get; set; }
     
     public string? Description { get; set; }
@@ -20,6 +22,7 @@ public class GameResponse
         new()
         {
             Id = game.Id,
+            UserId = game.UserId,
             Title = game.Title,
             Description = game.Description,
             PosterUrl = game.PosterUrl,

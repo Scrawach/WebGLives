@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.API.Contracts.Games;
 using WebGLives.API.Extensions;
@@ -12,12 +11,12 @@ namespace WebGLives.API.Controllers;
 public class GamesController : FunctionalControllerBase
 {
     private readonly IGamesService _games;
-    private readonly UserManager<IdentityUser> _userManager;
-
-    public GamesController(IGamesService games, UserManager<IdentityUser> userManager)
+    private readonly IAuthorizedGameService _authGames;
+    
+    public GamesController(IGamesService games, IAuthorizedGameService authGames)
     {
         _games = games;
-        _userManager = userManager;
+        _authGames = authGames;
     }
 
     [HttpGet]
@@ -38,7 +37,7 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Create(CancellationToken token = default) =>
-        await AsyncResponseFrom(GameResponse.From(_games.Create(_userManager.FindByNameAsync(User.Identity?.Name!).Id, token)));
+        await AsyncResponseFrom(GameResponse.From(_authGames.Create(Username, token)));
 
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]

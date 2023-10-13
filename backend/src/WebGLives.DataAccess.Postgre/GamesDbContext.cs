@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebGLives.Auth.Identity;
@@ -6,7 +7,7 @@ using WebGLives.DataAccess.Entities;
 
 namespace WebGLives.DataAccess;
 
-public class GamesDbContext : IdentityDbContext<User>
+public class GamesDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     public GamesDbContext(DbContextOptions<GamesDbContext> options) : base(options) { }
     

@@ -9,9 +9,9 @@ namespace WebGLives.API.Controllers;
 [Route("[controller]")]
 public class UsersController : FunctionalControllerBase
 {
-    private readonly IUserService _users;
+    private readonly IUsersService _users;
 
-    public UsersController(IUserService users) =>
+    public UsersController(IUsersService users) =>
         _users = users;
 
     [HttpPost]
