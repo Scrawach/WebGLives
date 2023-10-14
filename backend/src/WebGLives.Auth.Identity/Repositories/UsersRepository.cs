@@ -4,7 +4,7 @@ using WebGLives.Core;
 using WebGLives.Core.Errors;
 using WebGLives.Core.Repositories;
 
-namespace WebGLives.Auth.Identity.Services;
+namespace WebGLives.Auth.Identity.Repositories;
 
 public class UsersRepository : IUsersRepository
 {

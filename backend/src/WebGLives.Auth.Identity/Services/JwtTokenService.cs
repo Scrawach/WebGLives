@@ -3,9 +3,8 @@ using System.Security.Cryptography;
 using JWT.Algorithms;
 using JWT.Builder;
 using WebGLives.Auth.Identity.Extensions;
-using WebGLives.Auth.Identity.Services;
 
-namespace WebGLives.API.Services;
+namespace WebGLives.Auth.Identity.Services;
 
 public class JwtTokenService : IJwtTokenService
 {
