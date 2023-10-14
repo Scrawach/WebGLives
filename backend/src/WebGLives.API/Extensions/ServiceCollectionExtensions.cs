@@ -42,7 +42,13 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IZipService, ZipService>();
         services.AddSingleton<IFilesService, FilesService>();
-        services.AddSingleton<IJwtTokenService>(new JwtTokenService(builder.Configuration.GetAuthenticationSecretKey(), new HMACSHA256Algorithm()));
+        services.AddSingleton<IJwtAlgorithm, HMACSHA256Algorithm>();
+        services.AddSingleton<IJwtTokenService, JwtTokenService>(provider =>
+        {
+            var secretKey = builder.Configuration.GetAuthenticationSecretKey();
+            return new JwtTokenService(secretKey, provider.GetService<IJwtAlgorithm>()!);
+        });
+        
         services.AddScoped<ITokenFactory, TokenFactory>();
         services.AddScoped<IGamesService, GamesService>();
         services.AddScoped<IGamesRepository, GamesRepository>();
