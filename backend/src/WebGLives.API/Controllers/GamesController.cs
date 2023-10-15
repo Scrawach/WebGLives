@@ -84,5 +84,5 @@ public class GamesController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Delete(int id, CancellationToken token = default) =>
-        await AsyncResponseFrom(_games.Delete(id, token));
+        await AsyncResponseFrom(_games.Delete(Username!, id, token));
 }

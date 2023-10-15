@@ -42,10 +42,13 @@ public class GamesService : IGamesService
                 .Tap(path => game.GameUrl = path))
             .Check(game => _games.Update(game, token));
 
-    public async Task<UnitResult<Error>> Delete(int gameId, CancellationToken token = default) =>
-        await _files
-            .Delete(gameId.ToString())
-            .Check(() => _games.Delete(gameId, token));
+    public async Task<UnitResult<Error>> Delete(string username, int gameId, CancellationToken token = default) =>
+        await _users
+            .FindByNameAsync(username)
+            .Check(async user => await _games.GetOrDefault(gameId, token)
+                .Ensure(game => game.UserId == user.Id, new Error($"{username} has not access to game {gameId}")))
+            .Check(_ => _files.Delete(gameId.ToString()))
+            .Check(_ => _games.Delete(gameId, token));
 
     public async Task<UnitResult<Error>> UpdateTitle(int gameId, string title, CancellationToken token = default) =>
         await _games.GetOrDefault(gameId, token)
