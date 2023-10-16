@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using WebGLives.BusinessLogic.Errors;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core;
 using WebGLives.Core.Errors;
@@ -46,7 +47,7 @@ public class GamesService : IGamesService
         await _users
             .FindByNameAsync(username)
             .Check(async user => await _games.GetOrDefault(gameId, token)
-                .Ensure(game => game.UserId == user.Id, new Error($"{username} has not access to game {gameId}")))
+                .Ensure(game => game.UserId == user.Id, new InvalidAccessRightToGame(username, gameId)))
             .Check(_ => _files.Delete(gameId.ToString()))
             .Check(_ => _games.Delete(gameId, token));
 
