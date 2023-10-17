@@ -29,6 +29,11 @@ public class UsersRepository : IUsersRepository
             .ToResultAsync<User, Error>(new UserNotFound(username))
             .Map<User, IUser, Error>(user => user);
 
+    public async Task<Result<IUser, Error>> FindByIdAsync(int userId) =>
+        await _userManager.FindByIdAsync(userId.ToString())
+            .ToResultAsync<User, Error>(new UserNotFound(userId))
+            .Map<User, IUser, Error>(user => user);
+
     public async Task<UnitResult<Error>> CheckPasswordAsync(IUser user, string password) =>
         await Find(user).Ensure(IsCorrectPassword(password), new Error("Invalid password!"));
 

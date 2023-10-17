@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
 using WebGLives.Core.Errors;
@@ -7,6 +8,15 @@ namespace WebGLives.API.Controllers;
 public abstract class FunctionalControllerBase : ControllerBase
 {
     protected string? Username => User.Identity?.Name;
+
+    protected int UserId
+    {
+        get
+        {
+            var claim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+            return int.Parse(claim!.Value);
+        }
+    }
     
     protected async Task<IActionResult> AsyncResponseFrom<TResult, TError>(Task<Result<TResult, TError>> resultTask) where TError : Error =>
         ResponseFrom(await resultTask.ConfigureAwait(Result.Configuration.DefaultConfigureAwait));

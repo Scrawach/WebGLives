@@ -23,9 +23,9 @@ public class GamesService : IGamesService
     public async Task<Result<IEnumerable<Game>, Error>> All(CancellationToken token = default) =>
         await _games.All(token);
 
-    public async Task<Result<Game, Error>> Create(string username, CancellationToken token = default) =>
+    public async Task<Result<Game, Error>> Create(int userId, CancellationToken token = default) =>
         await _users
-            .FindByNameAsync(username)
+            .FindByIdAsync(userId)
             .Bind(async user => await _games.Create(new Game() {UserId = user.Id}, token));
 
     public async Task<Result<Game, Error>> Get(int gameId, CancellationToken token = default) =>
@@ -43,11 +43,11 @@ public class GamesService : IGamesService
                 .Tap(path => game.GameUrl = path))
             .Check(game => _games.Update(game, token));
 
-    public async Task<UnitResult<Error>> Delete(string username, int gameId, CancellationToken token = default) =>
+    public async Task<UnitResult<Error>> Delete(int userId, int gameId, CancellationToken token = default) =>
         await _users
-            .FindByNameAsync(username)
+            .FindByIdAsync(userId)
             .Check(async user => await _games.GetOrDefault(gameId, token)
-                .Ensure(game => game.UserId == user.Id, new InvalidAccessRightToGame(username, gameId)))
+                .Ensure(game => game.UserId == user.Id, new InvalidAccessRightToGame(userId, gameId)))
             .Check(_ => _files.Delete(gameId.ToString()))
             .Check(_ => _games.Delete(gameId, token));
 
