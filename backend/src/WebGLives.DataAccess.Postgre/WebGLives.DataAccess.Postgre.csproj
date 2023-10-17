@@ -18,10 +18,4 @@
       <ProjectReference Include="..\WebGLives.Core\WebGLives.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore">
-        <HintPath>..\..\..\..\..\..\.nuget\packages\microsoft.aspnetcore.identity.entityframeworkcore\7.0.0\lib\net7.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
 </Project>
