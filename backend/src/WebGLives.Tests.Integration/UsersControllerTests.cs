@@ -25,7 +25,7 @@ public class UsersControllerTests : IAsyncLifetime
     public async Task WhenCreateUser_ThenShouldReturnOkStatus()
     {
         var request = CreateUserRequest("test", "test123");
-        var response = await _client.PostAsJsonAsync("users", request);
+        var response = await _client.PostAsync("users", request);
         response.EnsureSuccessStatusCode();
     }
     
