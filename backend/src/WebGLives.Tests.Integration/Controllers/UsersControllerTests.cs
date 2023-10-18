@@ -58,7 +58,7 @@ public class UsersControllerTests : ControllerTestsBase
         var user = await Client.GetFromJsonAsync<UserResponse>($"users/{newUserId}");
 
         user.Should().NotBeNull();
-        user.Login.Should().Be(username);
+        user!.Login.Should().Be(username);
         user.Id.Should().Be(newUserId);
     }
 
