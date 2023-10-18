@@ -1,5 +1,7 @@
 using System.Net;
+using System.Net.Http.Json;
 using FluentAssertions;
+using WebGLives.API.Contracts.Users;
 
 namespace WebGLives.Tests.Integration.Controllers;
 
@@ -37,6 +39,23 @@ public class UsersControllerTests : ControllerTestsBase
     {
         var response = await Get(id);
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task WhenGetUser_ThenShouldReturnUserResponse()
+    {
+        const int newUserId = 1;
+        const string username = "test";
+        const string password = "test123";
+        
+        var createdResponse = await Post(CreateUserRequest(username, password));
+        createdResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var user = await Client.GetFromJsonAsync<UserResponse>($"users/{newUserId}");
+
+        user.Should().NotBeNull();
+        user.Login.Should().Be(username);
+        user.Id.Should().Be(newUserId);
     }
 
     private Task<HttpResponseMessage> Post(HttpContent content) =>
