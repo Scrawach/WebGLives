@@ -1,12 +1,10 @@
 using System.Net;
-using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
-using WebGLives.API.Contracts.Auth;
 using WebGLives.DataAccess;
 
 namespace WebGLives.Tests.Integration;
@@ -26,8 +24,7 @@ public class UsersControllerTests : IAsyncLifetime
     [InlineData("test", "test123")]
     public async Task WhenCreateUser_ThenShouldReturnOkStatus(string login, string password)
     {
-        var request = CreateUserRequest(login, password);
-        var response = await _client.PostAsync("users", request);
+        var response = await Post(CreateUserRequest(login, password));
         response.EnsureSuccessStatusCode();
     }
 
@@ -37,8 +34,7 @@ public class UsersControllerTests : IAsyncLifetime
     [InlineData("test", "test1")]
     public async Task WhenCreateUser_AndPasswordLessThan6Symbols_ThenShouldReturnBadRequest(string login, string password)
     {
-        var request = CreateUserRequest(login, password);
-        var response = await _client.PostAsync("users", request);
+        var response = await Post(CreateUserRequest(login, password));
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
     
@@ -71,7 +67,10 @@ public class UsersControllerTests : IAsyncLifetime
     public async Task DisposeAsync() =>
         await _postgresContainer.DisposeAsync();
 
-    private FormUrlEncodedContent CreateUserRequest(string login, string password) =>
+    private Task<HttpResponseMessage> Post(HttpContent content) =>
+        _client.PostAsync("users", content);
+
+    private static FormUrlEncodedContent CreateUserRequest(string login, string password) =>
         new(new[]
         {
             new KeyValuePair<string, string>("Login", login),
