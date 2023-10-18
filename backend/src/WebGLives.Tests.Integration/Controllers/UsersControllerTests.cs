@@ -45,14 +45,6 @@ public class UsersControllerTests : ControllerTestsBase
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-    [Theory]
-    [InlineData(1)]
-    public async Task WhenGetNotExistingUser_ThenShouldReturnNotFoundRequest(int id)
-    {
-        var response = await Get(id);
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-    }
-
     [Fact]
     public async Task WhenGetUser_ThenShouldReturnUserResponse()
     {
@@ -68,6 +60,14 @@ public class UsersControllerTests : ControllerTestsBase
         user.Should().NotBeNull();
         user.Login.Should().Be(username);
         user.Id.Should().Be(newUserId);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    public async Task WhenGetUser_AndThisUserNotExist_ThenShouldReturnNotFoundResponse(int id)
+    {
+        var response = await Get(id);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     private Task<HttpResponseMessage> Post(HttpContent content) =>
