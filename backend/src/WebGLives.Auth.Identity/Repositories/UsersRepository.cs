@@ -1,5 +1,7 @@
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
+using WebGLives.Auth.Identity.Errors;
+using WebGLives.Auth.Identity.Extensions;
 using WebGLives.Core;
 using WebGLives.Core.Errors;
 using WebGLives.Core.Repositories;
@@ -16,14 +18,8 @@ public class UsersRepository : IUsersRepository
     public UsersRepository(UserManager<User> userManager) =>
         _userManager = userManager;
 
-    public async Task<Result<IUser, Error>> CreateAsync(string username, string password)
-    {
-        var user = new User(username);
-        var result = await _userManager.CreateAsync(user, password);
-        return result.Succeeded
-            ? Result.Success<IUser, Error>(user)
-            : Result.Failure<IUser, Error>(new Error("Create user error"));
-    }
+    public async Task<Result<IUser, Error>> CreateAsync(string username, string password) =>
+        await _userManager.CreateAsyncWithResult(new User(username), password);
 
     public async Task<Result<IUser, Error>> FindByNameAsync(string username) =>
         await _userManager.FindByNameAsync(username)
@@ -36,16 +32,16 @@ public class UsersRepository : IUsersRepository
             .Map<User, IUser, Error>(user => user);
 
     public async Task<UnitResult<Error>> CheckPasswordAsync(IUser user, string password) =>
-        await Find(user).Ensure(IsCorrectPassword(password), new Error("Invalid password!"));
+        await Find(user).Ensure(IsCorrectPassword(password), new InvalidPasswordError());
 
     public async Task<Result<string, Error>> GetAuthenticationTokenAsync(IUser user) =>
         await Find(user).Bind(AuthenticationTokenAsync);
 
     public async Task<UnitResult<Error>> RemoveAuthenticationTokenAsync(IUser user) =>
-        await Find(user).Ensure(RemoveAuthenticationTokenAsync, new Error($"Can't remove token for {user.UserName}!"));
+        await Find(user).Ensure(RemoveAuthenticationTokenAsync, new RemoveTokenError(user.UserName));
 
     public async Task<UnitResult<Error>> SetAuthenticationTokenAsync(IUser user, string token) =>
-        await Find(user).Ensure(SetAuthenticationTokenAsync(token), new Error($"Can't set token for {user.UserName}!"));
+        await Find(user).Ensure(SetAuthenticationTokenAsync(token), new SetTokenError(user.UserName));
     
     private Task<Result<User, Error>> Find(IUser user) =>
         _userManager
@@ -58,7 +54,7 @@ public class UsersRepository : IUsersRepository
     private async Task<Result<string, Error>> AuthenticationTokenAsync(User entity) =>
         await _userManager
             .GetAuthenticationTokenAsync(entity, LocalProvider, RefreshTokenName)
-            .ToResultAsync(new Error($"Can't get token for {entity.UserName}"));
+            .ToResultAsync<string, Error>(new GetTokenError(entity.UserName!));
 
     private async Task<bool> RemoveAuthenticationTokenAsync(User entity)
     {
