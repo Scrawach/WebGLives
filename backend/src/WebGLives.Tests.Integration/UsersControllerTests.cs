@@ -37,6 +37,14 @@ public class UsersControllerTests : IAsyncLifetime
         var response = await Post(CreateUserRequest(login, password));
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
+
+    [Theory]
+    [InlineData("", "test123")]
+    public async Task WhenCreateUser_AndEmptyLogin_ThenShouldReturnBadRequest(string login, string password)
+    {
+        var response = await Post(CreateUserRequest(login, password));
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
     
     public async Task InitializeAsync()
     {
