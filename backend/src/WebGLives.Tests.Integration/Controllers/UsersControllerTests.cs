@@ -16,6 +16,18 @@ public class UsersControllerTests : ControllerTestsBase
     }
 
     [Theory]
+    [InlineData("test", "test123")]
+    public async Task WhenCreateUser_ThenShouldReturnUserResponse(string login, string password)
+    {
+        var createdResponse = await Post(CreateUserRequest(login, password));
+        var content = await createdResponse.Content.ReadFromJsonAsync<UserResponse>();
+        
+        createdResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        content.Should().NotBeNull();
+        content!.Login.Should().Be(login);
+    }
+
+    [Theory]
     [InlineData("test", "")]
     [InlineData("test", "test")]
     [InlineData("test", "test1")]
