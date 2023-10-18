@@ -25,7 +25,7 @@ public class UsersControllerTests : IAsyncLifetime
     public async Task WhenCreateUser_ThenShouldReturnOkStatus(string login, string password)
     {
         var response = await Post(CreateUserRequest(login, password));
-        response.EnsureSuccessStatusCode();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Theory]
