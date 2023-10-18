@@ -16,12 +16,13 @@ public class UsersRepository : IUsersRepository
     public UsersRepository(UserManager<User> userManager) =>
         _userManager = userManager;
 
-    public async Task<UnitResult<Error>> CreateAsync(string username, string password)
+    public async Task<Result<IUser, Error>> CreateAsync(string username, string password)
     {
-        var result = await _userManager.CreateAsync(new User(username), password);
+        var user = new User(username);
+        var result = await _userManager.CreateAsync(user, password);
         return result.Succeeded
-            ? UnitResult.Success<Error>()
-            : UnitResult.Failure(new Error("Create user error"));
+            ? Result.Success<IUser, Error>(user)
+            : Result.Failure<IUser, Error>(new Error("Create user error"));
     }
 
     public async Task<Result<IUser, Error>> FindByNameAsync(string username) =>

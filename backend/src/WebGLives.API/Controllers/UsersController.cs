@@ -17,7 +17,7 @@ public class UsersController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> CreateUser([FromForm] CreateUserRequest request) =>
-        await AsyncResponseFrom(_users.CreateAsync(request.Login, request.Password));
+        await AsyncResponseFrom(UserResponse.From(_users.CreateAsync(request.Login, request.Password)));
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResponse))]
