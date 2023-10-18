@@ -19,7 +19,7 @@ public class UsersRepository : IUsersRepository
         _userManager = userManager;
 
     public async Task<Result<IUser, Error>> CreateAsync(string username, string password) =>
-        await _userManager.CreateAsyncWithResult(new User(username), password);
+        await _userManager.CreateWithResultAsync(new User(username), password);
 
     public async Task<Result<IUser, Error>> FindByNameAsync(string username) =>
         await _userManager.FindByNameAsync(username)

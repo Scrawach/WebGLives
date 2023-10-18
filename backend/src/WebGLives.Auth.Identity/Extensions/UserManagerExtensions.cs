@@ -8,7 +8,7 @@ namespace WebGLives.Auth.Identity.Extensions;
 
 public static class UserManagerExtensions
 {
-    public static async Task<Result<IUser, Error>> CreateAsyncWithResult(this UserManager<User> manager, User user, string password)
+    public static async Task<Result<IUser, Error>> CreateWithResultAsync(this UserManager<User> manager, User user, string password)
     {
         var result = await manager.CreateAsync(user, password);
         return result.Succeeded
