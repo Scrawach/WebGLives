@@ -1,4 +1,4 @@
-namespace WebGLives.API.Contracts.Auth;
+namespace WebGLives.API.Contracts.Users;
 
 public class CreateUserRequest
 {
