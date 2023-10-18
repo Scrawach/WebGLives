@@ -21,10 +21,11 @@ public class UsersControllerTests : IAsyncLifetime
         _postgresContainer = new PostgreSqlBuilder().Build();
     }
 
-    [Fact]
-    public async Task WhenCreateUser_ThenShouldReturnOkStatus()
+    [Theory]
+    [InlineData("test", "test123")]
+    public async Task WhenCreateUser_ThenShouldReturnOkStatus(string login, string password)
     {
-        var request = CreateUserRequest("test", "test123");
+        var request = CreateUserRequest(login, password);
         var response = await _client.PostAsync("users", request);
         response.EnsureSuccessStatusCode();
     }
