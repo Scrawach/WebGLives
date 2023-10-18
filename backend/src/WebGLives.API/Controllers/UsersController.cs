@@ -23,5 +23,5 @@ public class UsersController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(int id) =>
-        await AsyncResponseFrom(_users.FindByIdAsync(id));
+        await AsyncResponseFrom(UserResponse.From(_users.FindByIdAsync(id)));
 }
