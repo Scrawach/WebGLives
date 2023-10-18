@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -28,6 +29,15 @@ public class UsersControllerTests : IAsyncLifetime
         var request = CreateUserRequest(login, password);
         var response = await _client.PostAsync("users", request);
         response.EnsureSuccessStatusCode();
+    }
+
+    [Theory]
+    [InlineData("test", "test")]
+    public async Task WhenCreateUser_AndPasswordLessThan6Symbols_ThenShouldReturnBadRequest(string login, string password)
+    {
+        var request = CreateUserRequest(login, password);
+        var response = await _client.PostAsync("users", request);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
     
     public async Task InitializeAsync()
