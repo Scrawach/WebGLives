@@ -31,8 +31,19 @@ public class UsersControllerTests : ControllerTestsBase
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
+    [Theory]
+    [InlineData(1)]
+    public async Task WhenGetNotExistingUser_ThenShouldReturnNotFoundRequest(int id)
+    {
+        var response = await Get(id);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
     private Task<HttpResponseMessage> Post(HttpContent content) =>
         Client.PostAsync("users", content);
+
+    private Task<HttpResponseMessage> Get(int id) =>
+        Client.GetAsync($"users/{id}");
 
     private static FormUrlEncodedContent CreateUserRequest(string login, string password) =>
         new(new[]
