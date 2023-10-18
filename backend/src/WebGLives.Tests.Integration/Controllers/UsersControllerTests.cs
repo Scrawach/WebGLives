@@ -17,7 +17,7 @@ public class UsersControllerTests : ControllerTestsBase
     [InlineData("test", "")]
     [InlineData("test", "test")]
     [InlineData("test", "test1")]
-    public async Task WhenCreateUser_AndPasswordLessThan6Symbols_ThenShouldReturnBadRequest(string login, string password)
+    public async Task WhenCreateUser_WithPasswordLessThan6Symbols_ThenShouldReturnBadRequest(string login, string password)
     {
         var response = await Post(CreateUserRequest(login, password));
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -25,7 +25,7 @@ public class UsersControllerTests : ControllerTestsBase
 
     [Theory]
     [InlineData("", "test123")]
-    public async Task WhenCreateUser_AndEmptyLogin_ThenShouldReturnBadRequest(string login, string password)
+    public async Task WhenCreateUser_WithEmptyLogin_ThenShouldReturnBadRequest(string login, string password)
     {
         var response = await Post(CreateUserRequest(login, password));
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
