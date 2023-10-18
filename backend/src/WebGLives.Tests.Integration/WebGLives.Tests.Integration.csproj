@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
         <PackageReference Include="Testcontainers" Version="3.5.0" />
         <PackageReference Include="Testcontainers.PostgreSql" Version="3.5.0" />
@@ -27,6 +28,14 @@
 
     <ItemGroup>
       <ProjectReference Include="..\WebGLives.API\WebGLives.API.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="testsettings.json">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>

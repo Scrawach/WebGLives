@@ -1,0 +1,11 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "GamesDbContext": "Server=localhost;Port=5433;Database=webglivesdb;User Id=postgres;Password=pwd"
+  }
+}
