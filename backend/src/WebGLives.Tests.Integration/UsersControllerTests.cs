@@ -32,7 +32,9 @@ public class UsersControllerTests : IAsyncLifetime
     }
 
     [Theory]
+    [InlineData("test", "")]
     [InlineData("test", "test")]
+    [InlineData("test", "test1")]
     public async Task WhenCreateUser_AndPasswordLessThan6Symbols_ThenShouldReturnBadRequest(string login, string password)
     {
         var request = CreateUserRequest(login, password);
