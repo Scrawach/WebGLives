@@ -8,8 +8,6 @@ namespace WebGLives.API.Controllers;
 
 public abstract class FunctionalControllerBase : ControllerBase
 {
-    protected string? Username => User.Identity?.Name;
-
     protected Result<int, Error> UserId =>
         HttpContext.User.Claims
             .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)
