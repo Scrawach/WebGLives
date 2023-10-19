@@ -20,56 +20,56 @@ public class GamesChangeController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Create(CancellationToken token = default) =>
-        await AsyncResponseFrom(GameResponse.From(_games.Create(UserId, token)));
+        await AuthorizedResponseFromAsync(userId => _games.Create(userId, token));
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{gameId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]   
-    public async Task<IActionResult> Update(int id, [FromForm] UpdateGameRequest request, CancellationToken token = default)
+    public async Task<IActionResult> Update(int gameId, [FromForm] UpdateGameRequest request, CancellationToken token = default)
     {
         await using var updatedData = request.ToData();
-        return await AsyncResponseFrom(_games.Update(UserId, id, updatedData, token));
+        return await AuthorizedResponseFromAsync(userId => _games.Update(userId, gameId, updatedData, token));
     }
 
-    [HttpPut("{id:int}/title")]
+    [HttpPut("{gameId:int}/title")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdateTitle(int id, [FromBody] string title, CancellationToken token = default) =>
-        await AsyncResponseFrom(_games.UpdateTitle(UserId, id, title, token));
+    public async Task<IActionResult> UpdateTitle(int gameId, [FromBody] string title, CancellationToken token = default) =>
+        await AuthorizedResponseFromAsync(userId => _games.UpdateTitle(userId, gameId, title, token));
 
-    [HttpPut("{id:int}/description")]
+    [HttpPut("{gameId:int}/description")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdateDescription(int id, [FromBody] string description, CancellationToken token = default) =>
-        await AsyncResponseFrom(_games.UpdateDescription(UserId, id, description, token));
+    public async Task<IActionResult> UpdateDescription(int gameId, [FromBody] string description, CancellationToken token = default) =>
+        await AuthorizedResponseFromAsync(userId => _games.UpdateDescription(userId, gameId, description, token));
 
-    [HttpPut("{id:int}/poster")]
+    [HttpPut("{gameId:int}/poster")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdatePoster(int id, IFormFile poster, CancellationToken token = default)
+    public async Task<IActionResult> UpdatePoster(int gameId, IFormFile poster, CancellationToken token = default)
     {
         await using var updatedData = poster.ToData();
-        return await AsyncResponseFrom(_games.UpdatePoster(UserId, id, updatedData, token));
+        return await AuthorizedResponseFromAsync(userId => _games.UpdatePoster(userId, gameId, updatedData, token));
     }
 
-    [HttpPut("{id:int}/game")]
+    [HttpPut("{gameId:int}/game")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> UpdateGame(int id, IFormFile archive, CancellationToken token = default)
+    public async Task<IActionResult> UpdateGame(int gameId, IFormFile archive, CancellationToken token = default)
     {
         await using var updatedData = archive.ToData();
-        return await AsyncResponseFrom(_games.UpdateGame(UserId, id, updatedData, token));
+        return await AuthorizedResponseFromAsync(userId => _games.UpdateGame(userId, gameId, updatedData, token));
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{gameId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public async Task<IActionResult> Delete(int id, CancellationToken token = default) =>
-        await AsyncResponseFrom(_games.Delete(UserId, id, token));
+    public async Task<IActionResult> Delete(int gameId, CancellationToken token = default) =>
+        await AuthorizedResponseFromAsync(userId => _games.Delete(userId, gameId, token));
 }

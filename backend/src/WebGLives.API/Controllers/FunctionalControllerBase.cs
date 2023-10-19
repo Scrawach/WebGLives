@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
+using WebGLives.API.Errors;
 using WebGLives.Core.Errors;
 
 namespace WebGLives.API.Controllers;
@@ -9,15 +10,25 @@ public abstract class FunctionalControllerBase : ControllerBase
 {
     protected string? Username => User.Identity?.Name;
 
-    protected int UserId
-    {
-        get
-        {
-            var claim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-            return int.Parse(claim!.Value);
-        }
-    }
+    protected Result<int, Error> UserId =>
+        HttpContext.User.Claims
+            .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)
+            .ToResult(new ClaimNameError())
+            .Map(claim => (hasId: int.TryParse(claim.Value, out var userId), userId))
+            .Finally(result => result is { IsSuccess: true, Value.hasId: true } 
+                ? Result.Success<int, Error>(result.Value.userId) 
+                : Result.Failure<int, Error>(new ClaimTypeError()));
+
+    protected async Task<IActionResult> AuthorizedResponseFromAsync<TResult, TError>(Func<int, Task<Result<TResult, TError>>> func) where TError : Error =>
+        UserId.IsFailure
+            ? ResponseFrom(UserId)
+            : await AsyncResponseFrom(func.Invoke(UserId.Value));
     
+    protected async Task<IActionResult> AuthorizedResponseFromAsync<TError>(Func<int, Task<UnitResult<TError>>> func) where TError : Error =>
+        UserId.IsFailure
+            ? ResponseFrom(UserId)
+            : await AsyncResponseFrom(func.Invoke(UserId.Value));
+
     protected async Task<IActionResult> AsyncResponseFrom<TResult, TError>(Task<Result<TResult, TError>> resultTask) where TError : Error =>
         ResponseFrom(await resultTask.ConfigureAwait(Result.Configuration.DefaultConfigureAwait));
 
