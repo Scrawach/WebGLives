@@ -6,14 +6,14 @@ using WebGLives.BusinessLogic.Services.Abstract;
 
 namespace WebGLives.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
-[Authorize]
-public class GamesController : FunctionalControllerBase
+public class GamesChangeController : FunctionalControllerBase
 {
     private readonly IGamesChangeService _games;
     
-    public GamesController(IGamesChangeService games) => 
+    public GamesChangeController(IGamesChangeService games) => 
         _games = games;
 
     [HttpPost]
