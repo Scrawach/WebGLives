@@ -17,12 +17,12 @@ public class GamesCatalogController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<GameResponse>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> All(CancellationToken token = default) =>
-        await AsyncResponseFrom(GameResponse.From(_games.All(token)));
+        await ResponseFromAsync(GameResponse.From(_games.All(token)));
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Get(int id, CancellationToken token = default) =>
-        await AsyncResponseFrom(GameResponse.From(_games.Get(id, token)));
+        await ResponseFromAsync(GameResponse.From(_games.Get(id, token)));
 }

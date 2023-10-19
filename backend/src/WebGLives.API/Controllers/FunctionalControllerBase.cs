@@ -22,17 +22,17 @@ public abstract class FunctionalControllerBase : ControllerBase
     protected async Task<IActionResult> AuthorizedResponseFromAsync<TResult, TError>(Func<int, Task<Result<TResult, TError>>> func) where TError : Error =>
         UserId.IsFailure
             ? ResponseFrom(UserId)
-            : await AsyncResponseFrom(func.Invoke(UserId.Value));
+            : await ResponseFromAsync(func.Invoke(UserId.Value));
     
     protected async Task<IActionResult> AuthorizedResponseFromAsync<TError>(Func<int, Task<UnitResult<TError>>> func) where TError : Error =>
         UserId.IsFailure
             ? ResponseFrom(UserId)
-            : await AsyncResponseFrom(func.Invoke(UserId.Value));
+            : await ResponseFromAsync(func.Invoke(UserId.Value));
 
-    protected async Task<IActionResult> AsyncResponseFrom<TResult, TError>(Task<Result<TResult, TError>> resultTask) where TError : Error =>
+    protected async Task<IActionResult> ResponseFromAsync<TResult, TError>(Task<Result<TResult, TError>> resultTask) where TError : Error =>
         ResponseFrom(await resultTask.ConfigureAwait(Result.Configuration.DefaultConfigureAwait));
 
-    protected async Task<IActionResult> AsyncResponseFrom<TError>(Task<UnitResult<TError>> resultTask) where TError : Error =>
+    protected async Task<IActionResult> ResponseFromAsync<TError>(Task<UnitResult<TError>> resultTask) where TError : Error =>
         ResponseFrom(await resultTask.ConfigureAwait(Result.Configuration.DefaultConfigureAwait));
     
     protected IActionResult ResponseFrom<TResult, TError>(Result<TResult, TError> result) where TError : Error =>
