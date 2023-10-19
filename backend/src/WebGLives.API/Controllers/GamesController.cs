@@ -8,6 +8,7 @@ namespace WebGLives.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class GamesController : FunctionalControllerBase
 {
     private readonly IGamesService _games;
@@ -16,7 +17,6 @@ public class GamesController : FunctionalControllerBase
         _games = games;
 
     [HttpPost]
-    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Create(CancellationToken token = default) =>
