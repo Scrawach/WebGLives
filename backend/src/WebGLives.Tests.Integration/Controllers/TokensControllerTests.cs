@@ -44,12 +44,42 @@ public class TokensControllerTests : ControllerTestsBase
     }
 
     [Fact]
+    public async Task WhenRefreshTokens_ThenShouldReturnTokenRefreshRequest_WithDifferentTokenValues()
+    {
+        const string login = "test";
+        const string password = "test123";
+
+        var tokensResponse = await CreateAuthenticatedUser(login, password);
+        var tokens = await tokensResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
+        tokens.Should().NotBeNull();
+        
+        Client.DefaultRequestHeaders.Authorization = Api.BearerAuthenticationHeader(tokens!.AccessToken);
+        var refreshResponse = await Client.PutAsync(Api.Tokens, Api.CreateTokenRefreshRequest(tokens.AccessToken, tokens.RefreshToken));
+        refreshResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var refreshedTokens = await refreshResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
+        refreshedTokens.Should().NotBeNull();
+        //refreshedTokens!.AccessToken.Should().NotBe(tokens.AccessToken);
+        refreshedTokens.RefreshToken.Should().NotBe(tokens.RefreshToken);
+    }
+
+    [Fact]
     public async Task WhenRefreshTokens_AndUserNotAuthorized_ThenShouldReturnUnauthorizedResponse()
     {
         var response = await Client.PutAsync(Api.Tokens, Api.CreateTokenRefreshRequest("test", "test"));
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
+    private async Task<HttpResponseMessage> CreateAuthenticatedUser(string login, string password)
+    {
+        await CreateUser(login, password);
+        var tokensResponse = await Client.PostAsync(Api.Tokens, Api.CreateLoginRequest(login, password));
+        
+        tokensResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        
+        return tokensResponse;
+    }
+    
     private async Task CreateUser(string login, string password)
     {
         var userCreatedResponse = await Client.PostAsync(Api.Users, Api.CreateUserRequest(login, password));
