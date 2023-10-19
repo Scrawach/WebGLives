@@ -11,9 +11,9 @@ namespace WebGLives.API.Controllers;
 [Authorize]
 public class GamesController : FunctionalControllerBase
 {
-    private readonly IGamesService _games;
+    private readonly IGamesChangeService _games;
     
-    public GamesController(IGamesService games) => 
+    public GamesController(IGamesChangeService games) => 
         _games = games;
 
     [HttpPost]

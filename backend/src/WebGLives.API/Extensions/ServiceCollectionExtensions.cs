@@ -51,6 +51,7 @@ public static class ServiceCollectionExtensions
         
         services.AddScoped<ITokenFactory, TokenFactory>();
         services.AddScoped<IGamesService, GamesService>();
+        services.AddScoped<IGamesChangeService, GamesService>();
         services.AddScoped<IGamesRepository, GamesRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
 
