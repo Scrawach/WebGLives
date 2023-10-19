@@ -29,7 +29,7 @@ public class GamesChangeController : FunctionalControllerBase
     public async Task<IActionResult> Update(int id, [FromForm] UpdateGameRequest request, CancellationToken token = default)
     {
         await using var updatedData = request.ToData();
-        return await AsyncResponseFrom(_games.Update(id, updatedData, token));
+        return await AsyncResponseFrom(_games.Update(UserId, id, updatedData, token));
     }
 
     [HttpPut("{id:int}/title")]
@@ -37,14 +37,14 @@ public class GamesChangeController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> UpdateTitle(int id, [FromBody] string title, CancellationToken token = default) =>
-        await AsyncResponseFrom(_games.UpdateTitle(id, title, token));
+        await AsyncResponseFrom(_games.UpdateTitle(UserId, id, title, token));
 
     [HttpPut("{id:int}/description")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> UpdateDescription(int id, [FromBody] string description, CancellationToken token = default) =>
-        await AsyncResponseFrom(_games.UpdateDescription(id, description, token));
+        await AsyncResponseFrom(_games.UpdateDescription(UserId, id, description, token));
 
     [HttpPut("{id:int}/poster")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -53,7 +53,7 @@ public class GamesChangeController : FunctionalControllerBase
     public async Task<IActionResult> UpdatePoster(int id, IFormFile poster, CancellationToken token = default)
     {
         await using var updatedData = poster.ToData();
-        return await AsyncResponseFrom(_games.UpdatePoster(id, updatedData, token));
+        return await AsyncResponseFrom(_games.UpdatePoster(UserId, id, updatedData, token));
     }
 
     [HttpPut("{id:int}/game")]
@@ -63,7 +63,7 @@ public class GamesChangeController : FunctionalControllerBase
     public async Task<IActionResult> UpdateGame(int id, IFormFile archive, CancellationToken token = default)
     {
         await using var updatedData = archive.ToData();
-        return await AsyncResponseFrom(_games.UpdateGame(id, updatedData, token));
+        return await AsyncResponseFrom(_games.UpdateGame(UserId, id, updatedData, token));
     }
 
     [HttpDelete("{id:int}")]
