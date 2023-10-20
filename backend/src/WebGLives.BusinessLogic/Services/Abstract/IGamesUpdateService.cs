@@ -4,7 +4,7 @@ using WebGLives.Core.Errors;
 
 namespace WebGLives.BusinessLogic.Services.Abstract;
 
-public interface IGamesChangeService
+public interface IGamesUpdateService
 {
     Task<Result<Game, Error>> Create(int userId, CancellationToken token = default);
     Task<UnitResult<Error>> Update(int userId, int gameId, UpdateGameData data, CancellationToken token = default);

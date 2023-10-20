@@ -7,7 +7,7 @@ using WebGLives.Core.Repositories;
 
 namespace WebGLives.BusinessLogic.Services;
 
-public class GamesService : IGamesService, IGamesChangeService
+public class GamesService : IGamesCatalogService, IGamesUpdateService
 {
     private readonly IGamesRepository _games;
     private readonly IUsersRepository _users;

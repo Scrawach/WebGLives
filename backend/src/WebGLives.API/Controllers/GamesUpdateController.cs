@@ -8,12 +8,12 @@ namespace WebGLives.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("[controller]")]
-public class GamesChangeController : FunctionalControllerBase
+[Route("Games")]
+public class GamesUpdateController : FunctionalControllerBase
 {
-    private readonly IGamesChangeService _games;
+    private readonly IGamesUpdateService _games;
     
-    public GamesChangeController(IGamesChangeService games) => 
+    public GamesUpdateController(IGamesUpdateService games) => 
         _games = games;
 
     [HttpPost]
