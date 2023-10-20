@@ -31,43 +31,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerWithJwtAuthentication();
 
 builder.Services.AddWebGLives(builder);
-builder.Services.AddIdentity<User, IdentityRole<int>>()
-    .AddEntityFrameworkStores<GamesDbContext>();
-
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.Password.RequireDigit = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredUniqueChars = 0;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 6;
-
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.AllowedForNewUsers = true;
-
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    options.User.RequireUniqueEmail = false;
-});
-
-builder.Services
-    .AddAuthentication(options => 
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey =  new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetAuthenticationSecretKey()))
-        };
-    });
+builder.Services.AddConfiguredIdentity(builder);
 
 var app = builder.Build();
 app.UseCors(cors);

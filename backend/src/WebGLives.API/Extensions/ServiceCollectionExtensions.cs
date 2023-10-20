@@ -1,8 +1,12 @@
+using System.Text;
 using JWT.Algorithms;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using WebGLives.Auth.Identity;
 using WebGLives.Auth.Identity.Repositories;
 using WebGLives.Auth.Identity.Services;
 using WebGLives.BusinessLogic.Services;
@@ -82,6 +86,49 @@ public static class ServiceCollectionExtensions
             options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
             options.AddSecurityRequirement(new OpenApiSecurityRequirement { { jwtSecurityScheme, Array.Empty<string>() } });
         });
+        return services;
+    }
+
+    public static IServiceCollection AddConfiguredIdentity(this IServiceCollection services, WebApplicationBuilder builder)
+    {
+        services.AddIdentity<User, IdentityRole<int>>()
+            .AddEntityFrameworkStores<GamesDbContext>();
+
+        services.Configure<IdentityOptions>(options =>
+        {
+            options.Password.RequireDigit = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequiredUniqueChars = 0;
+            options.Password.RequireUppercase = false;
+            options.Password.RequiredLength = 6;
+
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.AllowedForNewUsers = true;
+
+            options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            options.User.RequireUniqueEmail = false;
+        });
+        
+        services
+            .AddAuthentication(options => 
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey =  new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetAuthenticationSecretKey()))
+                };
+            });
+        
         return services;
     }
 }
