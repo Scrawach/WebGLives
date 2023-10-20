@@ -19,9 +19,9 @@ public class UsersController : FunctionalControllerBase
     public async Task<IActionResult> CreateUser([FromForm] CreateUserRequest request) =>
         await ResponseFromAsync(UserResponse.From(_users.CreateAsync(request.Login, request.Password)));
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{gameId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get(int id) =>
-        await ResponseFromAsync(UserResponse.From(_users.FindByIdAsync(id)));
+    public async Task<IActionResult> Get(int gameId) =>
+        await ResponseFromAsync(UserResponse.From(_users.FindByIdAsync(gameId)));
 }
