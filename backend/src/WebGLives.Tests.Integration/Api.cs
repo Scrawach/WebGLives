@@ -1,3 +1,5 @@
+using System.Net.Http.Headers;
+
 namespace WebGLives.Tests.Integration;
 
 public static class Api
@@ -19,7 +21,10 @@ public static class Api
     public static FormUrlEncodedContent CreateTokenRefreshRequest(string access, string refresh) =>
         new(new[]
         {
-            new KeyValuePair<string, string>("Access", access),
-            new KeyValuePair<string, string>("Refresh", refresh)
+            new KeyValuePair<string, string>("AccessToken", access),
+            new KeyValuePair<string, string>("RefreshToken", refresh)
         });
+
+    public static AuthenticationHeaderValue BearerAuthenticationHeader(string accessToken) =>
+        new AuthenticationHeaderValue("Bearer", accessToken);
 }

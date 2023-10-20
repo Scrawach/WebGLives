@@ -22,8 +22,8 @@ public class TokenFactory : ITokenFactory
             .Check(async entity => await _users.CheckPasswordAsync(entity, password))
             .Map(async user => await Authentication(user));
 
-    public async Task<Result<Tokens, Error>> Refresh(string username, string refreshToken) =>
-        await _users.FindByNameAsync(username)
+    public async Task<Result<Tokens, Error>> Refresh(int userId, string refreshToken) =>
+        await _users.FindByIdAsync(userId)
             .Map(user => (user, refreshToken))
             .Ensure(IsValidRefreshToken, new Error("Invalid refresh token!"))
             .Map(async login => await Authentication(login.user));
