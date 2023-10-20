@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Auth.Identity", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Tests.Integration", "src\WebGLives.Tests.Integration\WebGLives.Tests.Integration.csproj", "{72295FC3-57C2-4569-85FA-DB3658B9E5EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Tests.Unit", "src\WebGLives.Tests.Unit\WebGLives.Tests.Unit.csproj", "{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{72295FC3-57C2-4569-85FA-DB3658B9E5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72295FC3-57C2-4569-85FA-DB3658B9E5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72295FC3-57C2-4569-85FA-DB3658B9E5EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
