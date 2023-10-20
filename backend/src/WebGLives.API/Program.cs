@@ -28,26 +28,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    var jwtSecurityScheme = new OpenApiSecurityScheme()
-    {
-        BearerFormat = "JWT",
-        Description = @"Put **_ONLY_** your JWT Bearer token on textbox below!",
-        Name = "Bearer",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = JwtBearerDefaults.AuthenticationScheme,
-        Reference = new OpenApiReference()
-        {
-            Id = JwtBearerDefaults.AuthenticationScheme,
-            Type = ReferenceType.SecurityScheme
-        }
-    };
-    
-    options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement { { jwtSecurityScheme, Array.Empty<string>() } });
-});
+builder.Services.AddSwaggerWithAuthentication();
+
 builder.Services.AddWebGLives(builder);
 builder.Services.AddIdentity<User, IdentityRole<int>>()
     .AddEntityFrameworkStores<GamesDbContext>();

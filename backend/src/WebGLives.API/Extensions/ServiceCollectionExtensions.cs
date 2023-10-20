@@ -1,5 +1,7 @@
 using JWT.Algorithms;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using WebGLives.Auth.Identity.Repositories;
 using WebGLives.Auth.Identity.Services;
@@ -55,6 +57,31 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGamesRepository, GamesRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
 
+        return services;
+    }
+
+    public static IServiceCollection AddSwaggerWithAuthentication(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(options =>
+        {
+            var jwtSecurityScheme = new OpenApiSecurityScheme()
+            {
+                BearerFormat = "JWT",
+                Description = @"Put **_ONLY_** your JWT Bearer token on textbox below!",
+                Name = "Bearer",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
+                Reference = new OpenApiReference()
+                {
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Type = ReferenceType.SecurityScheme
+                }
+            };
+    
+            options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement { { jwtSecurityScheme, Array.Empty<string>() } });
+        });
         return services;
     }
 }
