@@ -4,6 +4,7 @@ public static class Api
 {
     public const string Users = "users";
     public const string Tokens = "tokens";
+    public const string GamesCatalog = "gamesCatalog";
 
     public static FormUrlEncodedContent CreateUserRequest(string login, string password) =>
         new(new[]
