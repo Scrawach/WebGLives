@@ -60,7 +60,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddSwaggerWithAuthentication(this IServiceCollection services)
+    public static IServiceCollection AddSwaggerWithJWTAuthentication(this IServiceCollection services)
     {
         services.AddSwaggerGen(options =>
         {
