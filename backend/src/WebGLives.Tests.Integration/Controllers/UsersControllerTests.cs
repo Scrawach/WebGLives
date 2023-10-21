@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using WebGLives.API;
 using WebGLives.API.Contracts.Users;
 
 namespace WebGLives.Tests.Integration.Controllers;
@@ -55,7 +56,7 @@ public class UsersControllerTests : ControllerTestsBase
         var createdResponse = await Post(CreateUserRequest(username, password));
         createdResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var user = await Client.GetFromJsonAsync<UserResponse>($"users/{newUserId}");
+        var user = await Client.GetFromJsonAsync<UserResponse>($"{ApiRoutings.Users}/{newUserId}");
 
         user.Should().NotBeNull();
         user!.Login.Should().Be(username);
@@ -71,10 +72,10 @@ public class UsersControllerTests : ControllerTestsBase
     }
 
     private Task<HttpResponseMessage> Post(HttpContent content) =>
-        Client.PostAsync("users", content);
+        Client.PostAsync(ApiRoutings.Users, content);
 
     private Task<HttpResponseMessage> Get(int id) =>
-        Client.GetAsync($"users/{id}");
+        Client.GetAsync($"{ApiRoutings.Users}/{id}");
 
     private static FormUrlEncodedContent CreateUserRequest(string login, string password) =>
         new(new[]

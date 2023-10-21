@@ -2,12 +2,8 @@ using System.Net.Http.Headers;
 
 namespace WebGLives.Tests.Integration;
 
-public static class Api
+public static class RequestBuilder
 {
-    public const string Users = "users";
-    public const string Tokens = "tokens";
-    public const string GamesCatalog = "gamesCatalog";
-
     public static FormUrlEncodedContent CreateUserRequest(string login, string password) =>
         new(new[]
         {
