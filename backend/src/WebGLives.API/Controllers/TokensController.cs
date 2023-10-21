@@ -6,7 +6,7 @@ using WebGLives.Auth.Identity.Services;
 namespace WebGLives.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route(ApiRoutings.Tokens)]
 public class TokensController : FunctionalControllerBase
 {
     private readonly ITokenFactory _tokens;
