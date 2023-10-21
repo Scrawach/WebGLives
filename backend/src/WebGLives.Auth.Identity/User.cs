@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using WebGLives.Core;
-using WebGLives.Core.Users;
 
 namespace WebGLives.Auth.Identity;
 

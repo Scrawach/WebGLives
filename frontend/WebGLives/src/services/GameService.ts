@@ -1,13 +1,12 @@
 import { Game } from "../types/Game"
 import { UpdateGame } from "../types/UpdateGame";
 import { Api } from "./Api";
-import { BaseService } from "./BaseService";
 import { Profile } from "./Profile";
 
-export class GameService extends BaseService {
+export class GameService {
     constructor(
         readonly url: string
-        ) { super() }
+        ) { }
 
     private readonly gamesPath: string = `${this.url}/games`
 
@@ -25,17 +24,17 @@ export class GameService extends BaseService {
         const response = await fetch(this.gamesPath, 
             { 
                 method: `POST`,
-                headers: this.getAuthorizationHeader()
+                headers: this.getAuthenticationHeader()
             });
 
-        if (response.status == 401)
+        if (response.status == 401 && Profile.tokens()?.refreshToken != null)
         {
             const tokens = await Api.auth.refresh(Profile.tokens()!);
             Profile.save(Profile.getUsername()!, tokens);
             const response = await fetch(this.gamesPath, 
                 { 
                     method: `POST`,
-                    headers: this.getAuthorizationHeader()
+                    headers: this.getAuthenticationHeader()
                 });
             return await response.json();           
         }
@@ -79,5 +78,12 @@ export class GameService extends BaseService {
         const request = new FormData()
         request.append('game', game)
         return await fetch(`${this.gamesPath}/${id}/game`, { method: `PUT`, body: request})
+    }
+
+    public getAuthenticationHeader(): Headers {
+        const headers = new Headers();
+        const tokens = Profile.tokens();
+        headers.set("Authorization", `Bearer ${tokens?.accessToken}`)
+        return headers;
     }
 }

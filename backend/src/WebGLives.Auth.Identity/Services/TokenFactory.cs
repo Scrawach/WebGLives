@@ -1,16 +1,17 @@
 using System.Security.Claims;
 using CSharpFunctionalExtensions;
+using WebGLives.Core;
 using WebGLives.Core.Errors;
-using WebGLives.Core.Users;
+using WebGLives.Core.Repositories;
 
 namespace WebGLives.Auth.Identity.Services;
 
 public class TokenFactory : ITokenFactory
 {
-    private readonly IUsersService _users;
+    private readonly IUsersRepository _users;
     private readonly IJwtTokenService _jwtTokenService;
 
-    public TokenFactory(IUsersService users, IJwtTokenService jwtTokenService)
+    public TokenFactory(IUsersRepository users, IJwtTokenService jwtTokenService)
     {
         _users = users;
         _jwtTokenService = jwtTokenService;
@@ -21,8 +22,8 @@ public class TokenFactory : ITokenFactory
             .Check(async entity => await _users.CheckPasswordAsync(entity, password))
             .Map(async user => await Authentication(user));
 
-    public async Task<Result<Tokens, Error>> Refresh(string username, string refreshToken) =>
-        await _users.FindByNameAsync(username)
+    public async Task<Result<Tokens, Error>> Refresh(int userId, string refreshToken) =>
+        await _users.FindByIdAsync(userId)
             .Map(user => (user, refreshToken))
             .Ensure(IsValidRefreshToken, new Error("Invalid refresh token!"))
             .Map(async login => await Authentication(login.user));

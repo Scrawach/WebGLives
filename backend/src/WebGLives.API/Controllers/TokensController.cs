@@ -19,11 +19,11 @@ public class TokensController : FunctionalControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Create([FromForm] LoginRequest request) =>
-        await AsyncResponseFrom(AuthenticatedResponse.From(_tokens.Create(request.Login, request.Password)));
+        await ResponseFromAsync(AuthenticatedResponse.From(_tokens.Create(request.Login, request.Password)));
 
     [Authorize]
-    [HttpPut("refresh")]
+    [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticatedResponse))]
     public async Task<IActionResult> Refresh([FromForm] TokenRefreshRequest request) =>
-        await AsyncResponseFrom(AuthenticatedResponse.From(_tokens.Refresh(Username!, request.RefreshToken)));
+        await AuthorizedResponseFromAsync(userId => AuthenticatedResponse.From(_tokens.Refresh(userId, request.RefreshToken)));
 }
