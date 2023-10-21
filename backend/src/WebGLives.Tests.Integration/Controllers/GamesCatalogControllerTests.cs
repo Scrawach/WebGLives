@@ -9,7 +9,7 @@ public class GamesCatalogControllerTests : ControllerTestsBase
     [Fact]
     public async Task WhenGetGame_AndThisGameNotExits_ThenShouldReturnNotFoundResponse()
     {
-        var response = await Client.GetAsync($"{ApiRoutings.Games}/0");
+        var response = await Client.GetAsync($"{ApiRouting.Games}/0");
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 }

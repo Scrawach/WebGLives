@@ -5,7 +5,7 @@ using WebGLives.Core.Repositories;
 namespace WebGLives.API.Controllers;
 
 [ApiController]
-[Route(ApiRoutings.Users)]
+[Route(ApiRouting.Users)]
 public class UsersController : FunctionalControllerBase
 {
     private readonly IUsersRepository _users;

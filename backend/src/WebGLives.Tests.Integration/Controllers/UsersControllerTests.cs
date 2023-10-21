@@ -56,7 +56,7 @@ public class UsersControllerTests : ControllerTestsBase
         var createdResponse = await Post(CreateUserRequest(username, password));
         createdResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var user = await Client.GetFromJsonAsync<UserResponse>($"{ApiRoutings.Users}/{newUserId}");
+        var user = await Client.GetFromJsonAsync<UserResponse>($"{ApiRouting.Users}/{newUserId}");
 
         user.Should().NotBeNull();
         user!.Login.Should().Be(username);
@@ -72,10 +72,10 @@ public class UsersControllerTests : ControllerTestsBase
     }
 
     private Task<HttpResponseMessage> Post(HttpContent content) =>
-        Client.PostAsync(ApiRoutings.Users, content);
+        Client.PostAsync(ApiRouting.Users, content);
 
     private Task<HttpResponseMessage> Get(int id) =>
-        Client.GetAsync($"{ApiRoutings.Users}/{id}");
+        Client.GetAsync($"{ApiRouting.Users}/{id}");
 
     private static FormUrlEncodedContent CreateUserRequest(string login, string password) =>
         new(new[]

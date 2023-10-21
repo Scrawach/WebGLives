@@ -11,7 +11,7 @@ public class TokensControllerTests : ControllerTestsBase
     [Fact]
     public async Task WhenCreateTokens_WithInvalidUser_ThenShouldReturnNotFoundResponse()
     {
-        var response = await Client.PostAsync(ApiRoutings.Tokens, RequestBuilder.CreateLoginRequest("test", "test123"));
+        var response = await Client.PostAsync(ApiRouting.Tokens, RequestBuilder.CreateLoginRequest("test", "test123"));
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
@@ -23,7 +23,7 @@ public class TokensControllerTests : ControllerTestsBase
 
         await CreateUser(login, "123test");
         
-        var authenticatedResponse = await Client.PostAsync(ApiRoutings.Tokens, RequestBuilder.CreateLoginRequest(login, password));
+        var authenticatedResponse = await Client.PostAsync(ApiRouting.Tokens, RequestBuilder.CreateLoginRequest(login, password));
         authenticatedResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
     
@@ -35,7 +35,7 @@ public class TokensControllerTests : ControllerTestsBase
 
         await CreateUser(login, password);
         
-        var authenticatedResponse = await Client.PostAsync(ApiRoutings.Tokens, RequestBuilder.CreateLoginRequest(login, password));
+        var authenticatedResponse = await Client.PostAsync(ApiRouting.Tokens, RequestBuilder.CreateLoginRequest(login, password));
         authenticatedResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var tokens = await authenticatedResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
@@ -55,7 +55,7 @@ public class TokensControllerTests : ControllerTestsBase
         tokens.Should().NotBeNull();
         
         Client.DefaultRequestHeaders.Authorization = RequestBuilder.BearerAuthenticationHeader(tokens!.AccessToken);
-        var refreshResponse = await Client.PutAsync(ApiRoutings.Tokens, RequestBuilder.CreateTokenRefreshRequest(tokens.AccessToken, tokens.RefreshToken));
+        var refreshResponse = await Client.PutAsync(ApiRouting.Tokens, RequestBuilder.CreateTokenRefreshRequest(tokens.AccessToken, tokens.RefreshToken));
         refreshResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var refreshedTokens = await refreshResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
@@ -67,14 +67,14 @@ public class TokensControllerTests : ControllerTestsBase
     [Fact]
     public async Task WhenRefreshTokens_AndUserNotAuthorized_ThenShouldReturnUnauthorizedResponse()
     {
-        var response = await Client.PutAsync(ApiRoutings.Tokens, RequestBuilder.CreateTokenRefreshRequest("test", "test"));
+        var response = await Client.PutAsync(ApiRouting.Tokens, RequestBuilder.CreateTokenRefreshRequest("test", "test"));
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     private async Task<HttpResponseMessage> CreateAuthenticatedUser(string login, string password)
     {
         await CreateUser(login, password);
-        var tokensResponse = await Client.PostAsync(ApiRoutings.Tokens, RequestBuilder.CreateLoginRequest(login, password));
+        var tokensResponse = await Client.PostAsync(ApiRouting.Tokens, RequestBuilder.CreateLoginRequest(login, password));
         
         tokensResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         
@@ -83,7 +83,7 @@ public class TokensControllerTests : ControllerTestsBase
     
     private async Task CreateUser(string login, string password)
     {
-        var userCreatedResponse = await Client.PostAsync(ApiRoutings.Users, RequestBuilder.CreateUserRequest(login, password));
+        var userCreatedResponse = await Client.PostAsync(ApiRouting.Users, RequestBuilder.CreateUserRequest(login, password));
         userCreatedResponse.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 }

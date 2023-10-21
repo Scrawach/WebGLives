@@ -8,7 +8,7 @@ namespace WebGLives.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route(ApiRoutings.Games)]
+[Route(ApiRouting.Games)]
 public class GamesUpdateController : FunctionalControllerBase
 {
     private readonly IGamesUpdateService _games;

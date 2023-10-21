@@ -1,6 +1,6 @@
 ﻿namespace WebGLives.API;
 
-public static class ApiRoutings
+public static class ApiRouting
 {
     public const string Games = "games";
     public const string Tokens = "tokens";

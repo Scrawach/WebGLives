@@ -5,7 +5,7 @@ using WebGLives.BusinessLogic.Services.Abstract;
 namespace WebGLives.API.Controllers;
 
 [ApiController]
-[Route(ApiRoutings.Games)]
+[Route(ApiRouting.Games)]
 public class GamesCatalogController : FunctionalControllerBase
 {
     private readonly IGamesCatalogService _games;
