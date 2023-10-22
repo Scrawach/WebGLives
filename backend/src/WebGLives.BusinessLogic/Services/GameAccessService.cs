@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using WebGLives.BusinessLogic.Errors;
 using WebGLives.BusinessLogic.Policies;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core;
@@ -18,8 +19,13 @@ public class GameAccessService : IGameAccessService
         _policies = policies;
     }
 
-    public async Task<Result<bool, Error>> HasAccess(int userId, Game game) =>
+    public async Task<UnitResult<Error>> HasAccess(int userId, Game game) =>
         await _users
             .FindByIdAsync(userId)
-            .Map(user => _policies.Aggregate(false, (current, policy) => current || policy.HasAccess(user, game)));
+            .Map(user =>
+            {
+                return _policies.Aggregate(false, (current, policy) => current || policy.HasAccess(user, game))
+                    ? UnitResult.Success<Error>()
+                    : UnitResult.Failure<Error>(new InvalidAccessRightToGame(user.Id, game.Id));
+            });
 }

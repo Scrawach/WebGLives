@@ -6,5 +6,5 @@ namespace WebGLives.BusinessLogic.Services.Abstract;
 
 public interface IGameAccessService
 {
-    Task<Result<bool, Error>> HasAccess(int userId, Game game);
+    Task<UnitResult<Error>> HasAccess(int userId, Game game);
 }
