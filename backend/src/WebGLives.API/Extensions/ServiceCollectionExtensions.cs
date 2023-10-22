@@ -9,6 +9,7 @@ using Serilog;
 using WebGLives.Auth.Identity;
 using WebGLives.Auth.Identity.Repositories;
 using WebGLives.Auth.Identity.Services;
+using WebGLives.BusinessLogic.Policies;
 using WebGLives.BusinessLogic.Services;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core.Repositories;
@@ -60,6 +61,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGamesUpdateService, GamesService>();
         services.AddScoped<IGamesRepository, GamesRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<IGameAccessService, GameAccessService>();
+        services.AddScoped<IGameAccessPolicy, GameHasLinkOnUser>();
+        services.AddScoped<IGameAccessPolicy, AdminPolicy>();
 
         return services;
     }

@@ -11,12 +11,14 @@ public class GamesService : IGamesCatalogService, IGamesUpdateService
 {
     private readonly IGamesRepository _games;
     private readonly IUsersRepository _users;
+    private readonly IGameAccessService _access;
     private readonly IFilesService _files;
 
-    public GamesService(IGamesRepository games, IUsersRepository users, IFilesService files)
+    public GamesService(IGamesRepository games, IUsersRepository users, IGameAccessService access, IFilesService files)
     {
         _games = games;
         _users = users;
+        _access = access;
         _files = files;
     }
 
@@ -74,5 +76,5 @@ public class GamesService : IGamesCatalogService, IGamesUpdateService
 
     private Task<Result<Game, Error>> GameWithAccessCheck(int userId, int gameId, CancellationToken token) =>
         _games.GetOrDefault(gameId, token)
-            .Ensure(game => game.UserId == userId, new InvalidAccessRightToGame(userId, gameId));
+            .Check(game => _access.HasAccess(userId, game));
 }
