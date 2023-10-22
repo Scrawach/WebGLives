@@ -62,7 +62,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGamesRepository, GamesRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<IGameAccessService, GameAccessService>();
-        services.AddScoped<IGameAccessPolicy, GameHasLinkOnUser>();
+        services.AddScoped<IGameAccessPolicy, UserOwnGamePolicy>();
         services.AddScoped<IGameAccessPolicy, AdminPolicy>();
 
         return services;

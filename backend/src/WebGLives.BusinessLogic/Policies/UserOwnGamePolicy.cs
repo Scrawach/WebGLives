@@ -1,9 +1,8 @@
-﻿using WebGLives.BusinessLogic.Services.Abstract;
-using WebGLives.Core;
+﻿using WebGLives.Core;
 
 namespace WebGLives.BusinessLogic.Policies;
 
-public class GameHasLinkOnUser : IGameAccessPolicy
+public class UserOwnGamePolicy : IGameAccessPolicy
 {
     public bool HasAccess(IUser user, Game game) =>
         game.UserId == user.Id;
