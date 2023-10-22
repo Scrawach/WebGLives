@@ -22,10 +22,7 @@ public class GameAccessService : IGameAccessService
     public async Task<UnitResult<Error>> HasAccess(int userId, Game game) =>
         await _users
             .FindByIdAsync(userId)
-            .Map(user =>
-            {
-                return _policies.Aggregate(false, (current, policy) => current || policy.HasAccess(user, game))
-                    ? UnitResult.Success<Error>()
-                    : UnitResult.Failure<Error>(new InvalidAccessRightToGame(user.Id, game.Id));
-            });
+            .Map(user => _policies.Aggregate(false, (current, policy) => current || policy.HasAccess(user, game))
+                ? UnitResult.Success<Error>()
+                : UnitResult.Failure<Error>(new InvalidAccessRightToGame(user.Id, game.Id)));
 }
