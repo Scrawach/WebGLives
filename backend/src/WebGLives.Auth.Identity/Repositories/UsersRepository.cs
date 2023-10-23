@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using WebGLives.Auth.Identity.Errors;
 using WebGLives.Auth.Identity.Extensions;
 using WebGLives.Core;
@@ -10,13 +11,14 @@ namespace WebGLives.Auth.Identity.Repositories;
 
 public class UsersRepository : IUsersRepository
 {
-    private const string LocalProvider = "LocalLogin";
-    private const string RefreshTokenName = "RefreshToken";
-
     private readonly UserManager<User> _userManager;
+    private readonly IOptions<UsersRepositoryOptions> _options;
 
-    public UsersRepository(UserManager<User> userManager) =>
+    public UsersRepository(UserManager<User> userManager, IOptions<UsersRepositoryOptions> options)
+    {
         _userManager = userManager;
+        _options = options;
+    }
 
     public async Task<Result<IUser, Error>> CreateAsync(string username, string password) =>
         await _userManager.CreateWithResultAsync(new User(username), password);
@@ -53,19 +55,19 @@ public class UsersRepository : IUsersRepository
 
     private async Task<Result<string, Error>> AuthenticationTokenAsync(User entity) =>
         await _userManager
-            .GetAuthenticationTokenAsync(entity, LocalProvider, RefreshTokenName)
+            .GetAuthenticationTokenAsync(entity, _options.Value.LocalProvider, _options.Value.RefreshTokenTable)
             .ToResultAsync<string, Error>(new GetTokenError(entity.UserName!));
 
     private async Task<bool> RemoveAuthenticationTokenAsync(User entity)
     {
-        var result = await _userManager.RemoveAuthenticationTokenAsync(entity, LocalProvider, RefreshTokenName);
+        var result = await _userManager.RemoveAuthenticationTokenAsync(entity, _options.Value.LocalProvider, _options.Value.RefreshTokenTable);
         return result.Succeeded;
     }
     
     private Func<User, Task<bool>> SetAuthenticationTokenAsync(string token) =>
         async entity =>
         {
-            var result = await _userManager.SetAuthenticationTokenAsync(entity, LocalProvider, RefreshTokenName, token);
+            var result = await _userManager.SetAuthenticationTokenAsync(entity, _options.Value.LocalProvider, _options.Value.RefreshTokenTable, token);
             return result.Succeeded;
         };
 }

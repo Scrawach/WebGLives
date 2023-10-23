@@ -65,6 +65,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGameAccessPolicy, UserOwnGamePolicy>();
         services.AddScoped<IGameAccessPolicy, AdminPolicy>();
 
+        services.Configure<UsersRepositoryOptions>(builder.Configuration.GetSection(UsersRepositoryOptions.UsersRepository));
         return services;
     }
 
