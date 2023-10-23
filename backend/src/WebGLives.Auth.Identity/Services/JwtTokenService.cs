@@ -18,7 +18,9 @@ public class JwtTokenService : IJwtTokenService
     }
 
     public string GenerateAccessToken(params Claim[] claims) =>
-        CreateJwtBuilder()
+        JwtBuilder.Create()
+            .WithAlgorithm(_algorithm)
+            .WithSecret(_secret)
             .ExpirationTime(DateTime.Now.AddMinutes(10))
             .WithVerifySignature(true)
             .AddClaims(claims)
@@ -31,9 +33,4 @@ public class JwtTokenService : IJwtTokenService
         random.GetBytes(randomNumbers);
         return Convert.ToBase64String(randomNumbers);
     }
-
-    private JwtBuilder CreateJwtBuilder() =>
-        JwtBuilder.Create()
-            .WithAlgorithm(_algorithm)
-            .WithSecret(_secret);
 }
