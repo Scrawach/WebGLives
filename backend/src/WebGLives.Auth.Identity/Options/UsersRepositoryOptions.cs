@@ -1,4 +1,4 @@
-namespace WebGLives.Auth.Identity.Repositories;
+namespace WebGLives.Auth.Identity.Options;
 
 public class UsersRepositoryOptions
 {

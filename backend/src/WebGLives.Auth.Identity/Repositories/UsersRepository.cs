@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using WebGLives.Auth.Identity.Errors;
 using WebGLives.Auth.Identity.Extensions;
+using WebGLives.Auth.Identity.Options;
 using WebGLives.Core;
 using WebGLives.Core.Errors;
 using WebGLives.Core.Repositories;

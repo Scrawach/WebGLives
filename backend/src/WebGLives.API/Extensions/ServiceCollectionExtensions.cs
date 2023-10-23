@@ -7,8 +7,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using WebGLives.Auth.Identity;
+using WebGLives.Auth.Identity.Options;
 using WebGLives.Auth.Identity.Repositories;
 using WebGLives.Auth.Identity.Services;
+using WebGLives.BusinessLogic.Options;
 using WebGLives.BusinessLogic.Policies;
 using WebGLives.BusinessLogic.Services;
 using WebGLives.BusinessLogic.Services.Abstract;
@@ -66,6 +68,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGameAccessPolicy, AdminPolicy>();
 
         services.Configure<UsersRepositoryOptions>(builder.Configuration.GetSection(UsersRepositoryOptions.UsersRepository));
+        services.Configure<FilesOptions>(builder.Configuration.GetSection(FilesOptions.Files));
         return services;
     }
 

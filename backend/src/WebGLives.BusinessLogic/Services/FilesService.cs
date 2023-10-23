@@ -1,26 +1,30 @@
 using System.Text;
 using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Options;
+using WebGLives.BusinessLogic.Options;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core;
 using WebGLives.Core.Errors;
+
 
 namespace WebGLives.BusinessLogic.Services;
 
 public class FilesService : IFilesService
 {
-    private const string GamesFolder = "games";
-    private static readonly string BaseDirectory = Path.Combine(Path.GetTempPath(), "WebGLives", "games");
-
     private readonly IZipService _zipService;
+    private readonly IOptions<FilesOptions> _options;
 
-    public FilesService(IZipService zipService) =>
+    public FilesService(IZipService zipService, IOptions<FilesOptions> options)
+    {
         _zipService = zipService;
+        _options = options;
+    }
 
     public async Task<Result<string, Error>> Save(string folderName, FileData file, CancellationToken token = default)
     {
         var fileName = $"{folderName}{file.GetExtension()}";
         await SaveFile(folderName, fileName, file.Stream, token);
-        return CombinePath(GamesFolder, folderName, fileName);
+        return CombinePath(_options.Value.GamesFolder, folderName, fileName);
     }
 
     public async Task<Result<string, Error>> SaveZip(string folderName, FileData gameArchive, CancellationToken token = default)
@@ -33,12 +37,12 @@ public class FilesService : IFilesService
         _zipService.Extract(path, root);
 
         MoveExtractedFolderToRoot(folderName, root);
-        return CombinePath(GamesFolder, folderName, Path.GetFileNameWithoutExtension(path), "index.html");
+        return CombinePath(_options.Value.GamesFolder, folderName, Path.GetFileNameWithoutExtension(path), "index.html");
     }
 
     public UnitResult<Error> Delete(string folderName)
     {
-        var root = Path.Combine(BaseDirectory, folderName);
+        var root = Path.Combine(_options.Value.BaseDirectory, folderName);
         
         if (Directory.Exists(root))
             Directory.Delete(root, true);
@@ -46,7 +50,7 @@ public class FilesService : IFilesService
         return UnitResult.Success<Error>();
     }
 
-    private static async Task<(string rootFolder, string pathToFile)> SaveFile(string title, string fileName, Stream file, CancellationToken token = default)
+    private async Task<(string rootFolder, string pathToFile)> SaveFile(string title, string fileName, Stream file, CancellationToken token = default)
     {
         var root = GetOrCreateRootDirectory(title);
         var path = Path.Combine(root, fileName);
@@ -66,9 +70,9 @@ public class FilesService : IFilesService
         return builder.ToString();
     }
 
-    private static string GetOrCreateRootDirectory(string directoryName)
+    private string GetOrCreateRootDirectory(string directoryName)
     {
-        var root = Path.Combine(BaseDirectory, directoryName);
+        var root = Path.Combine(_options.Value.BaseDirectory, directoryName);
         
         if (!Directory.Exists(root))
             Directory.CreateDirectory(root);
