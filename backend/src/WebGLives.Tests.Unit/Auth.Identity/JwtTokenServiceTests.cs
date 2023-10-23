@@ -51,6 +51,34 @@ public class JwtTokenServiceTests
         second.Should().NotBeEmpty();
         first.Should().NotBe(second);
     }
+    
+    [Theory]
+    [MemberData(nameof(Delays))]
+    public async Task WhenGenerateFewAccessToken_ThenShouldReturnUniqueTokens_UseTicks(int delay)
+    {
+        const string secret = "mysupersecret_secretkey!123";
+        var algorithm = new HMACSHA256Algorithm();
+        
+        var first = JwtBuilder.Create()
+            .WithAlgorithm(algorithm)
+            .WithSecret(secret)
+            .ExpirationTime(DateTime.Now.AddMinutes(10).Ticks)
+            .WithVerifySignature(true)
+            .Encode();
+
+        await Task.Delay(delay);
+
+        var second = JwtBuilder.Create()
+            .WithAlgorithm(algorithm)
+            .WithSecret(secret)
+            .ExpirationTime(DateTime.Now.AddMinutes(10).Ticks)
+            .WithVerifySignature(true)
+            .Encode();
+
+        first.Should().NotBeEmpty();
+        second.Should().NotBeEmpty();
+        first.Should().NotBe(second);
+    }
 
     public static IEnumerable<object[]> Delays => 
         new[] {1, 10, 50, 100, 250, 400, 500, 1000}
