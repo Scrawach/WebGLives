@@ -9,13 +9,18 @@ namespace WebGLives.Tests.Unit.Auth.Identity;
 
 public class JwtTokenServiceTests
 {
+    private static JwtTokenService CreateService()
+    {
+        const string secret = "no secrets, but you need to finish it to length";
+        var algorithm = new HMACSHA256Algorithm();
+        return new JwtTokenService(secret, algorithm);
+    }
+    
     [Fact]
     public void WhenGenerateAccessToken_ThenShouldReturnUniqueToken()
     {
         // arrange
-        const string secret = "no secrets, but you need to finish it to length";
-        var algorithm = new HMACSHA256Algorithm();
-        var service = new JwtTokenService(secret, algorithm);
+        var service = CreateService();
         
         // act
         var accessToken = service.GenerateAccessToken();
@@ -24,63 +29,21 @@ public class JwtTokenServiceTests
         accessToken.Should().NotBeEmpty();
     }
 
-    [Theory]
-    [MemberData(nameof(Delays))]
-    public async Task WhenGenerateFewAccessToken_ThenShouldReturnUniqueTokens(int delay)
+    [Fact]
+    public async Task WhenGenerateAccessTokens_WithDelayMoreThanSeconds_ThenShouldReturnUniqueAccessTokens()
     {
-        const string secret = "mysupersecret_secretkey!123";
-        var algorithm = new HMACSHA256Algorithm();
-        
-        var first = JwtBuilder.Create()
-            .WithAlgorithm(algorithm)
-            .WithSecret(secret)
-            .ExpirationTime(DateTime.Now.AddMinutes(10))
-            .WithVerifySignature(true)
-            .Encode();
+        // arrange
+        const int millisecondsInSecond = 1000;
+        var service = CreateService();
 
-        await Task.Delay(delay);
+        // act
+        var firstAccessToken = service.GenerateAccessToken();
+        await Task.Delay(millisecondsInSecond);
+        var secondAccessToken = service.GenerateAccessToken();
 
-        var second = JwtBuilder.Create()
-            .WithAlgorithm(algorithm)
-            .WithSecret(secret)
-            .ExpirationTime(DateTime.Now.AddMinutes(10))
-            .WithVerifySignature(true)
-            .Encode();
-
-        first.Should().NotBeEmpty();
-        second.Should().NotBeEmpty();
-        first.Should().NotBe(second);
+        // assert
+        firstAccessToken.Should().NotBeEmpty();
+        secondAccessToken.Should().NotBeEmpty();
+        firstAccessToken.Should().NotBe(secondAccessToken);
     }
-    
-    [Theory]
-    [MemberData(nameof(Delays))]
-    public async Task WhenGenerateFewAccessToken_ThenShouldReturnUniqueTokens_UseTicks(int delay)
-    {
-        const string secret = "mysupersecret_secretkey!123";
-        var algorithm = new HMACSHA256Algorithm();
-        
-        var first = JwtBuilder.Create()
-            .WithAlgorithm(algorithm)
-            .WithSecret(secret)
-            .ExpirationTime(DateTime.Now.AddMinutes(10).Ticks)
-            .WithVerifySignature(true)
-            .Encode();
-
-        await Task.Delay(delay);
-
-        var second = JwtBuilder.Create()
-            .WithAlgorithm(algorithm)
-            .WithSecret(secret)
-            .ExpirationTime(DateTime.Now.AddMinutes(10).Ticks)
-            .WithVerifySignature(true)
-            .Encode();
-
-        first.Should().NotBeEmpty();
-        second.Should().NotBeEmpty();
-        first.Should().NotBe(second);
-    }
-
-    public static IEnumerable<object[]> Delays => 
-        new[] {1, 10, 50, 100, 250, 400, 500, 1000}
-            .Select(number => new object[] { number });
 }

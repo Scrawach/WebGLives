@@ -45,22 +45,24 @@ public class TokensControllerTests : ControllerTestsBase
     }
 
     [Fact]
-    public async Task WhenRefreshTokens_ThenShouldReturnTokenRefreshRequest_WithDifferentTokenValues()
+    public async Task WhenRefreshTokens_AfterDelayMoreThanOneSecond_ThenShouldReturnDifferentTokens()
     {
         const string login = "test";
         const string password = "test123";
+        const int millisecondsInSecond = 1000; // one second is minimal value for time offset between generation, for jwt token
 
         var tokensResponse = await CreateAuthenticatedUser(login, password);
         var tokens = await tokensResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
         tokens.Should().NotBeNull();
         
         Client.DefaultRequestHeaders.Authorization = RequestBuilder.BearerAuthenticationHeader(tokens!.AccessToken);
+        await Task.Delay(millisecondsInSecond);
         var refreshResponse = await Client.PutAsync(ApiRouting.Tokens, RequestBuilder.CreateTokenRefreshRequest(tokens.AccessToken, tokens.RefreshToken));
         refreshResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var refreshedTokens = await refreshResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
         refreshedTokens.Should().NotBeNull();
-        //refreshedTokens!.AccessToken.Should().NotBe(tokens.AccessToken);
+        refreshedTokens!.AccessToken.Should().NotBe(tokens.AccessToken);
         refreshedTokens.RefreshToken.Should().NotBe(tokens.RefreshToken);
     }
 
