@@ -10,7 +10,7 @@ using WebGLives.Core.Repositories;
 
 namespace WebGLives.Auth.Identity.Repositories;
 
-public class UsersRepository : IUsersRepository
+public class UsersRepository : IUsersRepository, IRefreshTokensRepository
 {
     private readonly UserManager<User> _userManager;
     private readonly IOptions<UsersRepositoryOptions> _options;
@@ -37,13 +37,13 @@ public class UsersRepository : IUsersRepository
     public async Task<UnitResult<Error>> CheckPasswordAsync(IUser user, string password) =>
         await Find(user).Ensure(IsCorrectPassword(password), new InvalidPasswordError());
 
-    public async Task<Result<string, Error>> GetAuthenticationTokenAsync(IUser user) =>
+    public async Task<Result<string, Error>> GetToken(IUser user) =>
         await Find(user).Bind(AuthenticationTokenAsync);
 
-    public async Task<UnitResult<Error>> RemoveAuthenticationTokenAsync(IUser user) =>
+    public async Task<UnitResult<Error>> RemoveToken(IUser user) =>
         await Find(user).Ensure(RemoveAuthenticationTokenAsync, new RemoveTokenError(user.UserName));
 
-    public async Task<UnitResult<Error>> SetAuthenticationTokenAsync(IUser user, string token) =>
+    public async Task<UnitResult<Error>> CreateToken(IUser user, string token) =>
         await Find(user).Ensure(SetAuthenticationTokenAsync(token), new SetTokenError(user.UserName));
     
     private Task<Result<User, Error>> Find(IUser user) =>

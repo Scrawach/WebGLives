@@ -63,6 +63,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGamesUpdateService, GamesService>();
         services.AddScoped<IGamesRepository, GamesRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<IRefreshTokensRepository, UsersRepository>();
         services.AddScoped<IGameAccessService, GameAccessService>();
         services.AddScoped<IGameAccessPolicy, UserOwnGamePolicy>();
         services.AddScoped<IGameAccessPolicy, AdminPolicy>();

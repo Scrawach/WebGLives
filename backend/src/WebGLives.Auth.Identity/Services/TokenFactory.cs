@@ -9,12 +9,14 @@ namespace WebGLives.Auth.Identity.Services;
 public class TokenFactory : ITokenFactory
 {
     private readonly IUsersRepository _users;
+    private readonly IRefreshTokensRepository _refreshTokens;
     private readonly IJwtTokenService _jwtTokenService;
 
-    public TokenFactory(IUsersRepository users, IJwtTokenService jwtTokenService)
+    public TokenFactory(IUsersRepository users, IRefreshTokensRepository refreshTokens, IJwtTokenService jwtTokenService)
     {
         _users = users;
         _jwtTokenService = jwtTokenService;
+        _refreshTokens = refreshTokens;
     }
     
     public async Task<Result<Tokens, Error>> Create(string login, string password) =>
@@ -30,15 +32,15 @@ public class TokenFactory : ITokenFactory
 
     private async Task<bool> IsValidRefreshToken((IUser user, string refreshToken) data)
     {
-        var oldRefreshToken = await _users.GetAuthenticationTokenAsync(data.user);
+        var oldRefreshToken = await _refreshTokens.GetToken(data.user);
         return data.refreshToken == oldRefreshToken.Value;
     }
     
     private async Task<Tokens> Authentication(IUser user)
     {
-        await _users.RemoveAuthenticationTokenAsync(user);
+        await _refreshTokens.RemoveToken(user);
         var (accessToken, refreshToken) = GenerateTokens(user);
-        await _users.SetAuthenticationTokenAsync(user, refreshToken);
+        await _refreshTokens.CreateToken(user, refreshToken);
 
         return new Tokens
         {
