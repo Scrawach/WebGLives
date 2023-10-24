@@ -12,7 +12,7 @@ public class UsersControllerTests : ControllerTestsBase
     [InlineData("test", "test123")]
     public async Task WhenCreateUser_ThenShouldReturnOkStatus(string login, string password)
     {
-        var response = await Post(CreateUserRequest(login, password));
+        var response = await Client.PostAsync(ApiRouting.Users, RequestBuilder.CreateUserRequest(login, password));
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
@@ -20,7 +20,7 @@ public class UsersControllerTests : ControllerTestsBase
     [InlineData("test", "test123")]
     public async Task WhenCreateUser_ThenShouldReturnUserResponse(string login, string password)
     {
-        var createdResponse = await Post(CreateUserRequest(login, password));
+        var createdResponse = await Client.PostAsync(ApiRouting.Users, RequestBuilder.CreateUserRequest(login, password));
         var content = await createdResponse.Content.ReadFromJsonAsync<UserResponse>();
         
         createdResponse.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -34,7 +34,7 @@ public class UsersControllerTests : ControllerTestsBase
     [InlineData("test", "test1")]
     public async Task WhenCreateUser_WithPasswordLessThan6Symbols_ThenShouldReturnBadRequest(string login, string password)
     {
-        var response = await Post(CreateUserRequest(login, password));
+        var response = await Client.PostAsync(ApiRouting.Users, RequestBuilder.CreateUserRequest(login, password));
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -42,7 +42,7 @@ public class UsersControllerTests : ControllerTestsBase
     [InlineData("", "test123")]
     public async Task WhenCreateUser_WithEmptyLogin_ThenShouldReturnBadRequest(string login, string password)
     {
-        var response = await Post(CreateUserRequest(login, password));
+        var response = await Client.PostAsync(ApiRouting.Users, RequestBuilder.CreateUserRequest(login, password));
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -53,7 +53,7 @@ public class UsersControllerTests : ControllerTestsBase
         const string username = "test";
         const string password = "test123";
         
-        var createdResponse = await Post(CreateUserRequest(username, password));
+        var createdResponse = await Client.PostAsync(ApiRouting.Users, RequestBuilder.CreateUserRequest(username, password));
         createdResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var user = await Client.GetFromJsonAsync<UserResponse>($"{ApiRouting.Users}/{newUserId}");
@@ -67,20 +67,7 @@ public class UsersControllerTests : ControllerTestsBase
     [InlineData(1)]
     public async Task WhenGetUser_AndThisUserNotExist_ThenShouldReturnNotFoundResponse(int id)
     {
-        var response = await Get(id);
+        var response = await Client.GetAsync($"{ApiRouting.Users}/{id}");
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
-
-    private Task<HttpResponseMessage> Post(HttpContent content) =>
-        Client.PostAsync(ApiRouting.Users, content);
-
-    private Task<HttpResponseMessage> Get(int id) =>
-        Client.GetAsync($"{ApiRouting.Users}/{id}");
-
-    private static FormUrlEncodedContent CreateUserRequest(string login, string password) =>
-        new(new[]
-        {
-            new KeyValuePair<string, string>("Login", login),
-            new KeyValuePair<string, string>("Password", password)
-        });
 }

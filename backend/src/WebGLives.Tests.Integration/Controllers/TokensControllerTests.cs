@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using FluentAssertions;
 using WebGLives.API;
 using WebGLives.API.Contracts.Auth;
+using WebGLives.Tests.Integration.Extensions;
 
 namespace WebGLives.Tests.Integration.Controllers;
 
@@ -21,7 +22,7 @@ public class TokensControllerTests : ControllerTestsBase
         const string login = "test";
         const string password = "test123";
 
-        await CreateUser(login, "123test");
+        await Client.CreateUser(login, "123test");
         
         var authenticatedResponse = await Client.PostAsync(ApiRouting.Tokens, RequestBuilder.CreateLoginRequest(login, password));
         authenticatedResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -33,7 +34,7 @@ public class TokensControllerTests : ControllerTestsBase
         const string login = "test";
         const string password = "test123";
 
-        await CreateUser(login, password);
+        await Client.CreateUser(login, password);
         
         var authenticatedResponse = await Client.PostAsync(ApiRouting.Tokens, RequestBuilder.CreateLoginRequest(login, password));
         authenticatedResponse.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -51,9 +52,7 @@ public class TokensControllerTests : ControllerTestsBase
         const string password = "test123";
         const int millisecondsInSecond = 1000; // one second is minimal value for time offset between generation, for jwt token
 
-        var tokensResponse = await CreateAuthenticatedUser(login, password);
-        var tokens = await tokensResponse.Content.ReadFromJsonAsync<AuthenticatedResponse>();
-        tokens.Should().NotBeNull();
+        var tokens = await Client.CreateAuthenticatedUser(login, password);
         
         Client.DefaultRequestHeaders.Authorization = RequestBuilder.BearerAuthenticationHeader(tokens!.AccessToken);
         await Task.Delay(millisecondsInSecond);
@@ -71,21 +70,5 @@ public class TokensControllerTests : ControllerTestsBase
     {
         var response = await Client.PutAsync(ApiRouting.Tokens, RequestBuilder.CreateTokenRefreshRequest("test", "test"));
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-    }
-
-    private async Task<HttpResponseMessage> CreateAuthenticatedUser(string login, string password)
-    {
-        await CreateUser(login, password);
-        var tokensResponse = await Client.PostAsync(ApiRouting.Tokens, RequestBuilder.CreateLoginRequest(login, password));
-        
-        tokensResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        
-        return tokensResponse;
-    }
-    
-    private async Task CreateUser(string login, string password)
-    {
-        var userCreatedResponse = await Client.PostAsync(ApiRouting.Users, RequestBuilder.CreateUserRequest(login, password));
-        userCreatedResponse.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 }
