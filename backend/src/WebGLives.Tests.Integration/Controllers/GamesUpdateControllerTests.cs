@@ -25,7 +25,7 @@ public class GamesUpdateControllerTests : ControllerTestsBase
     }
 
     [Fact]
-    public async Task WhenUpdateTitle_ThenShouldChangeTitle_AndReturnOkStatus()
+    public async Task WhenUpdateTitle_ThenShouldChangeGameTitle()
     {
         const string newTitle = "Test";
         
