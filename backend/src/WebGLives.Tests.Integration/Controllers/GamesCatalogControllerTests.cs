@@ -29,6 +29,21 @@ public class GamesCatalogControllerTests : ControllerTestsBase
         gameResponse.Should().NotBeNull();
     }
 
+    [Fact]
+    public async Task WhenGetGame_ThenShouldReturnGame_WithIdFromUrl()
+    {
+        const int id = 1;
+        var tokens = await Client.CreateTestUser();
+        await Client.CreateGame(tokens.AccessToken);
+
+        var response = await Client.GetAsync($"{ApiRouting.Games}/{id}");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var gameResponse = await response.Content.ReadFromJsonAsync<GameResponse>();
+        gameResponse.Should().NotBeNull();
+        gameResponse!.Id.Should().Be(id);
+    }
+
     [Theory]
     [InlineData(5)]
     public async Task WhenGetAllGames_ThenShouldReturnGameResponses_ForEveryGame(int amountOfGames)
