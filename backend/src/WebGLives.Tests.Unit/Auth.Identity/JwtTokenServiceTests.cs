@@ -1,8 +1,7 @@
-using System.Security.Claims;
+using System.Text;
 using FluentAssertions;
-using JWT;
 using JWT.Algorithms;
-using JWT.Builder;
+using Moq;
 using WebGLives.Auth.Identity.Services;
 
 namespace WebGLives.Tests.Unit.Auth.Identity;
@@ -30,6 +29,43 @@ public class JwtTokenServiceTests
     }
 
     [Fact]
+    public void WhenGenerateAccessToken_ThenShouldSignThisTokenByAlgorithm()
+    {
+        // arrange
+        const string secret = "secret";
+        var mocked = Mock.Of<IJwtAlgorithm>(mock => mock.Sign(It.IsAny<byte[]>(), It.IsAny<byte[]>()) == new byte[] { 1, 2, 3, 4, 5 });
+        var service = new JwtTokenService(secret, mocked);
+
+        // act
+        var accessToken = service.GenerateAccessToken();
+
+        // assert
+        accessToken.Should().NotBeEmpty();
+        Mock.Get(mocked).Verify(mock => mock.Sign(It.IsAny<byte[]>(), It.IsAny<byte[]>()), Times.Once);
+    }
+
+    [Fact]
+    public void WhenGenerateAccessToken_ThenShouldUsedSecretKeyForAlgorithm()
+    {
+        // arrange
+        const string secret = "secret";
+        var mocked = Mock.Of<IJwtAlgorithm>(mock => mock.Sign(It.IsAny<byte[]>(), It.IsAny<byte[]>()) == new byte[] { 1, 2, 3, 4, 5 });
+        var service = new JwtTokenService(secret, mocked);
+        
+        // act
+        var accessToken = service.GenerateAccessToken();
+
+        // assert
+        accessToken.Should().NotBeEmpty();
+        Mock.Get(mocked)
+            .Verify(mock => mock.Sign
+            (
+                It.Is<byte[]>(bytes => bytes.SequenceEqual(Encoding.ASCII.GetBytes(secret))), 
+                It.IsAny<byte[]>()
+            ), Times.Once);
+    }
+
+    [Fact]
     public async Task WhenGenerateAccessTokens_WithDelayMoreThanSeconds_ThenShouldReturnUniqueAccessTokens()
     {
         // arrange
@@ -45,5 +81,34 @@ public class JwtTokenServiceTests
         firstAccessToken.Should().NotBeEmpty();
         secondAccessToken.Should().NotBeEmpty();
         firstAccessToken.Should().NotBe(secondAccessToken);
+    }
+
+    [Fact]
+    public void WhenGenerateRefreshToken_ThenShouldReturnUniqueToken()
+    {
+        // arrange
+        var service = CreateService();
+
+        // act
+        var refreshToken = service.GenerateRefreshToken();
+
+        // assert
+        refreshToken.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void WhenGenerateSeveralRefreshTokenInTime_ThenShouldBeUniques()
+    {
+        // arrange
+        var service = CreateService();
+
+        // act
+        var first = service.GenerateRefreshToken();
+        var second = service.GenerateRefreshToken();
+
+        // assert
+        first.Should().NotBeEmpty();
+        second.Should().NotBeEmpty();
+        first.Should().NotBe(second);
     }
 }
