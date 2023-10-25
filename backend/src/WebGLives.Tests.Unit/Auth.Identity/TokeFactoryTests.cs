@@ -12,7 +12,7 @@ namespace WebGLives.Tests.Unit.Auth.Identity;
 public class TokeFactoryTests
 {
     [Fact]
-    public async Task WhenCreateToken_AndNotFoundUser_ThenShouldReturnErrorFromUsersRepository()
+    public async Task WhenCreateToken_AndNotFoundUser_ThenShouldReturnTestError()
     {
         // arrange
         const string username = "test";
