@@ -19,8 +19,6 @@ public class TokeFactoryTests
         const string password = "test123";
         const string errorMessage = "test error";
         
-        Result.Success<IUser, Error>(new User(username));
-
         var mockedUsersRepository = new Mock<IUsersRepository>();
         mockedUsersRepository
             .Setup(mock => mock.FindByNameAsync(It.IsAny<string>()))
