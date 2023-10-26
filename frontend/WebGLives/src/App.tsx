@@ -9,6 +9,7 @@ import { NavigationBar } from "./components/NavigationBar";
 import { GameEdit } from "./pages/edit/GameEdit";
 import { GamePage } from "./pages/GamePage";
 import { Footer } from "./components/Footer";
+import { AuthVerify } from "./common/AuthVerify";
 
 export const App = () => (
   <ChakraProvider>
@@ -23,6 +24,8 @@ export const App = () => (
             <Route path="games/:id" element={<GamePage />} />
           </Route>
         </Routes>
+
+        <AuthVerify onLogout={() => alert("logout")}/>
 
         <Footer />
       </BrowserRouter>
