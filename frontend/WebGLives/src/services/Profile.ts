@@ -19,6 +19,10 @@ export class Profile {
         localStorage.removeItem(this.usernameKey);
     }
 
+    public static logout(): void {
+        this.clear();
+    }
+
     public static isAuthorized(): boolean {
         return this.tokens()?.accessToken != null;
     }
@@ -33,5 +37,13 @@ export class Profile {
         const headers = new Headers()
         headers.set("Authorization", `Bearer ${tokens?.accessToken}`);
         return headers;
+    }
+
+    public static hasUser(): boolean {
+        return this.getUsername() != null;
+    }
+
+    public static isTokenExpired(): boolean {
+        return false;
     }
 }

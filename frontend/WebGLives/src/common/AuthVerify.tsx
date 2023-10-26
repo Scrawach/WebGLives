@@ -10,13 +10,9 @@ export const AuthVerify: React.FC<AuthVerifyProps> = ({onLogout}) => {
     const location = useLocation();
 
     useEffect(() => {
-        const user = Profile.getUsername();
-
-        if (user) {
+        if (Profile.hasUser() && Profile.isTokenExpired())
+        {
             onLogout();
-        }
-        else {
-            alert("what?")
         }
     }, [location, onLogout]);
 
