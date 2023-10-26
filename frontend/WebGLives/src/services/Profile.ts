@@ -27,4 +27,11 @@ export class Profile {
         const json = localStorage.getItem(this.tokensKey);
         return json ? JSON.parse(json) : null;
     }
+
+    public static getAuthHeader(): Headers {
+        const tokens = this.tokens();
+        const headers = new Headers()
+        headers.set("Authorization", `Bearer ${tokens?.accessToken}`);
+        return headers;
+    }
 }
