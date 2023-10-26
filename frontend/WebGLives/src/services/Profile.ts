@@ -44,6 +44,15 @@ export class Profile {
     }
 
     public static isTokenExpired(): boolean {
+        const tokenExpireAt = this.tokens()?.expireAt;
+        const now = new Date();
+
+        if (tokenExpireAt)
+        {
+            const expiredData = new Date(tokenExpireAt)
+            return expiredData.getUTCSeconds() > now.getUTCSeconds();
+        }
+
         return false;
     }
 }

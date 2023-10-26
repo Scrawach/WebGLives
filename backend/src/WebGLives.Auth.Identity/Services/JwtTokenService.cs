@@ -17,11 +17,11 @@ public class JwtTokenService : IJwtTokenService
         _algorithm = algorithm;
     }
 
-    public string GenerateAccessToken(params Claim[] claims) =>
+    public string GenerateAccessToken(DateTime expireAt, params Claim[] claims) =>
         JwtBuilder.Create()
             .WithAlgorithm(_algorithm)
             .WithSecret(_secret)
-            .ExpirationTime(DateTime.Now.AddMinutes(10))
+            .ExpirationTime(expireAt)
             .WithVerifySignature(true)
             .AddClaims(claims)
             .Encode();

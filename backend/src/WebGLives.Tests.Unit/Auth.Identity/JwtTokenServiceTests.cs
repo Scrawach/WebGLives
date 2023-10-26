@@ -22,7 +22,7 @@ public class JwtTokenServiceTests
         var service = CreateService();
         
         // act
-        var accessToken = service.GenerateAccessToken();
+        var accessToken = service.GenerateAccessToken(DateTime.Now);
         
         // assert
         accessToken.Should().NotBeEmpty();
@@ -37,7 +37,7 @@ public class JwtTokenServiceTests
         var service = new JwtTokenService(secret, mocked);
 
         // act
-        var accessToken = service.GenerateAccessToken();
+        var accessToken = service.GenerateAccessToken(DateTime.Now);
 
         // assert
         accessToken.Should().NotBeEmpty();
@@ -53,7 +53,7 @@ public class JwtTokenServiceTests
         var service = new JwtTokenService(secret, mocked);
         
         // act
-        var accessToken = service.GenerateAccessToken();
+        var accessToken = service.GenerateAccessToken(DateTime.Now);
 
         // assert
         accessToken.Should().NotBeEmpty();
@@ -73,9 +73,9 @@ public class JwtTokenServiceTests
         var service = CreateService();
 
         // act
-        var firstAccessToken = service.GenerateAccessToken();
+        var firstAccessToken = service.GenerateAccessToken(DateTime.Now);
         await Task.Delay(millisecondsInSecond);
-        var secondAccessToken = service.GenerateAccessToken();
+        var secondAccessToken = service.GenerateAccessToken(DateTime.Now);
 
         // assert
         firstAccessToken.Should().NotBeEmpty();

@@ -39,20 +39,23 @@ public class TokenFactory : ITokenFactory
     private async Task<Tokens> Authentication(IUser user)
     {
         await _refreshTokens.RemoveToken(user);
-        var (accessToken, refreshToken) = GenerateTokens(user);
+        var expireAt = DateTime.Now.AddMinutes(1);
+        var (accessToken, refreshToken) = GenerateTokens(user, expireAt);
         await _refreshTokens.CreateToken(user, refreshToken);
 
         return new Tokens
         {
             Access = accessToken,
-            Refresh = refreshToken
+            Refresh = refreshToken,
+            ExpireAt = expireAt
         };
     }
 
-    private (string access, string refresh) GenerateTokens(IUser user) =>
+    private (string access, string refresh) GenerateTokens(IUser user, DateTime expireAt) =>
         (
             _jwtTokenService.GenerateAccessToken
             (
+                expireAt,
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName!)
             ), 
