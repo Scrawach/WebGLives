@@ -14,8 +14,9 @@ export const AuthVerify: React.FC<AuthVerifyProps> = ({onLogout}) => {
     const refreshTokens = useCallback(async() => {
         const previousTokens = Profile.tokens()!;
         const username = Profile.getUsername()!;
+        Profile.clear();
         const tokens = await Api.auth.refresh(previousTokens);
-        Profile.save(username, tokens) 
+        Profile.save(username, tokens);
     }, [])
 
     useEffect(() => {
