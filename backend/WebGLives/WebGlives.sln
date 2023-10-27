@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.API", "WebGLives.API\WebGLives.API.csproj", "{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.DataAccess.Postgre", "WebGLives.DataAccess.Postgre\WebGLives.DataAccess.Postgre.csproj", "{77828F18-253A-4F5F-8727-A012599C7F75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Core", "WebGLives.Core\WebGLives.Core.csproj", "{9D1B0D97-1A6D-4547-AF3E-6C3EE8877FE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.BusinessLogic", "WebGLives.BusinessLogic\WebGLives.BusinessLogic.csproj", "{6592E972-1511-4A8A-9BA3-E79AB5B50696}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Migrations", "WebGLives.Migrations\WebGLives.Migrations.csproj", "{D76DF361-086F-49F7-BBCB-193D68F46C11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Auth.Identity", "WebGLives.Auth.Identity\WebGLives.Auth.Identity.csproj", "{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Tests.Integration", "WebGLives.Tests.Integration\WebGLives.Tests.Integration.csproj", "{72295FC3-57C2-4569-85FA-DB3658B9E5EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Tests.Unit", "WebGLives.Tests.Unit\WebGLives.Tests.Unit.csproj", "{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77828F18-253A-4F5F-8727-A012599C7F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77828F18-253A-4F5F-8727-A012599C7F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77828F18-253A-4F5F-8727-A012599C7F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77828F18-253A-4F5F-8727-A012599C7F75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D1B0D97-1A6D-4547-AF3E-6C3EE8877FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D1B0D97-1A6D-4547-AF3E-6C3EE8877FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D1B0D97-1A6D-4547-AF3E-6C3EE8877FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D1B0D97-1A6D-4547-AF3E-6C3EE8877FE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6592E972-1511-4A8A-9BA3-E79AB5B50696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6592E972-1511-4A8A-9BA3-E79AB5B50696}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6592E972-1511-4A8A-9BA3-E79AB5B50696}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6592E972-1511-4A8A-9BA3-E79AB5B50696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D76DF361-086F-49F7-BBCB-193D68F46C11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D76DF361-086F-49F7-BBCB-193D68F46C11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D76DF361-086F-49F7-BBCB-193D68F46C11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D76DF361-086F-49F7-BBCB-193D68F46C11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72295FC3-57C2-4569-85FA-DB3658B9E5EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72295FC3-57C2-4569-85FA-DB3658B9E5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72295FC3-57C2-4569-85FA-DB3658B9E5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72295FC3-57C2-4569-85FA-DB3658B9E5EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

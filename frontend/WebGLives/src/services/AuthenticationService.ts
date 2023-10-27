@@ -1,4 +1,5 @@
 import { Tokens } from "../types/Tokens";
+import { Profile } from "./Profile";
 
 export class AuthenticationService {
     constructor(
@@ -25,7 +26,12 @@ export class AuthenticationService {
         const data = new FormData();
         data.append('AccessToken', previous.accessToken);
         data.append(`RefreshToken`, previous.refreshToken);
-        const result = await fetch(`${this.tokensPath}/refresh`, { method: `PUT`, body: data });
+        const result = await fetch(`${this.tokensPath}`, 
+        { 
+            method: `PUT`, 
+            headers: Profile.getAuthHeader(),
+            body: data 
+        });
         return await result.json();
     }
 

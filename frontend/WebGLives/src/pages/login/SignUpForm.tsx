@@ -19,13 +19,13 @@ export interface SignUpFormProps {
 export const SignUpForm: React.FC<SignUpFormProps> = ({onSignUp, onLoginClicked}) => {
     const { login, password, handleLogin, handlePassword } = useLoginForm();
 
-    const onLoginProcess = () => {
+    const onSignUpProcess = async () => {
         if (onSignUp)
-            onSignUp(login, password);
+            await onSignUp(login, password);
     }
 
     return (
-        <form onSubmit={onLoginProcess}> 
+        <>
             <Stack spacing={4}>
                 <FormControl id="login" isRequired>
                     <HStack justify={'space-between'}>
@@ -49,10 +49,11 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({onSignUp, onLoginClicked}
                         type="submit"
                         bg={'blue.400'}
                         color={'white'}
-                        _hover={{ bg: 'blue.500',}}>
+                        _hover={{ bg: 'blue.500',}}
+                        onClick={onSignUpProcess}>
                         Sign in
                     </Button>
             </Stack>
-        </form>
+        </>
     )
 }
