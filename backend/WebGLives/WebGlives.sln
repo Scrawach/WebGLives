@@ -1,20 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.API", "src\WebGLives.API\WebGLives.API.csproj", "{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.API", "WebGLives.API\WebGLives.API.csproj", "{62F0BA69-B9D5-47FC-A7F8-EC4EC2F9352B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.DataAccess.Postgre", "src\WebGLives.DataAccess.Postgre\WebGLives.DataAccess.Postgre.csproj", "{77828F18-253A-4F5F-8727-A012599C7F75}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.DataAccess.Postgre", "WebGLives.DataAccess.Postgre\WebGLives.DataAccess.Postgre.csproj", "{77828F18-253A-4F5F-8727-A012599C7F75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Core", "src\WebGLives.Core\WebGLives.Core.csproj", "{9D1B0D97-1A6D-4547-AF3E-6C3EE8877FE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Core", "WebGLives.Core\WebGLives.Core.csproj", "{9D1B0D97-1A6D-4547-AF3E-6C3EE8877FE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.BusinessLogic", "src\WebGLives.BusinessLogic\WebGLives.BusinessLogic.csproj", "{6592E972-1511-4A8A-9BA3-E79AB5B50696}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.BusinessLogic", "WebGLives.BusinessLogic\WebGLives.BusinessLogic.csproj", "{6592E972-1511-4A8A-9BA3-E79AB5B50696}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Migrations", "src\WebGLives.Migrations\WebGLives.Migrations.csproj", "{D76DF361-086F-49F7-BBCB-193D68F46C11}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Migrations", "WebGLives.Migrations\WebGLives.Migrations.csproj", "{D76DF361-086F-49F7-BBCB-193D68F46C11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Auth.Identity", "src\WebGLives.Auth.Identity\WebGLives.Auth.Identity.csproj", "{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Auth.Identity", "WebGLives.Auth.Identity\WebGLives.Auth.Identity.csproj", "{40F1AFA7-2154-4F2F-A5E4-AADAA0EDA34C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Tests.Integration", "src\WebGLives.Tests.Integration\WebGLives.Tests.Integration.csproj", "{72295FC3-57C2-4569-85FA-DB3658B9E5EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Tests.Integration", "WebGLives.Tests.Integration\WebGLives.Tests.Integration.csproj", "{72295FC3-57C2-4569-85FA-DB3658B9E5EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Tests.Unit", "src\WebGLives.Tests.Unit\WebGLives.Tests.Unit.csproj", "{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGLives.Tests.Unit", "WebGLives.Tests.Unit\WebGLives.Tests.Unit.csproj", "{0FF6055C-55DB-4139-A0B6-1C1D351E58D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
