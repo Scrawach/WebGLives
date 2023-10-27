@@ -21,7 +21,10 @@ export const AuthVerify: React.FC<AuthVerifyProps> = ({onLogout}) => {
     useEffect(() => {
         if (Profile.hasUser() && Profile.hasRefreshToken())
         {
-            refreshTokens().catch(onLogout);
+            refreshTokens().catch((value) => {
+                console.error(value);
+                onLogout();
+            });
         }
     }, [location, refreshTokens, onLogout]);
 
