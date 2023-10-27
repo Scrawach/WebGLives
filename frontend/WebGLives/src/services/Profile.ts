@@ -43,6 +43,10 @@ export class Profile {
         return this.getUsername() != null;
     }
 
+    public static hasRefreshToken(): boolean {
+        return this.tokens()?.accessToken != null;
+    }
+
     public static isTokenExpired(): boolean {
         const tokenExpireAt = this.tokens()?.expireAt;
         const now = new Date();
