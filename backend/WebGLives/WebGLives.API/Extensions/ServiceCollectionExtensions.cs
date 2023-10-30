@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using WebGLives.API.Options;
 using WebGLives.Auth.Identity;
 using WebGLives.Auth.Identity.Options;
 using WebGLives.Auth.Identity.Repositories;
@@ -70,6 +71,8 @@ public static class ServiceCollectionExtensions
 
         services.Configure<UsersRepositoryOptions>(builder.Configuration.GetSection(UsersRepositoryOptions.UsersRepository));
         services.Configure<FilesOptions>(builder.Configuration.GetSection(FilesOptions.Files));
+        
+        services.ConfigureOptions<CorsOptionsSetup>();
         return services;
     }
 
