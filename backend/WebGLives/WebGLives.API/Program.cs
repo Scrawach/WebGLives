@@ -1,20 +1,9 @@
 using WebGLives.API.Extensions;
-
-const string cors = "MyAllowSpecificOrigins";
+using WebGLives.API.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: cors, policy =>
-    {
-        policy
-            .WithOrigins("http://localhost:3000")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
-    });
-});
+builder.Services.AddCors();
 
 builder.Services.AddControllers();
 
@@ -26,7 +15,7 @@ builder.Services.AddConfiguredIdentity(builder);
 
 var app = builder.Build();
 
-app.UseCors(cors);
+app.UseCors(CorsOptionsSetup.CorsName);
 app.UseAuthentication();
 app.UseAuthorization();
 
