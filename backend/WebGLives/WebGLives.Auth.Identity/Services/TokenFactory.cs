@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using CSharpFunctionalExtensions;
+using WebGLives.Auth.Identity.Errors;
 using WebGLives.Core;
 using WebGLives.Core.Errors;
 using WebGLives.Core.Repositories;
@@ -27,7 +28,7 @@ public class TokenFactory : ITokenFactory
     public async Task<Result<Tokens, Error>> Refresh(int userId, string refreshToken) =>
         await _users.FindByIdAsync(userId)
             .Map(user => (user, refreshToken))
-            .Ensure(IsValidRefreshToken, new Error("Invalid refresh token!"))
+            .Ensure(IsValidRefreshToken, new RefreshTokenError())
             .Map(async login => await CreateTokens(login.user));
 
     private async Task<bool> IsValidRefreshToken((IUser user, string refreshToken) data)
