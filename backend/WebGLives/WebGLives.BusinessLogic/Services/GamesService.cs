@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using WebGLives.BusinessLogic.Errors;
+using WebGLives.BusinessLogic.Extensions;
 using WebGLives.BusinessLogic.Services.Abstract;
 using WebGLives.Core;
 using WebGLives.Core.Errors;
@@ -37,12 +38,8 @@ public class GamesService : IGamesCatalogService, IGamesUpdateService
         await GameWithAccessCheck(userId, gameId, token)
             .TapIf(data.Title is not null, game => game.Title = data.Title)
             .TapIf(data.Description is not null, game => game.Description = data.Description)
-            .CheckIf(data.Poster is not null, async game => await _files
-                .Save(gameId.ToString(), data.Poster!, token)
-                .Tap(path => game.PosterUrl = path))
-            .CheckIf(data.Game is not null, async game => await _files
-                .SaveZip(gameId.ToString(), data.Game!, token)
-                .Tap(path => game.GameUrl = path))
+            .CheckAndSavePosterFile(data.Poster, _files, token)
+            .CheckAndSaveGameFile(data.Game, _files, token)
             .Check(game => _games.Update(game, token));
 
     public async Task<UnitResult<Error>> Delete(int userId, int gameId, CancellationToken token = default) =>
@@ -62,16 +59,12 @@ public class GamesService : IGamesCatalogService, IGamesUpdateService
 
     public async Task<UnitResult<Error>> UpdateGame(int userId, int gameId, FileData file, CancellationToken token = default) =>
         await GameWithAccessCheck(userId, gameId, token)
-            .Check(async game => await _files
-                .SaveZip(gameId.ToString(), file, token)
-                .Tap(path => game.GameUrl = path))
+            .CheckAndSaveGameFile(file, _files, token)
             .Check(game => _games.Update(game, token));
 
     public async Task<UnitResult<Error>> UpdatePoster(int userId, int gameId, FileData file, CancellationToken token = default) =>
         await GameWithAccessCheck(userId, gameId, token)
-            .Check(async game => await _files
-                .Save(gameId.ToString(), file, token)
-                .Tap(path => game.PosterUrl = path))
+            .CheckAndSavePosterFile(file, _files, token)
             .Check(game => _games.Update(game, token));
 
     private Task<Result<Game, Error>> GameWithAccessCheck(int userId, int gameId, CancellationToken token) =>
