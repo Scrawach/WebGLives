@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using CSharpFunctionalExtensions;
+using WebGLives.Auth.Identity.Errors;
 using WebGLives.Core;
 using WebGLives.Core.Errors;
 using WebGLives.Core.Repositories;
@@ -18,17 +19,17 @@ public class TokenFactory : ITokenFactory
         _jwtTokenService = jwtTokenService;
         _refreshTokens = refreshTokens;
     }
-    
+
     public async Task<Result<Tokens, Error>> Create(string login, string password) =>
         await _users.FindByNameAsync(login)
-            .Check(async entity => await _users.CheckPasswordAsync(entity, password))
-            .Map(async user => await Authentication(user));
+            .CheckPassword(_users, password)
+            .Authenticate(CreateTokens);
 
     public async Task<Result<Tokens, Error>> Refresh(int userId, string refreshToken) =>
         await _users.FindByIdAsync(userId)
             .Map(user => (user, refreshToken))
-            .Ensure(IsValidRefreshToken, new Error("Invalid refresh token!"))
-            .Map(async login => await Authentication(login.user));
+            .Ensure(IsValidRefreshToken, new RefreshTokenError())
+            .Map(async login => await CreateTokens(login.user));
 
     private async Task<bool> IsValidRefreshToken((IUser user, string refreshToken) data)
     {
@@ -36,7 +37,7 @@ public class TokenFactory : ITokenFactory
         return data.refreshToken == oldRefreshToken.Value;
     }
     
-    private async Task<Tokens> Authentication(IUser user)
+    private async Task<Tokens> CreateTokens(IUser user)
     {
         await _refreshTokens.RemoveToken(user);
         var expireAt = DateTime.Now.AddMinutes(1);
